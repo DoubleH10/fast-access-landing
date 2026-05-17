@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Play } from 'lucide-react';
 import BrandButton from '../components/brand/BrandButton';
 import BrandPattern from '../components/brand/BrandPattern';
+import { useT } from '../i18n/I18nContext';
 
 /**
  * Hero — full-bleed cinematic intro.
@@ -15,6 +16,7 @@ import BrandPattern from '../components/brand/BrandPattern';
  *  - No competing right-rail indicator (moved into Journey only)
  */
 export default function Hero() {
+  const { t } = useT();
   // Stagger fade-in once on mount
   useEffect(() => {
     const elements = document.querySelectorAll('.hero-fade');
@@ -89,27 +91,23 @@ export default function Hero() {
             >
               <span className="w-1.5 h-1.5 rounded-sm bg-fa-orange-soda" />
               <span className="font-body text-[11px] font-semibold uppercase tracking-[0.12em] text-fa-classic-chalk/85">
-                The fastest partner for your business growth
+                {t('hero.eyebrow')}
               </span>
             </div>
 
-            {/* Headline — PPT slide 3: "Smart logistics services for every fast-growing brand" */}
             <h1 className="hero-fade font-display font-bold text-[48px] sm:text-[64px] lg:text-[80px] text-fa-classic-chalk leading-[0.96] tracking-[-0.028em]">
-              Smart logistics for every{' '}
-              <span className="text-fa-orange-soda">fast-growing</span> brand.
+              {t('hero.headlineA')}{' '}
+              <span className="text-fa-orange-soda">{t('hero.headlineHighlight')}</span>{' '}
+              {t('hero.headlineB')}
             </h1>
 
-            {/* Subhead — PPT slide 5 condensed */}
             <p className="hero-fade font-body mt-6 text-base lg:text-lg text-fa-classic-chalk/65 max-w-[520px] leading-[1.55]">
-              Storage, packing, shipping, real-time tracking, and same-day
-              cloud-store delivery — built to save merchants time, cut costs,
-              and grow profits.
+              {t('hero.sub')}
             </p>
 
-            {/* CTAs */}
             <div className="hero-fade flex flex-wrap items-center gap-3 mt-9">
               <BrandButton variant="filled" href="#quote">
-                Start shipping
+                {t('hero.primaryCta')}
               </BrandButton>
               <button
                 type="button"
@@ -120,7 +118,7 @@ export default function Hero() {
                 }}
               >
                 <Play size={12} className="text-fa-orange-soda" fill="currentColor" />
-                Watch the demo
+                {t('hero.secondaryCta')}
               </button>
             </div>
 

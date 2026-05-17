@@ -1,24 +1,12 @@
 import { useInView } from '../hooks/useInView';
-import BrandPattern from '../components/brand/BrandPattern';
 
 export default function Testimonial() {
   const { ref, isInView } = useInView(0.2);
 
   return (
     <section ref={ref} className="relative bg-fa-liberty-blue section-padding overflow-hidden">
-      <BrandPattern
-        pattern="isometric"
-        tint="orange"
-        opacity={0.14}
-        className="absolute -top-[10%] -right-[10%] w-[55%] max-w-[800px]"
-      />
-      <BrandPattern
-        pattern="isometric"
-        tint="white"
-        opacity={0.04}
-        className="absolute -bottom-[10%] -left-[10%] w-[55%] max-w-[800px]"
-        style={{ transform: 'scaleX(-1)' }}
-      />
+      {/* Intentionally quiet — patterns removed so the quote owns the section.
+          The CTA below carries the brand pattern moment. */}
 
       <div className="container-main max-w-[820px] text-center relative z-10">
         <div style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out' }}>

@@ -1,7 +1,8 @@
 import BrandLogo from '../components/brand/BrandLogo';
-import BrandPattern from '../components/brand/BrandPattern';
+import { useT } from '../i18n/I18nContext';
 
 export default function Footer() {
+  const { t } = useT();
   // Nav structure from PPT slide 20 footer:
   // About · Logistics solutions · Pricing · FAQ · Blog · Contact
   const footerLinks = {
@@ -13,14 +14,8 @@ export default function Footer() {
 
   return (
     <footer className="bg-fa-liberty-blue pt-24 pb-10 relative overflow-hidden">
-      {/* Pattern 1 — brand ribbon along the top, signature finishing mark */}
-      <BrandPattern
-        pattern="ribbon"
-        tint="orange"
-        opacity={0.2}
-        className="absolute top-0 -right-[10%] w-[120%] max-w-none"
-        style={{ transform: 'translateY(-30%)' }}
-      />
+      {/* No ribbon here — the CTA above is the pattern moment.
+          Footer stays quiet: just the giant FAST ACCESS watermark + links. */}
       {/* Background watermark */}
       <div
         className="absolute bottom-0 right-0 font-display font-bold pointer-events-none select-none leading-none tracking-[-0.04em]"
@@ -40,10 +35,10 @@ export default function Footer() {
           <div className="col-span-2">
             <BrandLogo variant="full" mode="dark" height={56} />
             <div className="font-display mt-5 text-base text-fa-classic-chalk font-semibold tracking-[-0.01em]">
-              The fastest partner for your business growth.
+              {t('footer.tagline')}
             </div>
             <p className="font-body mt-3 text-sm text-fa-classic-chalk/55 leading-[1.65] max-w-[320px]">
-              Storage, packing, shipping, real-time tracking, and same-day cloud-store delivery — built around the way your business actually ships.
+              {t('footer.body')}
             </p>
           </div>
 

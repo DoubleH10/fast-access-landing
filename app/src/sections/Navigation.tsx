@@ -2,18 +2,18 @@ import { useState, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import BrandLogo from '../components/brand/BrandLogo';
 import BrandButton from '../components/brand/BrandButton';
-
-// Nav IA per PPT slide 20 footer + slide 18 FAQ entry point
-const navLinks = [
-  { label: 'Solutions', href: '#services' },
-  { label: 'Journey', href: '#platform' },
-  { label: 'Network', href: '#network' },
-  { label: 'Pricing', href: '#pricing' },
-];
-
-const resourceLinks = ['About us', 'Mission & Vision', 'FAQ', 'Blog', 'Contact'];
+import LangToggle from '../components/brand/LangToggle';
+import { useT } from '../i18n/I18nContext';
 
 export default function Navigation() {
+  const { t } = useT();
+  const navLinks = [
+    { label: t('nav.solutions'), href: '#services' },
+    { label: t('nav.journey'), href: '#platform' },
+    { label: t('nav.network'), href: '#network' },
+    { label: t('nav.pricing'), href: '#pricing' },
+  ];
+  const resourceLinks = ['About us', 'Mission & Vision', 'FAQ', 'Blog', 'Contact'];
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -75,7 +75,7 @@ export default function Navigation() {
               className="flex items-center gap-1 text-sm font-medium transition-colors duration-200 group"
               style={{ color: scrolled ? '#6b6b7b' : 'rgba(255,255,255,0.8)' }}
             >
-              <span className="group-hover:text-[#F15B41] transition-colors duration-200">Resources</span>
+              <span className="group-hover:text-[#F15B41] transition-colors duration-200">{t('nav.resources')}</span>
               <ChevronDown
                 size={14}
                 className="transition-transform duration-200 group-hover:text-[#F15B41]"
@@ -116,15 +116,16 @@ export default function Navigation() {
 
         {/* Right side */}
         <div className="hidden lg:flex items-center gap-5">
+          <LangToggle tone={scrolled ? 'light' : 'dark'} />
           <a
             href="#"
             className="text-sm font-medium transition-colors duration-200 hover:text-[#F15B41]"
             style={{ color: scrolled ? '#6b6b7b' : 'rgba(255,255,255,0.8)' }}
           >
-            Log in
+            {t('nav.login')}
           </a>
           <BrandButton variant={scrolled ? 'filled' : 'on-dark'} href="#quote">
-            Get a quote
+            {t('nav.getQuote')}
           </BrandButton>
         </div>
 

@@ -1,5 +1,7 @@
 /* Inter Display + Clash Grotesk from Fontshare — must come before all other rules per CSS spec */
 @import url('https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500,600,700&f[]=inter-display@300,400,500,600,700&display=swap');
+/* Arabic: IBM Plex Sans Arabic — pairs well with Geist/Inter and reads cleanly at all weights */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -109,7 +111,7 @@
   html { scroll-behavior: auto; }
 
   body {
-    font-family: 'Inter Display', 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Inter Display', 'IBM Plex Sans Arabic', 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--bg-paper);
     color: var(--ink-primary);
     -webkit-font-smoothing: antialiased;
@@ -118,8 +120,17 @@
     letter-spacing: -0.01em;
   }
 
+  /* RTL: Arabic gets IBM Plex Sans Arabic first; relax kerning since Arabic
+     doesn't share Latin's tight letter-spacing aesthetic. */
+  html[dir='rtl'] body,
+  html[dir='rtl'] h1, html[dir='rtl'] h2, html[dir='rtl'] h3,
+  html[dir='rtl'] h4, html[dir='rtl'] h5, html[dir='rtl'] h6 {
+    font-family: 'IBM Plex Sans Arabic', 'Inter Display', sans-serif;
+    letter-spacing: 0;
+  }
+
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Clash Grotesk', 'Geist', -apple-system, sans-serif;
+    font-family: 'Clash Grotesk', 'IBM Plex Sans Arabic', 'Geist', -apple-system, sans-serif;
     letter-spacing: -0.02em;
     color: var(--ink-primary);
   }

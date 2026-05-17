@@ -1,8 +1,10 @@
 import { useInView } from '../hooks/useInView';
 import SectionChip from '../components/brand/SectionChip';
 import BrandPattern from '../components/brand/BrandPattern';
+import { useT } from '../i18n/I18nContext';
 
 export default function CTA() {
+  const { t } = useT();
   const { ref, isInView } = useInView(0.2);
 
   return (
@@ -11,20 +13,12 @@ export default function CTA() {
       ref={ref}
       className="relative bg-fa-liberty-blue section-padding overflow-hidden"
     >
-      {/* Pattern 1 (ribbon) — the signature "Built for Speed, Designed for Clarity"
-          treatment from brandbook pg 71. Two layered passes for depth. */}
+      {/* One single, confident ribbon — the brand pattern moment of the page. */}
       <BrandPattern
         pattern="ribbon"
         tint="orange"
-        opacity={0.32}
-        className="absolute top-[18%] -right-[8%] w-[110%] max-w-none"
-      />
-      <BrandPattern
-        pattern="ribbon"
-        tint="white"
-        opacity={0.06}
-        className="absolute bottom-[10%] -left-[10%] w-[110%] max-w-none"
-        style={{ transform: 'scaleX(-1)' }}
+        opacity={0.28}
+        className="absolute top-[22%] -right-[8%] w-[110%] max-w-none"
       />
 
       <div className="container-main text-center relative z-10">
@@ -36,7 +30,7 @@ export default function CTA() {
             transition: 'all 500ms ease-out',
           }}
         >
-          <SectionChip onDark>Ready when you are</SectionChip>
+          <SectionChip onDark>{t('cta.chip')}</SectionChip>
         </div>
 
         <h2
@@ -47,8 +41,7 @@ export default function CTA() {
             transition: 'all 600ms ease-out 100ms',
           }}
         >
-          Built for <span className="text-fa-orange-soda">Speed</span>,<br />
-          Designed for Clarity.
+          {t('cta.headlineA')} <span className="text-fa-orange-soda">{t('cta.headlineHighlight')}</span>{t('cta.headlineB')}
         </h2>
 
         <p
@@ -59,7 +52,7 @@ export default function CTA() {
             transition: 'all 500ms ease-out 200ms',
           }}
         >
-          Tell us about your business. We'll come back with a tailored plan within one business day.
+          {t('cta.body')}
         </p>
 
         <div
@@ -76,7 +69,7 @@ export default function CTA() {
             className="group inline-flex items-stretch font-body text-[12px] font-semibold uppercase tracking-[0.08em] rounded-[4px] overflow-hidden transition-transform duration-200 hover:-translate-y-0.5"
             style={{ backgroundColor: '#F15B41', color: '#F4F4F1' }}
           >
-            <span className="px-5 py-3.5">Inquire Now</span>
+            <span className="px-5 py-3.5">{t('cta.primary')}</span>
             <span
               className="flex items-center justify-center px-3.5"
               style={{ backgroundColor: 'rgba(13,18,50,0.18)' }}
@@ -92,7 +85,7 @@ export default function CTA() {
             className="inline-flex items-center px-5 py-3.5 font-body text-[12px] font-semibold uppercase tracking-[0.08em] text-fa-classic-chalk/90 rounded-[4px] transition-colors duration-200 hover:text-fa-classic-chalk"
             style={{ boxShadow: 'inset 0 0 0 1px rgba(244,244,241,0.28)' }}
           >
-            Book a tour
+            {t('cta.secondary')}
           </a>
         </div>
       </div>
