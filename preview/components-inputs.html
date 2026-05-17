@@ -1,0 +1,19 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Input + form</title>
+<link rel="stylesheet" href="_base.css">
+<style>
+  body { display: flex; align-items: center; background: var(--bg-2); }
+  .wrap { width: 700px; padding: 28px 32px; display: flex; flex-direction: column; gap: 12px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  label { font: 500 11px/1 var(--font-sans); letter-spacing: 0.06em; text-transform: uppercase; color: rgba(13,18,50,0.55); }
+  input, select { padding: 14px 16px; border: 1px solid rgba(13,18,50,0.16); border-radius: 10px; background: #fff; font: 400 14px/1 var(--font-sans); color: #0D1232; outline: none; box-shadow: 0 1px 2px rgba(13,18,50,0.04); }
+  input:focus { border-color: #F15B41; box-shadow: 0 0 0 3px rgba(241,91,65,0.18); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+</style></head>
+<body><div class="wrap">
+  <div class="row">
+    <div class="field"><label>Company</label><input value="Northwind Co." /></div>
+    <div class="field"><label>SKUs / month</label><input placeholder="e.g. 12,000" /></div>
+  </div>
+  <div class="field"><label>Origin warehouse</label><input value="Dallas, TX  •  FA-DAL-02" style="outline: 2px solid rgba(241,91,65,0.35); border-color:#F15B41;" /></div>
+</div></body></html>

@@ -1,0 +1,91 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Logo lockup</title>
+<link rel="stylesheet" href="_base.css">
+<style>
+  body { display: flex; align-items: stretch; }
+  .wrap { width: 700px; display: grid; grid-template-columns: 1fr 1fr; }
+  .panel { padding: 38px 36px; display: flex; align-items: center; gap: 16px; min-height: 240px; transition: background var(--dur-base) var(--ease-out); }
+  .mark { width: 72px; flex: 0 0 72px; display: flex; align-items: center; }
+  .mark img { display: block; width: 100%; height: auto; transition: filter var(--dur-base) var(--ease-out); }
+  .word { font: 600 22px/1.05 var(--font-display); letter-spacing: 0.02em; transition: color var(--dur-base) var(--ease-out); }
+</style></head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel">
+    const { useState } = React;
+
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "leftBg": "#F3F2EC",
+      "rightBg": "#0D1232",
+      "showWord": true,
+      "logoSize": 72
+    }/*EDITMODE-END*/;
+
+    // Curated swatches from the Fast Access palette
+    const SWATCHES = [
+      "#F3F2EC", // paper
+      "#FFFFFF", // white
+      "#E8E4D8", // warm 100
+      "#D8D2C2", // warm 200
+      "#0D1232", // liberty blue (brand dark)
+      "#1A1F4F", // liberty 600
+      "#2D2E75", // liberty 500 (logo blue)
+      "#F15B41", // orange soda (accent)
+      "#F47C5F", // orange 300
+      "#C84427", // orange 700
+      "#101010"  // near-black
+    ];
+
+    function pickTextColor(bg) {
+      // simple luma test — dark bg => white text
+      const m = bg.replace('#','');
+      const r = parseInt(m.slice(0,2),16), g = parseInt(m.slice(2,4),16), b = parseInt(m.slice(4,6),16);
+      const luma = (0.2126*r + 0.7152*g + 0.0722*b) / 255;
+      return luma < 0.55 ? '#FFFFFF' : '#0D1232';
+    }
+
+    function Panel({ bg, showWord, size }) {
+      const fg = pickTextColor(bg);
+      const invert = fg === '#FFFFFF';
+      return (
+        <div className="panel" style={{ background: bg }}>
+          <div className="mark" style={{ width: size, flexBasis: size }}>
+            <img src="../assets/logo-mark.png" alt="Fast Access"
+              style={{ filter: invert ? 'brightness(0) invert(1)' : 'none' }} />
+          </div>
+          {showWord && <div className="word" style={{ color: fg }}>FAST&nbsp;ACCESS</div>}
+        </div>
+      );
+    }
+
+    function App() {
+      const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+      return (
+        <>
+          <div className="wrap">
+            <Panel bg={t.leftBg} showWord={t.showWord} size={t.logoSize} />
+            <Panel bg={t.rightBg} showWord={t.showWord} size={t.logoSize} />
+          </div>
+          <TweaksPanel title="Logo">
+            <TweakSection label="Backgrounds" />
+            <TweakColor label="Left" value={t.leftBg} options={SWATCHES}
+              onChange={(v) => setTweak('leftBg', v)} />
+            <TweakColor label="Right" value={t.rightBg} options={SWATCHES}
+              onChange={(v) => setTweak('rightBg', v)} />
+            <TweakSection label="Lockup" />
+            <TweakToggle label="Show wordmark" value={t.showWord}
+              onChange={(v) => setTweak('showWord', v)} />
+            <TweakSlider label="Mark size" value={t.logoSize} min={40} max={120} unit="px"
+              onChange={(v) => setTweak('logoSize', v)} />
+          </TweaksPanel>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body></html>

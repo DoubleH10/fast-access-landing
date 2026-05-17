@@ -1,0 +1,26 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Type scale</title>
+<link rel="stylesheet" href="_base.css">
+<style>
+  body { display: flex; align-items: center; }
+  .wrap { width: 700px; padding: 28px 32px; display: flex; flex-direction: column; gap: 6px; }
+  .row { display: flex; align-items: baseline; gap: 16px; padding: 4px 0; border-bottom: 1px solid var(--border-soft); }
+  .row:last-child { border-bottom: 0; }
+  .tag { width: 56px; font: 500 10px/1 var(--font-mono); color: var(--fg-3); letter-spacing: 0.05em; text-transform: uppercase; }
+  .size { width: 50px; font: 400 11px/1 var(--font-mono); color: var(--fg-3); text-align: right; }
+  .spec { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.02em; color: var(--fg-1); }
+  .h1 { font-size: 40px; line-height: 1.0; }
+  .h2 { font-size: 30px; line-height: 1.0; }
+  .h3 { font-size: 22px; line-height: 1.1; }
+  .h4 { font-family: var(--font-sans); font-weight: 600; font-size: 18px; line-height: 1.2; letter-spacing: -0.01em; }
+  .body { font-family: var(--font-sans); font-weight: 400; font-size: 14px; line-height: 1.4; letter-spacing: -0.01em; color: var(--fg-2); }
+  .cap { font-family: var(--font-sans); font-weight: 500; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); }
+</style></head>
+<body><div class="wrap">
+  <div class="row"><span class="tag">H1</span><span class="size">56 / 88</span><span class="spec h1">Headline example</span></div>
+  <div class="row"><span class="tag">H2</span><span class="size">44</span><span class="spec h2">Section heading</span></div>
+  <div class="row"><span class="tag">H3</span><span class="size">32</span><span class="spec h3">Subhead</span></div>
+  <div class="row"><span class="tag">H4</span><span class="size">24</span><span class="spec h4">Card title · Inter 600</span></div>
+  <div class="row"><span class="tag">Body</span><span class="size">16</span><span class="spec body">Body copy demonstrates the supporting text used across pages.</span></div>
+  <div class="row"><span class="tag">Caption</span><span class="size">12</span><span class="spec cap">Eyebrow · uppercase</span></div>
+</div></body></html>

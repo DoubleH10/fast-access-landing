@@ -1,0 +1,21 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Eyebrows & chips</title>
+<link rel="stylesheet" href="_base.css">
+<style>
+  body { display: flex; align-items: center; background: var(--bg-2); }
+  .wrap { width: 700px; padding: 28px 32px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: #fff; border-radius: 8px; box-shadow: 0 1px 2px rgba(13,18,50,0.06); font: 500 12px/1 var(--font-sans); color: #0D1232; }
+  .eyebrow::before { content: ""; width: 10px; height: 10px; background: #F15B41; border-radius: 2px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(13,18,50,0.06); border-radius: 999px; font: 500 11px/1 var(--font-sans); color: #0D1232; }
+  .pill .d { width: 6px; height: 6px; border-radius: 50%; background: #F15B41; }
+  .tag { padding: 5px 10px; border: 1px solid rgba(13,18,50,0.16); border-radius: 6px; font: 500 11px/1 var(--font-mono); color: #0D1232; background: #fff; }
+  .status { display:inline-flex; align-items:center; gap:6px; padding: 6px 10px; background:#FDECE6; color:#B33620; border-radius: 999px; font: 600 10px/1 var(--font-sans); letter-spacing: 0.06em; text-transform: uppercase; }
+  .status .d { width:6px; height:6px; border-radius:50%; background:#F15B41; box-shadow: 0 0 8px #F15B41; }
+</style></head>
+<body><div class="wrap">
+  <span class="eyebrow">Delivering with Care</span>
+  <span class="eyebrow">Our Process</span>
+  <span class="pill"><span class="d"></span> Live tracking</span>
+  <span class="tag">SKU 02841</span>
+  <span class="status"><span class="d"></span> In transit</span>
+</div></body></html>

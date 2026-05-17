@@ -1,0 +1,194 @@
+/* =====================================================
+   Fast Access — Brand Tokens
+   ===================================================== */
+
+/* Fonts — Clash Grotesk via Fontshare, Inter via Google Fonts.
+   NOTE TO USER: brand spec calls for **Inter Display** as the
+   subhead/body face. Inter Display is Inter's display variant
+   and ships via Google Fonts as part of the Inter family
+   (use "InterDisplay" feature setting via `font-feature-settings`
+   or load Inter directly — sufficient match). If you have real
+   Inter Display + Clash Grotesk webfont files, drop them in
+   /fonts and switch the @font-face URLs below. */
+@import url('https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* === PRIMARY PALETTE === */
+  --color-liberty-blue: #0D1232;   /* trust, stability — primary surface */
+  --color-blue-rose:    #2D2E75;   /* depth, modern accent */
+  --color-orange-soda:  #F15B41;   /* energy, motion — signature accent */
+
+  /* === SECONDARY / NEUTRAL === */
+  --color-ink:          #0D1232;   /* alias for liberty-blue (text on light) */
+  --color-paper:        #F3F2EC;   /* warm off-white surface (sand) */
+  --color-bone:         #E8E6DA;   /* warmer paper used in mockups */
+  --color-white:        #FFFFFF;
+  --color-black:        #000000;
+
+  /* Neutral ramp (derived) */
+  --color-n-50:  #F7F7F4;
+  --color-n-100: #ECECE6;
+  --color-n-200: #D9D9D2;
+  --color-n-300: #B8B8B1;
+  --color-n-400: #8B8B85;
+  --color-n-500: #5C5C57;
+  --color-n-600: #3A3A38;
+  --color-n-700: #1E1E29;
+  --color-n-800: #131526;
+  --color-n-900: #0D1232;
+
+  /* Orange tints (signature accent ramp) */
+  --color-orange-50:  #FDECE6;
+  --color-orange-100: #FCD2C4;
+  --color-orange-300: #F58F73;
+  --color-orange-500: #F15B41;    /* base = orange-soda */
+  --color-orange-600: #D9462C;
+  --color-orange-700: #B33620;
+
+  /* === SEMANTIC === */
+  --fg-1: var(--color-liberty-blue);     /* primary text on light */
+  --fg-2: rgba(13, 18, 50, 0.72);        /* secondary text */
+  --fg-3: rgba(13, 18, 50, 0.55);        /* tertiary / muted labels */
+  --fg-on-dark-1: #FFFFFF;
+  --fg-on-dark-2: rgba(255, 255, 255, 0.72);
+  --fg-on-dark-3: rgba(255, 255, 255, 0.5);
+
+  --bg-1: var(--color-white);            /* default surface */
+  --bg-2: var(--color-paper);            /* warm cream surface */
+  --bg-3: var(--color-bone);             /* warmer cream surface */
+  --bg-dark: var(--color-liberty-blue);  /* premium dark surface */
+
+  --accent:        var(--color-orange-soda);
+  --accent-hover:  var(--color-orange-600);
+  --accent-press:  var(--color-orange-700);
+
+  --border-soft:   rgba(13, 18, 50, 0.08);
+  --border-strong: rgba(13, 18, 50, 0.16);
+  --border-on-dark: rgba(255, 255, 255, 0.10);
+
+  /* === TYPOGRAPHY === */
+  --font-display:  "Clash Grotesk", "Inter", -apple-system, sans-serif;
+  --font-sans:     "Inter", "Inter Display", -apple-system, sans-serif;
+  --font-mono:     "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --tracking-display: -0.02em;   /* −2% kerning per spec */
+  --tracking-body:    -0.01em;
+  --tracking-button:   0.06em;   /* uppercase buttons */
+
+  --leading-display:  1.10;   /* 110% leading per spec */
+  --leading-heading:  1.28;   /* 128% for subhead */
+  --leading-body:     1.40;   /* 140% for body */
+
+  /* Type scale (rem assuming 16px base) */
+  --fs-display-1: 5.5rem;    /* 88px hero */
+  --fs-display-2: 4.5rem;    /* 72px */
+  --fs-h1:        3.5rem;    /* 56px */
+  --fs-h2:        2.75rem;   /* 44px */
+  --fs-h3:        2rem;      /* 32px */
+  --fs-h4:        1.5rem;    /* 24px */
+  --fs-h5:        1.25rem;   /* 20px */
+  --fs-body-lg:   1.125rem;  /* 18px */
+  --fs-body:      1rem;      /* 16px */
+  --fs-body-sm:   0.875rem;  /* 14px */
+  --fs-caption:   0.75rem;   /* 12px */
+
+  /* === SPACING (4-pt grid) === */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* === RADII === */
+  --radius-xs:  4px;     /* button arrow tile, micro chips */
+  --radius-sm:  8px;     /* small chips, inputs */
+  --radius-md:  12px;    /* default buttons + cards */
+  --radius-lg:  16px;    /* feature cards */
+  --radius-xl:  24px;    /* hero image card */
+  --radius-pill: 999px;
+
+  /* === SHADOWS === */
+  --shadow-xs: 0 1px 2px rgba(13, 18, 50, 0.06);
+  --shadow-sm: 0 2px 6px rgba(13, 18, 50, 0.06), 0 1px 2px rgba(13, 18, 50, 0.04);
+  --shadow-md: 0 8px 24px rgba(13, 18, 50, 0.08), 0 2px 6px rgba(13, 18, 50, 0.04);
+  --shadow-lg: 0 24px 56px rgba(13, 18, 50, 0.14), 0 4px 12px rgba(13, 18, 50, 0.06);
+  --shadow-glow-orange: 0 0 40px rgba(241, 91, 65, 0.35);
+  --shadow-inset-line: inset 0 0 0 1px var(--border-soft);
+
+  /* === MOTION === */
+  --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in:    cubic-bezier(0.5, 0, 0.75, 0);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast:   140ms;
+  --dur-base:   240ms;
+  --dur-slow:   420ms;
+  --dur-scene:  900ms;        /* page-to-page / scene transitions */
+
+  /* === LAYOUT === */
+  --container-max: 1280px;
+  --container-gutter: 32px;
+}
+
+/* =====================================================
+   Base typography classes (semantic vars)
+   ===================================================== */
+
+.fa-display-1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--fs-display-1);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  color: var(--fg-1);
+}
+.fa-display-2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--fs-display-2);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  color: var(--fg-1);
+}
+.fa-h1 { font: 500 var(--fs-h1)/var(--leading-display) var(--font-display); letter-spacing: var(--tracking-display); color: var(--fg-1); }
+.fa-h2 { font: 500 var(--fs-h2)/var(--leading-display) var(--font-display); letter-spacing: var(--tracking-display); color: var(--fg-1); }
+.fa-h3 { font: 500 var(--fs-h3)/var(--leading-heading) var(--font-display); letter-spacing: var(--tracking-display); color: var(--fg-1); }
+.fa-h4 { font: 600 var(--fs-h4)/var(--leading-heading) var(--font-sans);    letter-spacing: var(--tracking-body);    color: var(--fg-1); }
+.fa-h5 { font: 600 var(--fs-h5)/var(--leading-heading) var(--font-sans);    letter-spacing: var(--tracking-body);    color: var(--fg-1); }
+
+.fa-body-lg { font: 400 var(--fs-body-lg)/var(--leading-body) var(--font-sans); color: var(--fg-2); }
+.fa-body    { font: 400 var(--fs-body)/var(--leading-body)    var(--font-sans); color: var(--fg-2); }
+.fa-body-sm { font: 400 var(--fs-body-sm)/var(--leading-body) var(--font-sans); color: var(--fg-2); }
+
+.fa-caption {
+  font: 500 var(--fs-caption)/1.4 var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+.fa-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: 500 var(--fs-body-sm)/1 var(--font-sans);
+  color: var(--fg-1);
+}
+.fa-eyebrow::before {
+  content: ""; width: 10px; height: 10px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.fa-button-label {
+  font: 600 var(--fs-body-sm)/1 var(--font-sans);
+  letter-spacing: var(--tracking-button);
+  text-transform: uppercase;
+}

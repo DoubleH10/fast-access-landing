@@ -1,0 +1,24 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Semantic colors</title>
+<link rel="stylesheet" href="_base.css">
+<style>
+  body { display: flex; align-items: center; }
+  .wrap { width: 700px; padding: 24px 28px; background: var(--bg-2); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tok { display: flex; align-items: center; gap: 12px; padding: 10px 12px; background: #fff; border: 1px solid var(--border-soft); border-radius: 8px; }
+  .dot { width: 28px; height: 28px; border-radius: 6px; flex: 0 0 28px; box-shadow: inset 0 0 0 1px rgba(13,18,50,0.08); }
+  .name { font: 600 13px/1.2 var(--font-mono); color: var(--fg-1); }
+  .desc { font: 400 11px/1.2 var(--font-sans); color: var(--fg-3); }
+</style></head>
+<body>
+  <div class="wrap">
+    <div class="grid">
+      <div class="tok"><span class="dot" style="background:#0D1232"></span><div><div class="name">--fg-1</div><div class="desc">primary text · light</div></div></div>
+      <div class="tok"><span class="dot" style="background:rgba(13,18,50,0.72)"></span><div><div class="name">--fg-2</div><div class="desc">secondary text</div></div></div>
+      <div class="tok"><span class="dot" style="background:#FFFFFF;box-shadow:inset 0 0 0 1px #D9D9D2"></span><div><div class="name">--bg-1</div><div class="desc">surface · default</div></div></div>
+      <div class="tok"><span class="dot" style="background:#F3F2EC"></span><div><div class="name">--bg-2</div><div class="desc">paper · warm cream</div></div></div>
+      <div class="tok"><span class="dot" style="background:#0D1232"></span><div><div class="name">--bg-dark</div><div class="desc">premium dark surface</div></div></div>
+      <div class="tok"><span class="dot" style="background:#F15B41"></span><div><div class="name">--accent</div><div class="desc">CTA · status pip · dot</div></div></div>
+    </div>
+  </div>
+</body></html>

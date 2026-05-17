@@ -1,0 +1,23 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Timeline card</title>
+<link rel="stylesheet" href="_base.css">
+<style>
+  body { display: flex; align-items: center; background: #E8E6DA; }
+  .wrap { width: 700px; padding: 28px 32px; display: flex; align-items: center; justify-content: center; }
+  .card { width: 320px; background: rgba(255,255,255,0.92); backdrop-filter: blur(20px); border-radius: 14px; padding: 18px 20px; box-shadow: 0 24px 56px rgba(13,18,50,0.14), 0 4px 12px rgba(13,18,50,0.06); display: flex; flex-direction: column; gap: 12px; }
+  .row { display: flex; align-items: center; justify-content: space-between; }
+  .left { display:flex; align-items:center; gap: 10px; }
+  .pip { width: 18px; height: 18px; border-radius: 50%; background: #F15B41; display: flex; align-items: center; justify-content: center; }
+  .pip svg { width: 10px; height: 10px; color: #fff; }
+  .pip.muted { background: rgba(13,18,50,0.15); }
+  .lbl { font: 600 13px/1 var(--font-sans); color: #0D1232; }
+  .date { font: 500 12px/1 var(--font-mono); color: rgba(13,18,50,0.55); }
+  .row.muted .lbl { color: rgba(13,18,50,0.45); }
+</style></head>
+<body><div class="wrap">
+  <div class="card">
+    <div class="row"><div class="left"><div class="pip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></div><div class="lbl">Dispatch Date</div></div><div class="date">10/07/2025</div></div>
+    <div class="row"><div class="left"><div class="pip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></div><div class="lbl">Transit Day</div></div><div class="date">12/07/2025</div></div>
+    <div class="row muted"><div class="left"><div class="pip muted"></div><div class="lbl">Shipping Date</div></div><div class="date">15/07/2025</div></div>
+  </div>
+</div></body></html>

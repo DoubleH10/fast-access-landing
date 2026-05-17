@@ -1,0 +1,25 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Orange ramp</title>
+<link rel="stylesheet" href="_base.css">
+<style>
+  body { display: flex; align-items: center; }
+  .wrap { width: 700px; padding: 24px 28px; }
+  .row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; height: 72px; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-xs); }
+  .sw { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; padding: 8px 10px; font: 500 10px/1 var(--font-mono); }
+  .sw .h { opacity: 0.9; }
+  .sw .v { font-size: 9px; opacity: 0.7; margin-top: 2px; }
+  .lbl { margin-top: 12px; font: 500 11px/1 var(--font-sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); }
+</style></head>
+<body>
+  <div class="wrap">
+    <div class="row">
+      <div class="sw" style="background:#FDECE6;color:#B33620"><span class="h">#FDECE6</span><span class="v">50</span></div>
+      <div class="sw" style="background:#FCD2C4;color:#B33620"><span class="h">#FCD2C4</span><span class="v">100</span></div>
+      <div class="sw" style="background:#F58F73;color:#fff"><span class="h">#F58F73</span><span class="v">300</span></div>
+      <div class="sw" style="background:#F15B41;color:#fff"><span class="h">#F15B41</span><span class="v">500 · base</span></div>
+      <div class="sw" style="background:#D9462C;color:#fff"><span class="h">#D9462C</span><span class="v">600 · hover</span></div>
+      <div class="sw" style="background:#B33620;color:#fff"><span class="h">#B33620</span><span class="v">700 · press</span></div>
+    </div>
+    <div class="lbl">Orange Soda ramp · signature accent</div>
+  </div>
+</body></html>

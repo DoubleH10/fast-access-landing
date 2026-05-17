@@ -1,0 +1,24 @@
+/* Shared base for preview cards. Each card targets 700×var. */
+@import url('../colors_and_type.css');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  width: 100%; min-height: 100%;
+  background: var(--bg-1);
+  color: var(--fg-1);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.card {
+  width: 700px;
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.card--paper { background: var(--bg-2); }
+.card--dark  { background: var(--bg-dark); color: var(--fg-on-dark-1); }
+.row { display: flex; gap: 12px; align-items: center; }
+.col { display: flex; flex-direction: column; }
+.mono { font-family: var(--font-mono); }
