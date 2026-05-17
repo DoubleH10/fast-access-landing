@@ -104,7 +104,6 @@ export default function Pricing() {
                 <div className="mt-10">
                   <BrandButton
                     variant={isFeatured ? 'on-dark' : plan.style === 'outlined' ? 'outline' : 'filled'}
-                    className="w-full justify-between"
                   >
                     {plan.cta}
                   </BrandButton>

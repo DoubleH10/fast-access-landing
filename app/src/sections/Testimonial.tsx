@@ -20,13 +20,14 @@ export default function Testimonial() {
         style={{ transform: 'scaleX(-1)' }}
       />
 
-      <div className="container-main max-w-[860px] text-center relative z-10">
+      <div className="container-main max-w-[820px] text-center relative z-10">
         <div style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out' }}>
-          <span className="font-display text-[64px] text-fa-orange-soda leading-none block mb-2">&ldquo;</span>
-          <blockquote className="font-display text-[26px] sm:text-[32px] lg:text-[40px] text-fa-classic-chalk leading-[1.25] tracking-[-0.015em]">
-            Fast Access did in eight weeks what our 3PL hadn't managed in two years.{' '}
+          {/* Compact accent bar instead of giant floating quote mark */}
+          <div className="mx-auto mb-8 h-[3px] w-12 bg-fa-orange-soda" />
+          <blockquote className="font-display text-[26px] sm:text-[32px] lg:text-[40px] text-fa-classic-chalk leading-[1.22] tracking-[-0.015em]">
+            “Fast Access did in eight weeks what our 3PL hadn't managed in two years.{' '}
             <span className="text-fa-orange-soda">Our shipping costs fell 22%</span>{' '}
-            and our customers actually got their packages on time.
+            and our customers actually got their packages on time.”
           </blockquote>
         </div>
         <div

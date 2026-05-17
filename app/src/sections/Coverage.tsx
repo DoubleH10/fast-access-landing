@@ -194,25 +194,34 @@ export default function Coverage() {
           </div>
         </div>
 
-        {/* Stats row */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
-          {stats.map((stat, i) => (
-            <div key={stat.label} style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: `all 500ms ease-out ${400 + i * 100}ms` }}>
-              <div className="w-8 h-px bg-[#F15B41] mb-3" />
-              <div className="font-mono text-[28px] lg:text-[36px] text-[#F4F4F1] leading-none">
-                {stat.value}
+        {/* Stats row — matches ByTheNumbers treatment for visual consistency */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mt-14 pt-10 border-t border-fa-classic-chalk/10">
+          {stats.map((stat, i) => {
+            // Split number from unit so we can color-accent the unit
+            const match = stat.value.match(/^([\d.]+)(.*)$/);
+            const num = match ? match[1] : stat.value;
+            const unit = match ? match[2] : '';
+            return (
+              <div
+                key={stat.label}
+                style={{
+                  opacity: isInView ? 1 : 0,
+                  transform: isInView ? 'translateY(0)' : 'translateY(20px)',
+                  transition: `all 500ms ease-out ${400 + i * 100}ms`,
+                }}
+              >
+                <div className="w-10 h-[3px] bg-fa-orange-soda mb-5" />
+                <div className="font-display font-semibold text-[40px] lg:text-[52px] text-fa-classic-chalk leading-none tracking-[-0.02em]">
+                  {num}
+                  {unit && <span className="text-fa-orange-soda">{unit}</span>}
+                </div>
+                <div className="mt-3 text-[11px] font-semibold text-fa-classic-chalk/55 uppercase tracking-[0.08em] font-body">
+                  {stat.label}
+                </div>
               </div>
-              <div className="mt-2 text-[10px] sm:text-[11px] font-medium text-[#8a8a9a] uppercase tracking-[0.08em]">
-                {stat.label}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
-      </div>
-
-      {/* Background watermark */}
-      <div className="absolute bottom-0 right-0 font-display font-black pointer-events-none select-none leading-none" style={{ fontSize: 'clamp(80px, 12vw, 160px)', color: 'rgba(244,244,241,0.02)', transform: 'translate(10%, 25%)' }}>
-        NETWORK
       </div>
     </section>
   );

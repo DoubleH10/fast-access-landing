@@ -18,12 +18,12 @@ export default function ByTheNumbers() {
       id="numbers"
       className="relative bg-fa-classic-chalk section-padding border-t border-fa-hairline overflow-hidden"
     >
-      {/* Pattern 1 — soft ribbon on the right (paper variant of the brand mark) */}
+      {/* Pattern 1 — feather-soft ribbon, pushed further right so it reads as background */}
       <BrandPattern
         pattern="ribbon"
         tint="navy"
-        opacity={0.06}
-        className="absolute -top-[8%] -right-[15%] w-[80%] max-w-none"
+        opacity={0.035}
+        className="absolute -top-[20%] -right-[40%] w-[100%] max-w-none"
       />
 
       <div className="container-main relative z-10">

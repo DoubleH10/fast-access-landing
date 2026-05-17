@@ -1,5 +1,4 @@
 import { useInView } from '../hooks/useInView';
-import BrandButton from '../components/brand/BrandButton';
 import SectionChip from '../components/brand/SectionChip';
 import BrandPattern from '../components/brand/BrandPattern';
 
@@ -71,12 +70,30 @@ export default function CTA() {
             transition: 'all 500ms ease-out 300ms',
           }}
         >
-          <BrandButton variant="on-dark" href="#contact" className="!bg-fa-blue-rose">
-            Inquire Now
-          </BrandButton>
-          <BrandButton variant="on-dark" href="#tour" arrow={false}>
+          {/* Primary — bold orange, the unambiguous "click me" */}
+          <a
+            href="#contact"
+            className="group inline-flex items-stretch font-body text-[12px] font-semibold uppercase tracking-[0.08em] rounded-[4px] overflow-hidden transition-transform duration-200 hover:-translate-y-0.5"
+            style={{ backgroundColor: '#F15B41', color: '#F4F4F1' }}
+          >
+            <span className="px-5 py-3.5">Inquire Now</span>
+            <span
+              className="flex items-center justify-center px-3.5"
+              style={{ backgroundColor: 'rgba(13,18,50,0.18)' }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M5 12h14M13 5l7 7-7 7" />
+              </svg>
+            </span>
+          </a>
+          {/* Secondary — ghost with visible cream border */}
+          <a
+            href="#tour"
+            className="inline-flex items-center px-5 py-3.5 font-body text-[12px] font-semibold uppercase tracking-[0.08em] text-fa-classic-chalk/90 rounded-[4px] transition-colors duration-200 hover:text-fa-classic-chalk"
+            style={{ boxShadow: 'inset 0 0 0 1px rgba(244,244,241,0.28)' }}
+          >
             Book a tour
-          </BrandButton>
+          </a>
         </div>
       </div>
     </section>
