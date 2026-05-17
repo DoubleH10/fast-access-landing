@@ -77,9 +77,9 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 container-main pt-32 lg:pt-36 pb-24 min-h-screen flex flex-col justify-center">
-        <div className="grid lg:grid-cols-[1.05fr_1fr] gap-14 lg:gap-16 items-center">
+        <div className="grid lg:grid-cols-[1.25fr_1fr] gap-14 lg:gap-14 items-center">
           {/* LEFT — message column */}
-          <div className="max-w-[640px]">
+          <div className="max-w-none">
             {/* Eyebrow chip */}
             <div
               className="hero-fade inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full mb-7"
@@ -95,7 +95,7 @@ export default function Hero() {
               </span>
             </div>
 
-            <h1 className="hero-fade font-display font-bold text-[48px] sm:text-[64px] lg:text-[80px] text-fa-classic-chalk leading-[0.96] tracking-[-0.028em]">
+            <h1 className="hero-fade font-display font-bold text-[44px] sm:text-[56px] lg:text-[68px] text-fa-classic-chalk leading-[1.0] tracking-[-0.025em] max-w-[640px]">
               {t('hero.headlineA')}{' '}
               <span className="text-fa-orange-soda">{t('hero.headlineHighlight')}</span>{' '}
               {t('hero.headlineB')}

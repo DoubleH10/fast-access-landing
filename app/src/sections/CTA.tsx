@@ -11,7 +11,7 @@ export default function CTA() {
     <section
       id="quote"
       ref={ref}
-      className="relative bg-fa-liberty-blue section-padding overflow-hidden"
+      className="relative bg-fa-liberty-blue pt-24 pb-20 lg:pt-28 lg:pb-24 overflow-hidden"
     >
       {/* One single, confident ribbon — the brand pattern moment of the page. */}
       <BrandPattern

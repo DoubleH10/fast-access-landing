@@ -65,16 +65,14 @@ export default function ServicesGrid() {
         className="absolute -top-[8%] -right-[15%] w-[55%] max-w-[800px]"
       />
       <div className="container-main relative z-10">
-        <div className="grid lg:grid-cols-12 gap-8 items-end mb-14">
-          <div className="lg:col-span-7">
-            <div className="mb-5" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>
-              <SectionChip>What we do</SectionChip>
-            </div>
-            <h2 className="font-display font-bold text-[32px] sm:text-[40px] lg:text-[56px] text-fa-liberty-blue leading-[1.05] tracking-[-0.02em]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
-              Everything your business needs to <span className="text-fa-orange-soda">grow</span>, in one place.
-            </h2>
+        <div className="mb-14 max-w-[820px]">
+          <div className="mb-5" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>
+            <SectionChip>What we do</SectionChip>
           </div>
-          <p className="font-body lg:col-span-5 text-base text-fa-ink-muted leading-[1.6]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
+          <h2 className="font-display font-bold text-[32px] sm:text-[40px] lg:text-[52px] text-fa-liberty-blue leading-[1.05] tracking-[-0.02em]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
+            Everything your business needs to <span className="text-fa-orange-soda">grow</span>, in one place.
+          </h2>
+          <p className="font-body mt-5 text-base lg:text-lg text-fa-ink-muted leading-[1.6] max-w-[640px]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
             Stop juggling vendors. Fast Access runs storage, packing, shipping, tracking, and customer support as one tightly-coordinated operation — so every order arrives the way you sold it.
           </p>
         </div>

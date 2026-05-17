@@ -79,7 +79,7 @@ export default function Calculator() {
       />
 
       <div className="container-main relative z-10">
-        <div className="grid lg:grid-cols-[1fr_1.05fr] gap-12 lg:gap-16 items-center">
+        <div className="grid lg:grid-cols-[1fr_1.05fr] gap-12 lg:gap-16 items-start">
           {/* LEFT — pitch + inputs */}
           <div>
             <div className="calc-fade inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full mb-7"
@@ -166,8 +166,8 @@ export default function Calculator() {
             </div>
           </div>
 
-          {/* RIGHT — results card */}
-          <div className="calc-fade">
+          {/* RIGHT — results card, sticky so it follows while sliders move */}
+          <div className="calc-fade lg:sticky lg:top-32">
             <div
               className="relative rounded-[20px] p-8 lg:p-10"
               style={{

@@ -13,7 +13,7 @@ const en = {
   hero: {
     eyebrow: 'The fastest partner for your business growth',
     headlineA: 'Smart logistics for every',
-    headlineHighlight: 'fast-growing',
+    headlineHighlight: 'fast‑growing',
     headlineB: 'brand.',
     sub: 'Storage, packing, shipping, real-time tracking, and same-day cloud-store delivery — built to save merchants time, cut costs, and grow profits.',
     primaryCta: 'Start shipping', secondaryCta: 'Watch the demo',
