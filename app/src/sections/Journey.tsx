@@ -194,17 +194,85 @@ export default function Journey() {
     (gridHelper.material as THREE.Material).depthWrite = false;
     scene.add(gridHelper);
 
-    // Package mesh
-    const pkgSize = isMobileDevice ? 0.6 : 0.5;
+    // Package mesh — real cardboard box look, with Fast Access logo on the top face
+    const pkgSize = isMobileDevice ? 0.65 : 0.55;
     const pkgGeo = new THREE.BoxGeometry(pkgSize, pkgSize, pkgSize);
-    const pkgShader = new THREE.ShaderMaterial({
-      vertexShader: wireframeVertexShader,
-      fragmentShader: wireframeFragmentShader,
-      uniforms: { uTime: { value: 0 }, uColor1: { value: new THREE.Vector3(0.15, 0.15, 0.35) }, uColor2: { value: new THREE.Vector3(1.0, 0.42, 0.21) } },
-      transparent: true, side: THREE.DoubleSide, depthWrite: false,
-    });
-    const packageMesh = new THREE.Mesh(pkgGeo, pkgShader);
+
+    // Generate the box face textures procedurally on a 2D canvas.
+    // - Top face: cream cardboard + centered FA logo + brand orange flag bar.
+    // - Side faces: cream cardboard + thin orange tape line.
+    const makeFaceCanvas = (kind: 'top' | 'side') => {
+      const c = document.createElement('canvas');
+      c.width = 256; c.height = 256;
+      const g = c.getContext('2d')!;
+      // base cardboard
+      g.fillStyle = '#F4F4F1';
+      g.fillRect(0, 0, 256, 256);
+      // light kraft texture noise
+      g.fillStyle = 'rgba(13,18,50,0.04)';
+      for (let i = 0; i < 800; i++) {
+        g.fillRect(Math.random() * 256, Math.random() * 256, 1, 1);
+      }
+      // outer edge shadow
+      g.strokeStyle = 'rgba(13,18,50,0.18)';
+      g.lineWidth = 4;
+      g.strokeRect(2, 2, 252, 252);
+      if (kind === 'top') {
+        // orange flag bars (mimics the FA logo flag)
+        g.fillStyle = '#F15B41';
+        g.fillRect(64, 84, 60, 12);
+        g.fillRect(130, 84, 28, 12);
+        // navy hex/box mark
+        g.fillStyle = '#0D1232';
+        g.beginPath();
+        g.moveTo(128, 110);
+        g.lineTo(168, 130);
+        g.lineTo(168, 170);
+        g.lineTo(128, 190);
+        g.lineTo(88, 170);
+        g.lineTo(88, 130);
+        g.closePath();
+        g.fill();
+        // diamond cut-out
+        g.fillStyle = '#F4F4F1';
+        g.beginPath();
+        g.moveTo(143, 145); g.lineTo(158, 155); g.lineTo(143, 165); g.lineTo(128, 155);
+        g.closePath();
+        g.fill();
+      } else {
+        // tape line across the side
+        g.fillStyle = '#F15B41';
+        g.fillRect(0, 120, 256, 16);
+      }
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    };
+
+    const topTex = makeFaceCanvas('top');
+    const sideTex = makeFaceCanvas('side');
+    // BoxGeometry face order: +x, -x, +y, -y, +z, -z
+    const pkgMaterials = [
+      new THREE.MeshStandardMaterial({ map: sideTex, roughness: 0.85, metalness: 0 }),
+      new THREE.MeshStandardMaterial({ map: sideTex, roughness: 0.85, metalness: 0 }),
+      new THREE.MeshStandardMaterial({ map: topTex,  roughness: 0.7,  metalness: 0 }), // top
+      new THREE.MeshStandardMaterial({ map: topTex,  roughness: 0.7,  metalness: 0 }), // bottom
+      new THREE.MeshStandardMaterial({ map: sideTex, roughness: 0.85, metalness: 0 }),
+      new THREE.MeshStandardMaterial({ map: sideTex, roughness: 0.85, metalness: 0 }),
+    ];
+    const packageMesh = new THREE.Mesh(pkgGeo, pkgMaterials);
     scene.add(packageMesh);
+
+    // Real lighting for the box (MeshStandardMaterial needs real lights)
+    const keyLight = new THREE.DirectionalLight(0xffffff, 0.9);
+    keyLight.position.set(3, 5, 4);
+    scene.add(keyLight);
+    const fillLight = new THREE.DirectionalLight(0xF15B41, 0.35);
+    fillLight.position.set(-3, 2, -2);
+    scene.add(fillLight);
+
+    // Keep the shader vars defined for compatibility with later references
+    void wireframeVertexShader; void wireframeFragmentShader;
 
     const packageLight = new THREE.PointLight(0xF15B41, 0.8, 6);
     scene.add(packageLight);
@@ -284,7 +352,9 @@ export default function Journey() {
       const elapsed = clock.getElapsedTime();
       const progress = progressRef.current;
 
-      pkgShader.uniforms.uTime.value = elapsed;
+      // Gentle box rotation as it travels — like a package in motion
+      packageMesh.rotation.y = elapsed * 0.4;
+      packageMesh.rotation.x = Math.sin(elapsed * 0.6) * 0.15;
       const pos = curve.getPointAt(Math.min(progress, 0.999));
       packageMesh.position.copy(pos);
       packageLight.position.copy(pos);

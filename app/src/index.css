@@ -73,6 +73,8 @@
     --fa-modern-lavender: #A6ABB3;
 
     /* ===== Semantic aliases (used by components) ===== */
+    /* Dark theme (default) — dark sections stay dark, paper stays paper.
+       Light theme below flips dark sections to paper-on-paper.            */
     --bg-paper:    var(--fa-classic-chalk);
     --bg-deep:     var(--fa-liberty-blue);
     --ink-primary: var(--fa-liberty-blue);
@@ -109,6 +111,24 @@
   * { @apply border-border; }
 
   html { scroll-behavior: auto; }
+
+  /* ===== Light theme overrides ===== */
+  html[data-theme='light'] body { background-color: #FFFFFF; }
+  html[data-theme='light'] .bg-fa-liberty-blue { background-color: #FFFFFF !important; }
+  html[data-theme='light'] .bg-fa-liberty-blue .text-fa-classic-chalk { color: var(--fa-liberty-blue) !important; }
+  html[data-theme='light'] .bg-fa-liberty-blue .text-fa-classic-chalk\/65,
+  html[data-theme='light'] .bg-fa-liberty-blue .text-fa-classic-chalk\/55,
+  html[data-theme='light'] .bg-fa-liberty-blue .text-fa-classic-chalk\/45 { color: var(--ink-muted) !important; }
+  html[data-theme='light'] .bg-fa-liberty-blue .border-fa-classic-chalk\/10 { border-color: var(--hairline) !important; }
+  /* Section chip — flip on-dark chips to light treatment */
+  html[data-theme='light'] .section-chip--on-dark {
+    background: #fff !important;
+    color: var(--fa-liberty-blue) !important;
+    box-shadow: 0 1px 0 rgba(13,18,50,0.04) !important;
+  }
+  /* Map continents become navy outlines on white */
+  html[data-theme='light'] .bg-fa-liberty-blue svg [stroke="rgba(244,244,241,0.18)"] { stroke: rgba(13,18,50,0.18) !important; }
+  html[data-theme='light'] .bg-fa-liberty-blue svg [fill="rgba(244,244,241,0.04)"] { fill: rgba(13,18,50,0.03) !important; }
 
   body {
     font-family: 'Inter Display', 'IBM Plex Sans Arabic', 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;

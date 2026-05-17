@@ -3,6 +3,7 @@ import { ChevronDown } from 'lucide-react';
 import BrandLogo from '../components/brand/BrandLogo';
 import BrandButton from '../components/brand/BrandButton';
 import LangToggle from '../components/brand/LangToggle';
+import ThemeToggle from '../components/brand/ThemeToggle';
 import { useT } from '../i18n/I18nContext';
 
 export default function Navigation() {
@@ -116,6 +117,7 @@ export default function Navigation() {
 
         {/* Right side */}
         <div className="hidden lg:flex items-center gap-5">
+          <ThemeToggle tone={scrolled ? 'light' : 'dark'} />
           <LangToggle tone={scrolled ? 'light' : 'dark'} />
           <a
             href="#"
