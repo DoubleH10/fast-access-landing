@@ -29,3 +29,7 @@ pnpm-debug.log*
 
 # Working archives
 *.zip
+.gstack/
+
+# Brandbook source assets (308MB Figma/AI/EPS files — copies live in app/public/)
+/Final/

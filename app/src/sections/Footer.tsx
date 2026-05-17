@@ -1,3 +1,6 @@
+import BrandLogo from '../components/brand/BrandLogo';
+import StepRibbon from '../components/brand/StepRibbon';
+
 export default function Footer() {
   const footerLinks = {
     Platform: ['Dashboard', 'Shipments', 'Inventory', 'Analytics', 'API'],
@@ -7,17 +10,25 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#1a1a3e] pt-20 pb-10 relative overflow-hidden">
+    <footer className="bg-fa-liberty-blue pt-24 pb-10 relative overflow-hidden">
+      {/* Subtle stepped ribbon accent */}
+      <StepRibbon
+        variant="outline"
+        color="#F4F4F1"
+        opacity={0.05}
+        strokeWidth={1}
+        className="pointer-events-none absolute top-1/4 right-0 w-[60%] max-w-[900px]"
+      />
       {/* Background watermark */}
       <div
-        className="absolute bottom-0 right-0 font-display font-black pointer-events-none select-none leading-none"
+        className="absolute bottom-0 right-0 font-display font-bold pointer-events-none select-none leading-none tracking-[-0.04em]"
         style={{
-          fontSize: 'clamp(120px, 15vw, 200px)',
-          color: 'rgba(245,245,240,0.03)',
-          transform: 'translate(5%, 20%)',
+          fontSize: 'clamp(140px, 18vw, 260px)',
+          color: 'rgba(244,244,241,0.04)',
+          transform: 'translate(4%, 22%)',
         }}
       >
-        FAST ACCESS
+        FAST&nbsp;ACCESS
       </div>
 
       <div className="container-main relative z-10">
@@ -25,13 +36,8 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
           {/* Logo & Description */}
           <div className="col-span-2">
-            <div className="flex items-center gap-2.5">
-              <img src="/assets/logo-mark.png" alt="Fast Access" className="h-7 w-auto opacity-80" />
-              <span className="font-display font-bold text-xl text-[#f5f5f0]">
-                Fast Access
-              </span>
-            </div>
-            <p className="mt-4 text-sm text-[#8a8a9a] leading-relaxed max-w-[280px]">
+            <BrandLogo variant="horizontal" mode="dark" height={40} showTagline />
+            <p className="font-body mt-5 text-sm text-fa-classic-chalk/55 leading-[1.65] max-w-[300px]">
               Fast Access is a tech-driven logistics company built to move businesses forward — connecting storage, fulfillment, and delivery through speed, precision, and innovation.
             </p>
           </div>
@@ -39,7 +45,7 @@ export default function Footer() {
           {/* Link columns */}
           {Object.entries(footerLinks).map(([header, links]) => (
             <div key={header}>
-              <div className="text-xs font-semibold text-[#f5f5f0] uppercase tracking-[0.08em] mb-4">
+              <div className="text-xs font-semibold text-[#F4F4F1] uppercase tracking-[0.08em] mb-4">
                 {header}
               </div>
               <ul className="space-y-2">
@@ -47,7 +53,7 @@ export default function Footer() {
                   <li key={link}>
                     <a
                       href="#"
-                      className="text-sm text-[#8a8a9a] hover:text-[#f5f5f0] transition-colors duration-150"
+                      className="text-sm text-[#8a8a9a] hover:text-[#F4F4F1] transition-colors duration-150"
                     >
                       {link}
                     </a>
@@ -59,7 +65,7 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="my-12 h-px bg-[rgba(245,245,240,0.1)]" />
+        <div className="my-12 h-px bg-[rgba(244,244,241,0.1)]" />
 
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -71,7 +77,7 @@ export default function Footer() {
               <a
                 key={item}
                 href="#"
-                className="text-[13px] text-[#8a8a9a] hover:text-[#f5f5f0] transition-colors duration-150"
+                className="text-[13px] text-[#8a8a9a] hover:text-[#F4F4F1] transition-colors duration-150"
               >
                 {item}
               </a>

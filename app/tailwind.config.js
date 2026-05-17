@@ -5,6 +5,35 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // ===== Fast Access brand palette (brandbook v1.0) =====
+        fa: {
+          'liberty-blue': '#0D1232',
+          'blue-rose':    '#2D2E75',
+          'orange-soda':  '#F15B41',
+          'classic-chalk':'#F4F4F1',
+          'spritzig':     '#72C6EA',
+          'goldfinch':    '#FDD803',
+          'navy-900': '#0D1232',
+          'navy-800': '#1D2556',
+          'navy-700': '#3C4688',
+          'navy-500': '#6873B8',
+          'navy-300': '#A3ACE8',
+          'rose-900': '#2D2E75',
+          'rose-700': '#4D4E9D',
+          'rose-500': '#8182C4',
+          'rose-300': '#A3A4DD',
+          'orange-900': '#F15B41',
+          'orange-700': '#FB7C65',
+          'orange-500': '#FFA291',
+          'orange-300': '#FECAC1',
+          'orange-100': '#FEF1EF',
+          'midnight':     '#565962',
+          'greatcoat':    '#808389',
+          'lavender':     '#A6ABB3',
+          'ink-muted':    '#6B6B7B',
+          'ink-faint':    '#8A8A9A',
+          'hairline':     '#E8E6DE',
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -48,6 +77,12 @@ module.exports = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+      },
+      fontFamily: {
+        display: ['Clash Grotesk', 'Geist', 'sans-serif'],
+        body:    ['Inter Display', 'Geist', 'sans-serif'],
+        ui:      ['Geist', 'Inter Display', 'sans-serif'],
+        mono:    ['Geist Mono', 'ui-monospace', 'monospace'],
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",

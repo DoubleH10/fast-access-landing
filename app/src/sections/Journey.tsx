@@ -4,6 +4,8 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useInView } from '../hooks/useInView';
 import { useMediaQuery } from '../hooks/useMediaQuery';
+import SectionChip from '../components/brand/SectionChip';
+import StepRibbon from '../components/brand/StepRibbon';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -151,7 +153,7 @@ export default function Journey() {
     const isTabletDevice = window.innerWidth >= 768 && window.innerWidth < 1024;
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x1a1a3e, isMobileDevice ? 0.045 : 0.035);
+    scene.fog = new THREE.FogExp2(0x0D1232, isMobileDevice ? 0.045 : 0.035);
 
     const fov = isMobileDevice ? 55 : 45;
     const camera = new THREE.PerspectiveCamera(fov, container.clientWidth / container.clientHeight, 0.1, 1000);
@@ -171,17 +173,17 @@ export default function Journey() {
 
     // Glowing cable
     const tubeGeo = new THREE.TubeGeometry(curve, tubeSegments, 0.04, isMobileDevice ? 6 : 8, false);
-    const tubeMat = new THREE.MeshBasicMaterial({ color: 0xff6b35, transparent: true, opacity: 0.12, depthWrite: false });
+    const tubeMat = new THREE.MeshBasicMaterial({ color: 0xF15B41, transparent: true, opacity: 0.12, depthWrite: false });
     scene.add(new THREE.Mesh(tubeGeo, tubeMat));
 
     const lineGeo = new THREE.BufferGeometry().setFromPoints(pathPoints);
-    const lineMat = new THREE.LineBasicMaterial({ color: 0xff6b35, transparent: true, opacity: 0.35, depthWrite: false });
+    const lineMat = new THREE.LineBasicMaterial({ color: 0xF15B41, transparent: true, opacity: 0.35, depthWrite: false });
     scene.add(new THREE.Line(lineGeo, lineMat));
 
     // Grid floor
     const gridSize = isMobileDevice ? 20 : 30;
     const gridDiv = isMobileDevice ? 20 : 30;
-    const gridHelper = new THREE.GridHelper(gridSize, gridDiv, 0x2a2a5a, 0x1e1e40);
+    const gridHelper = new THREE.GridHelper(gridSize, gridDiv, 0x1D2556, 0x1D2556);
     gridHelper.position.y = -2;
     (gridHelper.material as THREE.Material).opacity = 0.12;
     (gridHelper.material as THREE.Material).transparent = true;
@@ -200,7 +202,7 @@ export default function Journey() {
     const packageMesh = new THREE.Mesh(pkgGeo, pkgShader);
     scene.add(packageMesh);
 
-    const packageLight = new THREE.PointLight(0xff6b35, 0.8, 6);
+    const packageLight = new THREE.PointLight(0xF15B41, 0.8, 6);
     scene.add(packageLight);
 
     // Glow trail
@@ -228,14 +230,14 @@ export default function Journey() {
     STAGES.forEach((stage) => {
       const pos = curve.getPointAt(stage.progress);
       const ringGeo = new THREE.TorusGeometry(mRingSize, 0.03, 8, 24);
-      const ringMat = new THREE.MeshBasicMaterial({ color: 0xff6b35, transparent: true, opacity: 0.35, depthWrite: false });
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0xF15B41, transparent: true, opacity: 0.35, depthWrite: false });
       const ring = new THREE.Mesh(ringGeo, ringMat);
       ring.position.copy(pos);
       ring.lookAt(pos.clone().add(new THREE.Vector3(0, 1, 0)));
       scene.add(ring);
       markers.push(ring);
 
-      const light = new THREE.PointLight(0xff6b35, 0, 5);
+      const light = new THREE.PointLight(0xF15B41, 0, 5);
       light.position.copy(pos);
       scene.add(light);
       markerLights.push(light);
@@ -251,10 +253,10 @@ export default function Journey() {
     }
     const pGeo = new THREE.BufferGeometry();
     pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
-    const pMat = new THREE.PointsMaterial({ color: 0xff6b35, size: 0.06, transparent: true, opacity: 0.25, depthWrite: false, blending: THREE.AdditiveBlending });
+    const pMat = new THREE.PointsMaterial({ color: 0xF15B41, size: 0.06, transparent: true, opacity: 0.25, depthWrite: false, blending: THREE.AdditiveBlending });
     scene.add(new THREE.Points(pGeo, pMat));
 
-    scene.add(new THREE.AmbientLight(0x2a2a5a, 0.5));
+    scene.add(new THREE.AmbientLight(0x1D2556, 0.5));
 
     // ScrollTrigger
     const trigger = ScrollTrigger.create({
@@ -343,35 +345,49 @@ export default function Journey() {
 
   return (
     <section id="platform">
-      {/* Intro */}
-      <div ref={introRef} className="bg-[#1a1a3e] section-padding">
-        <div className="container-main">
-          <span className="eyebrow-label block mb-4" style={{ opacity: introInView ? 1 : 0, transform: introInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>
-            The package journey
-          </span>
-          <h2 className="font-display font-bold text-[28px] sm:text-[36px] lg:text-[48px] text-[#f5f5f0] leading-[1.1]" style={{ opacity: introInView ? 1 : 0, transform: introInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
-            Every order, tracked across six steps.
+      {/* Intro — dark with brand stepped ribbon accent */}
+      <div ref={introRef} className="relative bg-fa-liberty-blue section-padding overflow-hidden">
+        <StepRibbon
+          variant="outline"
+          color="#F15B41"
+          opacity={0.16}
+          strokeWidth={1.2}
+          className="pointer-events-none absolute -bottom-12 right-0 w-[60%] max-w-[900px]"
+        />
+        <StepRibbon
+          variant="outline"
+          color="#F4F4F1"
+          opacity={0.05}
+          strokeWidth={1}
+          className="pointer-events-none absolute top-1/4 right-1/3 w-[40%] max-w-[600px]"
+        />
+        <div className="container-main relative z-10">
+          <div className="mb-5" style={{ opacity: introInView ? 1 : 0, transform: introInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>
+            <SectionChip onDark>The Package Journey</SectionChip>
+          </div>
+          <h2 className="font-display font-bold text-[32px] sm:text-[40px] lg:text-[56px] text-fa-classic-chalk leading-[1.05] tracking-[-0.02em] max-w-[800px]" style={{ opacity: introInView ? 1 : 0, transform: introInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
+            Every order, <span className="text-fa-orange-soda">tracked</span> across six steps.
           </h2>
-          <p className="mt-4 text-sm sm:text-base text-[#8a8a9a] max-w-[520px] leading-relaxed" style={{ opacity: introInView ? 1 : 0, transform: introInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
+          <p className="font-body mt-5 text-base sm:text-lg text-fa-classic-chalk/65 max-w-[560px] leading-[1.55]" style={{ opacity: introInView ? 1 : 0, transform: introInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
             From receiving to delivery, your inventory moves through our intelligent network with real-time visibility at every stage.
           </p>
         </div>
       </div>
 
       {/* Journey sticky section */}
-      <div ref={wrapperRef} className="relative" style={{ height: journeyHeight, backgroundColor: '#1a1a3e' }}>
+      <div ref={wrapperRef} className="relative" style={{ height: journeyHeight, backgroundColor: '#0D1232' }}>
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(255,255,255,0.012) 48px, rgba(255,255,255,0.012) 49px)' }} />
 
         <div ref={stickyRef} className="h-screen w-full relative overflow-hidden">
           <div ref={canvasContainerRef} className="absolute inset-0" style={{ zIndex: 1 }} />
 
-          <a href="#numbers" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#f5f5f0] focus:text-[#1a1a3e] focus:rounded-lg">Skip journey</a>
+          <a href="#numbers" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#F4F4F1] focus:text-[#0D1232] focus:rounded-lg">Skip journey</a>
 
           {/* Progress chip */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(26,26,62,0.7)', backdropFilter: 'blur(12px)' }}>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b35]" style={{ animation: 'pulse-glow 2s infinite' }} />
-            <span className="font-mono text-[10px] text-[#ff6b35] tracking-wider">Stage {String(currentStageNum).padStart(2, '0')}</span>
-            <span className="text-[10px] text-[#f5f5f0]/60 font-medium">/ 06</span>
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(13,18,50,0.7)', backdropFilter: 'blur(12px)' }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#F15B41]" style={{ animation: 'pulse-glow 2s infinite' }} />
+            <span className="font-mono text-[10px] text-[#F15B41] tracking-wider">Stage {String(currentStageNum).padStart(2, '0')}</span>
+            <span className="text-[10px] text-[#F4F4F1]/60 font-medium">/ 06</span>
           </div>
 
           {/* Stage detail card */}
@@ -382,16 +398,16 @@ export default function Journey() {
               transform: isMobile ? 'translateX(-50%)' : 'none',
               width: isMobile ? 'calc(100% - 32px)' : isTablet ? 280 : 380,
               maxWidth: 420,
-              background: 'rgba(245,245,240,0.96)', backdropFilter: 'blur(20px)',
+              background: 'rgba(244,244,241,0.96)', backdropFilter: 'blur(20px)',
               borderRadius: 14, padding: isMobile ? 18 : 24,
               boxShadow: '0 12px 40px rgba(0,0,0,0.25)',
             }}
           >
             <div className="flex items-center gap-2 mb-2">
-              <span className="font-mono text-[11px] text-[#ff6b35]">{stageData.number}</span>
-              <span className="text-[11px] font-semibold text-[#1a1a3e] uppercase tracking-wide">{stageData.label}</span>
+              <span className="font-mono text-[11px] text-[#F15B41]">{stageData.number}</span>
+              <span className="text-[11px] font-semibold text-[#0D1232] uppercase tracking-wide">{stageData.label}</span>
             </div>
-            <h3 className="text-sm sm:text-base font-semibold text-[#1a1a3e] leading-snug">{stageData.headline}</h3>
+            <h3 className="text-sm sm:text-base font-semibold text-[#0D1232] leading-snug">{stageData.headline}</h3>
             <p className="text-xs sm:text-sm text-[#6b6b7b] leading-relaxed mt-2" style={{ display: '-webkit-box', WebkitLineClamp: isMobile ? 3 : 4, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
               {stageData.body}
             </p>
@@ -399,23 +415,23 @@ export default function Journey() {
             <div className="flex items-center gap-5 mt-3 pt-3 border-t border-[#e8e8e8]">
               {stageData.stats.map((s) => (
                 <div key={s.label}>
-                  <div className="font-mono text-[15px] text-[#1a1a3e] leading-none">{s.value}</div>
+                  <div className="font-mono text-[15px] text-[#0D1232] leading-none">{s.value}</div>
                   <div className="text-[9px] font-medium text-[#8a8a9a] uppercase tracking-wider mt-1">{s.label}</div>
                 </div>
               ))}
             </div>
             <div className="mt-3 h-1 rounded-full bg-[#e8e8e8] overflow-hidden">
-              <div className="h-full rounded-full bg-[#ff6b35] transition-all duration-100" style={{ width: `${journeyProgress * 100}%` }} />
+              <div className="h-full rounded-full bg-[#F15B41] transition-all duration-100" style={{ width: `${journeyProgress * 100}%` }} />
             </div>
           </div>
 
           {/* Desktop sidebar dots */}
           {isDesktop && (
             <div className="absolute right-6 top-1/2 -translate-y-1/2 z-10 flex flex-col items-center gap-4">
-              <span className="font-mono text-xs text-[#ff6b35] tracking-wider">{String(currentStageNum).padStart(2, '0')} / 06</span>
+              <span className="font-mono text-xs text-[#F15B41] tracking-wider">{String(currentStageNum).padStart(2, '0')} / 06</span>
               <div className="flex flex-col gap-2.5">
                 {STAGES.map((stage, i) => (
-                  <div key={stage.number} className="relative transition-all duration-300" style={{ width: i + 1 === currentStageNum ? 10 : 8, height: i + 1 === currentStageNum ? 10 : 8, borderRadius: '50%', backgroundColor: i + 1 <= currentStageNum ? '#ff6b35' : 'transparent', border: i + 1 <= currentStageNum ? 'none' : '1px solid rgba(245,245,240,0.25)', boxShadow: i + 1 === currentStageNum ? '0 0 12px rgba(255,107,53,0.6)' : 'none' }} />
+                  <div key={stage.number} className="relative transition-all duration-300" style={{ width: i + 1 === currentStageNum ? 10 : 8, height: i + 1 === currentStageNum ? 10 : 8, borderRadius: '50%', backgroundColor: i + 1 <= currentStageNum ? '#F15B41' : 'transparent', border: i + 1 <= currentStageNum ? 'none' : '1px solid rgba(244,244,241,0.25)', boxShadow: i + 1 === currentStageNum ? '0 0 12px rgba(241,91,65,0.6)' : 'none' }} />
                 ))}
               </div>
             </div>
@@ -433,7 +449,7 @@ export default function Journey() {
         </div>
       </div>
 
-      <style>{`@keyframes pulse-glow{0%,100%{box-shadow:0 0 4px rgba(255,107,53,0.5)}50%{box-shadow:0 0 12px rgba(255,107,53,0.9)}}@keyframes scroll-hint{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(5px);opacity:1}}`}</style>
+      <style>{`@keyframes pulse-glow{0%,100%{box-shadow:0 0 4px rgba(241,91,65,0.5)}50%{box-shadow:0 0 12px rgba(241,91,65,0.9)}}@keyframes scroll-hint{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(5px);opacity:1}}`}</style>
     </section>
   );
 }

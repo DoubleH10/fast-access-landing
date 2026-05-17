@@ -1,5 +1,6 @@
 import { useInView } from '../hooks/useInView';
 import { Truck, Warehouse, Package, RefreshCw, BarChart3, Gift, ArrowRight } from 'lucide-react';
+import SectionChip from '../components/brand/SectionChip';
 
 const services = [
   { icon: Truck, number: '01', title: 'Smart Fulfillment', description: 'End-to-end orchestration from cart to doorstep, with intelligent routing that picks the right facility for every order.' },
@@ -14,29 +15,45 @@ export default function ServicesGrid() {
   const { ref, isInView } = useInView(0.2);
 
   return (
-    <section id="services" ref={ref} className="bg-[#f5f5f0] section-padding">
+    <section id="services" ref={ref} className="bg-fa-classic-chalk section-padding border-t border-fa-hairline">
       <div className="container-main">
-        <span className="eyebrow-label block mb-4" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>What we do</span>
-        <h2 className="font-display font-bold text-[28px] sm:text-[36px] lg:text-[48px] text-[#1a1a3e] leading-[1.1]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
-          One platform, the whole back office.
-        </h2>
-        <p className="mt-4 text-sm sm:text-base text-[#6b6b7b] max-w-[560px] leading-relaxed" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
-          From the inbound dock to the customer's doorstep — and the journey back. Every step instrumented, every decision automated, every shipment yours to see.
-        </p>
+        <div className="grid lg:grid-cols-12 gap-8 items-end mb-14">
+          <div className="lg:col-span-7">
+            <div className="mb-5" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>
+              <SectionChip>What we do</SectionChip>
+            </div>
+            <h2 className="font-display font-bold text-[32px] sm:text-[40px] lg:text-[56px] text-fa-liberty-blue leading-[1.05] tracking-[-0.02em]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
+              One platform, the whole <span className="text-fa-orange-soda">back office</span>.
+            </h2>
+          </div>
+          <p className="font-body lg:col-span-5 text-base text-fa-ink-muted leading-[1.6]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
+            From the inbound dock to the customer's doorstep — and the journey back. Every step instrumented, every decision automated, every shipment yours to see.
+          </p>
+        </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mt-10">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, i) => {
             const Icon = service.icon;
             return (
-              <div key={service.number} className="group bg-white border border-[#e8e8e8] p-7 lg:p-8 transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-transparent cursor-default"
-                style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(40px)', transition: `opacity 400ms ease-out ${i * 80}ms, transform 400ms ease-out ${i * 80}ms, box-shadow 200ms ease-out, border-color 200ms ease-out` }}
+              <div
+                key={service.number}
+                className="group relative bg-white border border-fa-hairline p-8 lg:p-10 transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(13,18,50,0.08)] hover:border-fa-orange-soda/30 cursor-default rounded-sm"
+                style={{
+                  opacity: isInView ? 1 : 0,
+                  transform: isInView ? 'translateY(0)' : 'translateY(40px)',
+                  transition: `opacity 400ms ease-out ${i * 80}ms, transform 400ms ease-out ${i * 80}ms, box-shadow 200ms ease-out, border-color 200ms ease-out`,
+                }}
               >
-                <span className="font-mono text-[11px] text-[#ff6b35]">{service.number}</span>
-                <Icon size={36} strokeWidth={1.5} className="mt-4 text-[#1a1a3e]" />
-                <h3 className="mt-4 text-base font-semibold text-[#1a1a3e]">{service.title}</h3>
-                <p className="mt-2 text-sm text-[#6b6b7b] leading-relaxed">{service.description}</p>
-                <span className="inline-flex items-center gap-1 mt-4 text-[13px] font-medium text-[#ff6b35] group-hover:underline transition-all duration-150">
-                  Learn more <ArrowRight size={13} />
+                <div className="flex items-start justify-between">
+                  <span className="font-display text-[12px] text-fa-orange-soda font-semibold tracking-[0.12em]">{service.number}</span>
+                  <Icon size={28} strokeWidth={1.6} className="text-fa-liberty-blue" />
+                </div>
+                <h3 className="font-display mt-8 text-[20px] lg:text-[22px] font-semibold text-fa-liberty-blue tracking-[-0.01em]">
+                  {service.title}
+                </h3>
+                <p className="font-body mt-3 text-sm text-fa-ink-muted leading-[1.6]">{service.description}</p>
+                <span className="inline-flex items-center gap-1.5 mt-6 text-[12px] font-semibold uppercase tracking-[0.06em] text-fa-orange-soda group-hover:gap-2 transition-all duration-200 font-body">
+                  Learn more <ArrowRight size={13} strokeWidth={2.4} />
                 </span>
               </div>
             );

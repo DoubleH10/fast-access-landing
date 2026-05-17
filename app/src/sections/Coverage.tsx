@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useInView } from '../hooks/useInView';
+import SectionChip from '../components/brand/SectionChip';
 
 const cities = [
   { name: 'San Francisco', x: 14, y: 38, region: 'us' },
@@ -141,7 +142,7 @@ export default function Coverage() {
         const dashOffset = (time * 0.02) % 20;
         ctx.setLineDash([4, 8]);
         ctx.lineDashOffset = -dashOffset;
-        ctx.strokeStyle = 'rgba(255,107,53,0.35)';
+        ctx.strokeStyle = 'rgba(241,91,65,0.35)';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
@@ -150,7 +151,7 @@ export default function Coverage() {
         ctx.setLineDash([]);
 
         // Static faint line underneath
-        ctx.strokeStyle = 'rgba(255,107,53,0.12)';
+        ctx.strokeStyle = 'rgba(241,91,65,0.12)';
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
@@ -167,26 +168,26 @@ export default function Coverage() {
         // Outer glow ring
         ctx.beginPath();
         ctx.arc(cx, cy, 10 + pulse * 6, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,107,53,${0.06 + pulse * 0.1})`;
+        ctx.fillStyle = `rgba(241,91,65,${0.06 + pulse * 0.1})`;
         ctx.fill();
 
         // Middle ring
         ctx.beginPath();
         ctx.arc(cx, cy, 5 + pulse * 2, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(255,107,53,${0.25 + pulse * 0.2})`;
+        ctx.strokeStyle = `rgba(241,91,65,${0.25 + pulse * 0.2})`;
         ctx.lineWidth = 1.5;
         ctx.stroke();
 
         // Center dot
         ctx.beginPath();
         ctx.arc(cx, cy, 3, 0, Math.PI * 2);
-        ctx.fillStyle = '#ff6b35';
+        ctx.fillStyle = '#F15B41';
         ctx.fill();
 
         // Label (every city)
         ctx.font = '500 10px Inter, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillStyle = 'rgba(245,245,240,0.55)';
+        ctx.fillStyle = 'rgba(244,244,241,0.55)';
         ctx.fillText(city.name, cx, cy - 14);
       });
 
@@ -197,15 +198,15 @@ export default function Coverage() {
   }, []);
 
   return (
-    <section id="network" ref={ref} className="bg-[#1a1a3e] section-padding relative overflow-hidden">
+    <section id="network" ref={ref} className="bg-fa-liberty-blue section-padding relative overflow-hidden">
       <div className="container-main relative z-10">
-        <span className="eyebrow-label block mb-4" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>
-          The network
-        </span>
-        <h2 className="font-display font-bold text-[28px] sm:text-[36px] lg:text-[48px] text-[#f5f5f0] leading-[1.1]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
-          One network. Every market.
+        <div className="mb-5" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>
+          <SectionChip onDark>The Network</SectionChip>
+        </div>
+        <h2 className="font-display font-bold text-[32px] sm:text-[40px] lg:text-[56px] text-fa-classic-chalk leading-[1.05] tracking-[-0.02em]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
+          One network. <span className="text-fa-orange-soda">Every market.</span>
         </h2>
-        <p className="mt-4 text-sm sm:text-base text-[#8a8a9a] max-w-[560px] leading-relaxed" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
+        <p className="font-body mt-5 text-base text-fa-classic-chalk/55 max-w-[600px] leading-[1.6]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
           Hubs across North America, Europe, the Middle East, and Asia-Pacific. Local lanes, regional dispatch, zero handoffs you can feel.
         </p>
 
@@ -220,8 +221,8 @@ export default function Coverage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
           {stats.map((stat, i) => (
             <div key={stat.label} style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: `all 500ms ease-out ${400 + i * 100}ms` }}>
-              <div className="w-8 h-px bg-[#ff6b35] mb-3" />
-              <div className="font-mono text-[28px] lg:text-[36px] text-[#f5f5f0] leading-none">
+              <div className="w-8 h-px bg-[#F15B41] mb-3" />
+              <div className="font-mono text-[28px] lg:text-[36px] text-[#F4F4F1] leading-none">
                 {stat.value}
               </div>
               <div className="mt-2 text-[10px] sm:text-[11px] font-medium text-[#8a8a9a] uppercase tracking-[0.08em]">
@@ -233,7 +234,7 @@ export default function Coverage() {
       </div>
 
       {/* Background watermark */}
-      <div className="absolute bottom-0 right-0 font-display font-black pointer-events-none select-none leading-none" style={{ fontSize: 'clamp(80px, 12vw, 160px)', color: 'rgba(245,245,240,0.02)', transform: 'translate(10%, 25%)' }}>
+      <div className="absolute bottom-0 right-0 font-display font-black pointer-events-none select-none leading-none" style={{ fontSize: 'clamp(80px, 12vw, 160px)', color: 'rgba(244,244,241,0.02)', transform: 'translate(10%, 25%)' }}>
         NETWORK
       </div>
     </section>

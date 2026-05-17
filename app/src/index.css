@@ -1,213 +1,241 @@
+/* Inter Display + Clash Grotesk from Fontshare — must come before all other rules per CSS spec */
+@import url('https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500,600,700&f[]=inter-display@300,400,500,600,700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   Fast Access — Brand fonts (self-hosted)
+   Primary UI: Geist · Secondary/Body: Inter Display · Display headlines: Clash Grotesk
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Regular.ttf') format('truetype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Medium.ttf') format('truetype');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-SemiBold.ttf') format('truetype');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Bold.ttf') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
 @layer base {
   :root {
-    --navy: #1a1a3e;
-    --orange: #ff6b35;
-    --warm-white: #f5f5f0;
-    --muted-navy: #2a2a5a;
-    --muted-orange: #ff8c5a;
-    --text-primary: #1a1a3e;
-    --text-secondary: #6b6b7b;
-    --text-light: #f5f5f0;
-    --text-muted: #8a8a9a;
-    --card-bg: #ffffff;
-    --card-border: #e8e8e8;
-    --overlay: rgba(26, 26, 62, 0.85);
+    /* ===== Fast Access — Primary palette (brandbook pg 43) ===== */
+    --fa-liberty-blue: #0D1232;     /* primary dark, trust/stability */
+    --fa-blue-rose:    #2D2E75;     /* depth/accent */
+    --fa-orange-soda:  #F15B41;     /* signature energy/momentum */
 
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    /* ===== Fast Access — Secondary palette (brandbook pg 44) ===== */
+    --fa-classic-chalk: #F4F4F1;    /* primary "paper" cream */
+    --fa-spritzig:      #72C6EA;    /* sky blue accent */
+    --fa-goldfinch:     #FDD803;    /* yellow accent */
+
+    /* ===== Primary blue shades (pg 46) ===== */
+    --fa-navy-900: #0D1232;
+    --fa-navy-800: #1D2556;
+    --fa-navy-700: #3C4688;
+    --fa-navy-500: #6873B8;
+    --fa-navy-300: #A3ACE8;
+
+    /* ===== Blue Rose shades ===== */
+    --fa-rose-900: #2D2E75;
+    --fa-rose-700: #4D4E9D;
+    --fa-rose-500: #8182C4;
+    --fa-rose-300: #A3A4DD;
+    --fa-rose-100: #D9DAFF;
+
+    /* ===== Orange shades ===== */
+    --fa-orange-900: #F15B41;
+    --fa-orange-700: #FB7C65;
+    --fa-orange-500: #FFA291;
+    --fa-orange-300: #FECAC1;
+    --fa-orange-100: #FEF1EF;
+
+    /* ===== Monochrome neutrals (pg 45) ===== */
+    --fa-black:           #000000;
+    --fa-midnight-badger: #565962;
+    --fa-greatcoat-grey:  #808389;
+    --fa-modern-lavender: #A6ABB3;
+
+    /* ===== Semantic aliases (used by components) ===== */
+    --bg-paper:    var(--fa-classic-chalk);
+    --bg-deep:     var(--fa-liberty-blue);
+    --ink-primary: var(--fa-liberty-blue);
+    --ink-muted:   #6B6B7B;
+    --ink-faint:   #8A8A9A;
+    --accent:      var(--fa-orange-soda);
+    --accent-hover:#FB7C65;
+    --hairline:    #E8E6DE;
+    --overlay:     rgba(13, 18, 50, 0.85);
+
+    /* shadcn-ui vars (kept for primitive components) */
+    --background: 60 14% 95%;
+    --foreground: 232 59% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 232 59% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --popover-foreground: 232 59% 12%;
+    --primary: 232 59% 12%;
+    --primary-foreground: 60 14% 95%;
+    --secondary: 60 14% 92%;
+    --secondary-foreground: 232 59% 12%;
+    --muted: 60 14% 92%;
+    --muted-foreground: 232 8% 41%;
+    --accent: 11 86% 60%;
+    --accent-foreground: 60 14% 95%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.625rem;
+    --border: 50 10% 88%;
+    --input: 50 10% 88%;
+    --ring: 11 86% 60%;
+    --radius: 0.5rem;
   }
 
-  * {
-    @apply border-border;
-  }
+  * { @apply border-border; }
+
+  html { scroll-behavior: auto; }
 
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: var(--warm-white);
-    color: var(--text-primary);
+    font-family: 'Inter Display', 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-paper);
+    color: var(--ink-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-  }
-
-  html {
-    scroll-behavior: auto;
+    letter-spacing: -0.01em;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Big Shoulders Display', sans-serif;
+    font-family: 'Clash Grotesk', 'Geist', -apple-system, sans-serif;
+    letter-spacing: -0.02em;
+    color: var(--ink-primary);
   }
 }
 
 @layer components {
-  .font-display {
-    font-family: 'Big Shoulders Display', sans-serif;
-  }
+  /* === Brand fonts === */
+  .font-display { font-family: 'Clash Grotesk', 'Geist', sans-serif; letter-spacing: -0.02em; }
+  .font-body    { font-family: 'Inter Display', 'Geist', sans-serif; letter-spacing: -0.02em; }
+  .font-ui      { font-family: 'Geist', 'Inter Display', sans-serif; letter-spacing: -0.01em; }
+  .font-mono    { font-family: 'Geist Mono', ui-monospace, 'SF Mono', monospace; }
 
-  .font-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  }
-
-  .font-mono {
-    font-family: 'Space Mono', monospace;
-  }
-
-  .section-padding {
-    padding-top: 120px;
-    padding-bottom: 120px;
-  }
-
+  /* === Layout === */
   .container-main {
-    max-width: 1200px;
+    max-width: 1240px;
     margin-left: auto;
     margin-right: auto;
     padding-left: 24px;
     padding-right: 24px;
   }
+  @media (min-width: 768px)  { .container-main { padding-left: 48px;  padding-right: 48px;  } }
+  @media (min-width: 1024px) { .container-main { padding-left: 80px;  padding-right: 80px;  } }
 
-  @media (min-width: 768px) {
-    .container-main {
-      padding-left: 48px;
-      padding-right: 48px;
-    }
-  }
+  .section-padding { padding-top: 120px; padding-bottom: 120px; }
+  @media (max-width: 767px) { .section-padding { padding-top: 80px; padding-bottom: 80px; } }
 
-  @media (min-width: 1024px) {
-    .container-main {
-      padding-left: 80px;
-      padding-right: 80px;
-    }
-    .section-padding {
-      padding-top: 120px;
-      padding-bottom: 120px;
-    }
-  }
-
-  @media (max-width: 767px) {
-    .section-padding {
-      padding-top: 80px;
-      padding-bottom: 80px;
-    }
-  }
-
-  .btn-primary {
+  /* === Brand buttons (brandbook pg 55) ===
+     Signature: navy fill + attached orange square w/ white arrow on the right
+  */
+  .btn-brand {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 14px 28px;
-    background-color: var(--navy);
-    color: var(--warm-white);
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
+    align-items: stretch;
+    font-family: 'Inter Display', sans-serif;
+    font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    border: none;
+    letter-spacing: 0.06em;
+    border: 1px solid var(--fa-liberty-blue);
     cursor: pointer;
+    transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 200ms ease;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .btn-brand:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(13,18,50,0.15); }
+  .btn-brand__label {
+    display: inline-flex; align-items: center;
+    padding: 12px 20px;
+  }
+  .btn-brand__arrow {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px;
+    background: var(--fa-orange-soda);
+    color: #fff;
+    border-left: 1px solid var(--fa-liberty-blue);
     transition: background-color 150ms ease;
   }
+  .btn-brand:hover .btn-brand__arrow { background: var(--accent-hover); }
 
-  .btn-primary:hover {
-    background-color: var(--muted-navy);
+  .btn-brand--filled {
+    background: var(--fa-liberty-blue);
+    color: var(--fa-classic-chalk);
+    /* Visible edge so the button keeps presence on any background, including same-color sections */
+    box-shadow: inset 0 0 0 1px rgba(244, 244, 241, 0.18);
   }
+  /* On photo/dark sections, lift to blue-rose so the button stays visually distinct */
+  .bg-fa-liberty-blue .btn-brand--filled,
+  .hero-fade .btn-brand--filled {
+    background: var(--fa-blue-rose);
+  }
+  .btn-brand--outline { background: transparent; color: var(--fa-liberty-blue); }
+  .btn-brand--outline .btn-brand__arrow { border-left: 1px solid var(--fa-liberty-blue); }
+  .btn-brand--on-dark { background: transparent; color: var(--fa-classic-chalk); border-color: rgba(244,244,241,0.3); }
+  .btn-brand--on-dark .btn-brand__arrow { border-left: 1px solid rgba(244,244,241,0.3); }
 
-  .btn-orange {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 14px 28px;
-    background-color: var(--orange);
-    color: var(--warm-white);
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
+  /* === Section chip (eyebrow tag) brandbook pg 56 === */
+  .section-chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 0 rgba(13,18,50,0.04);
+    font-family: 'Inter Display', sans-serif;
+    font-size: 12px;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    border: none;
-    cursor: pointer;
-    transition: background-color 150ms ease;
+    color: var(--fa-liberty-blue);
+    letter-spacing: 0.01em;
+  }
+  .section-chip--on-dark {
+    background: rgba(244,244,241,0.06);
+    backdrop-filter: blur(8px);
+    color: var(--fa-classic-chalk);
+    box-shadow: inset 0 0 0 1px rgba(244,244,241,0.1);
+  }
+  .section-chip::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--fa-orange-soda);
+    border-radius: 1px;
   }
 
-  .btn-orange:hover {
-    background-color: var(--muted-orange);
-  }
-
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 14px 28px;
-    background-color: transparent;
-    color: var(--text-primary);
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
+  /* Legacy eyebrow label (for places not yet migrated to chip) */
+  .eyebrow-label {
+    font-family: 'Geist', monospace;
+    font-size: 12px;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    border: 1px solid var(--card-border);
-    cursor: pointer;
-    transition: border-color 150ms ease, color 150ms ease;
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--text-primary);
-  }
-
-  .eyebrow-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    font-weight: 400;
-    text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--orange);
-  }
-
-  .text-gradient-orange {
-    background: linear-gradient(135deg, var(--orange), var(--muted-orange));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--fa-orange-soda);
   }
 }
 
 @layer utilities {
-  .journey-bg-pattern::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 48px,
-      rgba(255, 255, 255, 0.015) 48px,
-      rgba(255, 255, 255, 0.015) 49px
-    );
-    pointer-events: none;
-    z-index: 0;
+  /* StepRibbon tiled grid utility used as section background */
+  .bg-step-grid {
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='80' viewBox='0 0 240 80'%3E%3Cpath d='M0 60 Q 30 60 50 40 T 100 20 L 240 20' fill='none' stroke='%230D1232' stroke-opacity='0.06' stroke-width='1.5'/%3E%3Cpath d='M0 60 L 100 60 Q 130 60 150 40 T 200 20 L 240 20' fill='none' stroke='%230D1232' stroke-opacity='0.04' stroke-width='1'/%3E%3C/svg%3E");
+    background-repeat: repeat;
   }
 }

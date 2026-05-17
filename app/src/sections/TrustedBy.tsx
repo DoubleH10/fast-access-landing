@@ -13,7 +13,7 @@ export default function TrustedBy() {
   const { ref, isInView } = useInView(0.2);
 
   return (
-    <section ref={ref} className="bg-[#f5f5f0] border-t border-[#e8e8e8] py-10 lg:py-14">
+    <section ref={ref} className="bg-fa-classic-chalk border-t border-fa-hairline py-12 lg:py-16">
       <div className="container-main">
         <p
           className="text-center text-[11px] font-medium text-[#8a8a9a] uppercase tracking-[0.12em] mb-7"
@@ -35,7 +35,7 @@ export default function TrustedBy() {
                 fontWeight: brand.weight,
                 letterSpacing: brand.letter,
                 fontSize: '0.85rem',
-                color: '#1a1a3e',
+                color: '#0D1232',
                 opacity: isInView ? 0.3 : 0,
                 filter: 'grayscale(100%)',
                 transform: isInView ? 'translateY(0)' : 'translateY(10px)',

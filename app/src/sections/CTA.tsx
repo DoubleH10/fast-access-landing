@@ -1,39 +1,83 @@
 import { useInView } from '../hooks/useInView';
-import { ArrowRight } from 'lucide-react';
+import BrandButton from '../components/brand/BrandButton';
+import SectionChip from '../components/brand/SectionChip';
+import StepRibbon from '../components/brand/StepRibbon';
 
 export default function CTA() {
   const { ref, isInView } = useInView(0.2);
 
   return (
-    <section id="quote" ref={ref} className="bg-[#1a1a3e] section-padding relative overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none opacity-30"
-        style={{ background: 'repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(255,255,255,0.012) 48px, rgba(255,255,255,0.012) 49px)' }}
+    <section
+      id="quote"
+      ref={ref}
+      className="relative bg-fa-liberty-blue section-padding overflow-hidden"
+    >
+      {/* Layered stepped ribbons — the signature "Built for Speed, Designed for Clarity" treatment */}
+      <StepRibbon
+        variant="outline"
+        color="#F15B41"
+        opacity={0.22}
+        strokeWidth={1.4}
+        className="pointer-events-none absolute top-1/4 -right-12 w-[80%] max-w-[1200px]"
+      />
+      <StepRibbon
+        variant="outline"
+        color="#F4F4F1"
+        opacity={0.07}
+        strokeWidth={1}
+        className="pointer-events-none absolute -bottom-8 -left-12 w-[70%] max-w-[1000px]"
+        style={{ transform: 'scaleX(-1)' }}
       />
 
       <div className="container-main text-center relative z-10">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 border rounded-full mb-6"
-          style={{ borderColor: 'rgba(245,245,240,0.2)', opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}
+        <div
+          className="inline-flex mb-6"
+          style={{
+            opacity: isInView ? 1 : 0,
+            transform: isInView ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'all 500ms ease-out',
+          }}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b35]" />
-          <span className="text-xs font-medium text-[#f5f5f0]">Ready when you are</span>
+          <SectionChip onDark>Ready when you are</SectionChip>
         </div>
 
-        <h2 className="font-display font-black text-[44px] sm:text-[56px] lg:text-[64px] text-[#f5f5f0] leading-[1]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
-          Ship faster. <span className="text-[#ff6b35]">Today.</span>
+        <h2
+          className="font-display font-bold text-[44px] sm:text-[60px] lg:text-[76px] text-fa-classic-chalk leading-[0.98] tracking-[-0.025em]"
+          style={{
+            opacity: isInView ? 1 : 0,
+            transform: isInView ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'all 600ms ease-out 100ms',
+          }}
+        >
+          Built for <span className="text-fa-orange-soda">Speed</span>,<br />
+          Designed for Clarity.
         </h2>
 
-        <p className="mt-4 text-base lg:text-lg text-[#8a8a9a] max-w-[480px] mx-auto" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
+        <p
+          className="font-body mt-6 text-base lg:text-lg text-fa-classic-chalk/65 max-w-[520px] mx-auto leading-[1.55]"
+          style={{
+            opacity: isInView ? 1 : 0,
+            transform: isInView ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'all 500ms ease-out 200ms',
+          }}
+        >
           Move your operations to a network that actually moves. Go live in 14 days.
         </p>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 mt-8" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 300ms' }}>
-          <a href="#" className="btn-orange">
-            Get a quote
-            <ArrowRight size={16} />
-          </a>
-          <a href="#" className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-medium text-[#f5f5f0] uppercase tracking-wider border transition-colors duration-150 hover:border-[#f5f5f0]" style={{ borderColor: 'rgba(245,245,240,0.2)' }}>
+        <div
+          className="flex flex-wrap items-center justify-center gap-3 mt-10"
+          style={{
+            opacity: isInView ? 1 : 0,
+            transform: isInView ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'all 500ms ease-out 300ms',
+          }}
+        >
+          <BrandButton variant="on-dark" href="#contact" className="!bg-fa-blue-rose">
+            Inquire Now
+          </BrandButton>
+          <BrandButton variant="on-dark" href="#tour" arrow={false}>
             Book a tour
-          </a>
+          </BrandButton>
         </div>
       </div>
     </section>

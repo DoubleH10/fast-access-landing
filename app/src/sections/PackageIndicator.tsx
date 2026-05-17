@@ -29,10 +29,10 @@ export default function PackageIndicator() {
 
         {/* Moving dot */}
         <div
-          className="absolute right-[14px] w-2 h-2 rounded-full bg-[#ff6b35] transition-[top] duration-150 ease-out"
+          className="absolute right-[14px] w-2 h-2 rounded-full bg-[#F15B41] transition-[top] duration-150 ease-out"
           style={{
             top: `calc(${pct * 100}% - 4px)`,
-            boxShadow: '0 0 12px rgba(255,107,53,0.8)',
+            boxShadow: '0 0 12px rgba(241,91,65,0.8)',
           }}
         />
 
@@ -46,14 +46,14 @@ export default function PackageIndicator() {
             >
               <span
                 className={`font-mono text-[10px] uppercase tracking-wider ${
-                  i === active ? 'text-[#ff6b35]' : 'text-white/60'
+                  i === active ? 'text-[#F15B41]' : 'text-white/60'
                 }`}
               >
                 {label}
               </span>
               <span
                 className={`block w-1.5 h-1.5 rounded-full ${
-                  i <= active ? 'bg-[#ff6b35]' : 'bg-white/25'
+                  i <= active ? 'bg-[#F15B41]' : 'bg-white/25'
                 }`}
               />
             </div>

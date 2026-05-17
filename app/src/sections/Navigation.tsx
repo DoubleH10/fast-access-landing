@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
+import BrandLogo from '../components/brand/BrandLogo';
+import BrandButton from '../components/brand/BrandButton';
 
 const navLinks = [
   { label: 'Platform', href: '#platform' },
@@ -28,29 +30,19 @@ export default function Navigation() {
       className="fixed top-9 left-0 right-0 z-50 transition-all duration-300"
       style={{
         top: scrolled ? 0 : 36,
-        backgroundColor: scrolled ? 'rgba(245,245,240,0.95)' : 'transparent',
+        backgroundColor: scrolled ? 'rgba(244,244,241,0.95)' : 'transparent',
         backdropFilter: scrolled ? 'blur(16px)' : 'none',
-        boxShadow: scrolled ? '0 1px 0 0 rgba(26,26,62,0.06)' : 'none',
+        boxShadow: scrolled ? '0 1px 0 0 rgba(13,18,50,0.06)' : 'none',
       }}
     >
       <div className="container-main flex items-center justify-between h-16 lg:h-20">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2.5 group">
-          <img
-            src="/assets/logo-mark.png"
-            alt="Fast Access"
-            className="h-8 w-auto"
-            style={{
-              filter: scrolled ? 'none' : 'brightness(0) invert(1)',
-              transition: 'filter 300ms',
-            }}
+        <a href="#" className="flex items-center group">
+          <BrandLogo
+            variant="horizontal"
+            mode={scrolled ? 'light' : 'dark'}
+            height={32}
           />
-          <span
-            className="font-display font-bold text-lg tracking-tight transition-colors duration-300"
-            style={{ color: scrolled ? '#1a1a3e' : '#ffffff' }}
-          >
-            Fast Access
-          </span>
         </a>
 
         {/* Desktop Nav */}
@@ -62,12 +54,12 @@ export default function Navigation() {
               className="relative text-sm font-medium transition-colors duration-200 group"
               style={{ color: scrolled ? '#6b6b7b' : 'rgba(255,255,255,0.8)' }}
             >
-              <span className="group-hover:text-[#ff6b35] transition-colors duration-200">
+              <span className="group-hover:text-[#F15B41] transition-colors duration-200">
                 {link.label}
               </span>
               <span
                 className="absolute -bottom-1 left-0 w-full h-px origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-out"
-                style={{ backgroundColor: '#ff6b35' }}
+                style={{ backgroundColor: '#F15B41' }}
               />
             </a>
           ))}
@@ -82,10 +74,10 @@ export default function Navigation() {
               className="flex items-center gap-1 text-sm font-medium transition-colors duration-200 group"
               style={{ color: scrolled ? '#6b6b7b' : 'rgba(255,255,255,0.8)' }}
             >
-              <span className="group-hover:text-[#ff6b35] transition-colors duration-200">Resources</span>
+              <span className="group-hover:text-[#F15B41] transition-colors duration-200">Resources</span>
               <ChevronDown
                 size={14}
-                className="transition-transform duration-200 group-hover:text-[#ff6b35]"
+                className="transition-transform duration-200 group-hover:text-[#F15B41]"
                 style={{ transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
               />
             </button>
@@ -93,7 +85,7 @@ export default function Navigation() {
               <div
                 className="absolute top-full left-0 mt-2 w-48 py-2 rounded-lg shadow-lg border border-[#e8e8e8] overflow-hidden"
                 style={{
-                  backgroundColor: scrolled ? 'rgba(245,245,240,0.98)' : 'rgba(26,26,62,0.98)',
+                  backgroundColor: scrolled ? 'rgba(244,244,241,0.98)' : 'rgba(13,18,50,0.98)',
                   backdropFilter: 'blur(12px)',
                   animation: 'fadeIn 200ms ease-out',
                 }}
@@ -105,7 +97,7 @@ export default function Navigation() {
                     className="block px-4 py-2 text-sm transition-colors duration-150"
                     style={{ color: scrolled ? '#6b6b7b' : 'rgba(255,255,255,0.7)' }}
                     onMouseEnter={(e) => {
-                      (e.target as HTMLElement).style.color = scrolled ? '#1a1a3e' : '#ffffff';
+                      (e.target as HTMLElement).style.color = scrolled ? '#0D1232' : '#ffffff';
                       (e.target as HTMLElement).style.backgroundColor = scrolled ? 'rgba(232,232,232,0.5)' : 'rgba(255,255,255,0.08)';
                     }}
                     onMouseLeave={(e) => {
@@ -125,20 +117,14 @@ export default function Navigation() {
         <div className="hidden lg:flex items-center gap-5">
           <a
             href="#"
-            className="text-sm font-medium transition-colors duration-200 hover:text-[#ff6b35]"
+            className="text-sm font-medium transition-colors duration-200 hover:text-[#F15B41]"
             style={{ color: scrolled ? '#6b6b7b' : 'rgba(255,255,255,0.8)' }}
           >
             Log in
           </a>
-          <a
-            href="#quote"
-            className="group inline-flex items-center gap-2 px-5 py-2.5 bg-[#ff6b35] text-white text-sm font-semibold hover:bg-[#ff8c5a] transition-colors duration-200"
-          >
+          <BrandButton variant={scrolled ? 'filled' : 'on-dark'} href="#quote">
             Get a quote
-            <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors">
-              <ArrowRight size={12} />
-            </span>
-          </a>
+          </BrandButton>
         </div>
 
         {/* Mobile menu button */}
@@ -152,7 +138,7 @@ export default function Navigation() {
               key={i}
               className="w-5 h-0.5 mb-1 last:mb-0 transition-all duration-200"
               style={{
-                backgroundColor: scrolled ? '#1a1a3e' : '#ffffff',
+                backgroundColor: scrolled ? '#0D1232' : '#ffffff',
                 transform: mobileOpen
                   ? i === 0 ? 'rotate(45deg) translate(3px, 3px)' : i === 2 ? 'rotate(-45deg) translate(3px, -3px)' : 'none'
                   : 'none',
@@ -175,7 +161,7 @@ export default function Navigation() {
         <div
           className="lg:hidden border-t"
           style={{
-            backgroundColor: scrolled ? 'rgba(245,245,240,0.98)' : 'rgba(26,26,62,0.98)',
+            backgroundColor: scrolled ? 'rgba(244,244,241,0.98)' : 'rgba(13,18,50,0.98)',
             backdropFilter: 'blur(16px)',
             borderColor: scrolled ? '#e8e8e8' : 'rgba(255,255,255,0.1)',
           }}
@@ -185,8 +171,8 @@ export default function Navigation() {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-base font-medium transition-colors hover:text-[#ff6b35]"
-                style={{ color: scrolled ? '#1a1a3e' : '#ffffff' }}
+                className="text-base font-medium transition-colors hover:text-[#F15B41]"
+                style={{ color: scrolled ? '#0D1232' : '#ffffff' }}
                 onClick={() => setMobileOpen(false)}
               >
                 {link.label}
@@ -201,14 +187,12 @@ export default function Navigation() {
               >
                 Log in
               </a>
-              <a
+              <BrandButton
+                variant={scrolled ? 'filled' : 'on-dark'}
                 href="#quote"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#ff6b35] text-white text-sm font-semibold"
-                onClick={() => setMobileOpen(false)}
               >
                 Get a quote
-                <ArrowRight size={14} />
-              </a>
+              </BrandButton>
             </div>
           </div>
         </div>

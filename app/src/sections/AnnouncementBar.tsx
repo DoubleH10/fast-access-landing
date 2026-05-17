@@ -31,13 +31,13 @@ export default function AnnouncementBar() {
       `}</style>
       <div className="container-main flex items-center justify-center h-9 relative">
         <div className="flex items-center gap-2">
-          <TrendingUp size={12} className="text-[#ff6b35] flex-shrink-0" />
+          <TrendingUp size={12} className="text-[#F15B41] flex-shrink-0" />
           <p className="text-xs text-white/60">
             Fast Access raises $80M from secua ventures &amp; Matrix partners
           </p>
           <a
             href="#"
-            className="text-xs font-semibold text-[#ff6b35] hover:text-[#ff8c5a] hover:underline underline-offset-2 transition-all duration-150"
+            className="text-xs font-semibold text-[#F15B41] hover:text-[#FB7C65] hover:underline underline-offset-2 transition-all duration-150"
           >
             Read announcement
           </a>

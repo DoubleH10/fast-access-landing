@@ -1,23 +1,52 @@
 import { useInView } from '../hooks/useInView';
+import StepRibbon from '../components/brand/StepRibbon';
 
 export default function Testimonial() {
   const { ref, isInView } = useInView(0.2);
 
   return (
-    <section ref={ref} className="bg-[#1a1a3e] section-padding">
-      <div className="container-main max-w-[800px] text-center">
+    <section ref={ref} className="relative bg-fa-liberty-blue section-padding overflow-hidden">
+      <StepRibbon
+        variant="outline"
+        color="#F15B41"
+        opacity={0.12}
+        strokeWidth={1.2}
+        className="pointer-events-none absolute -top-8 -right-12 w-[55%] max-w-[800px]"
+      />
+      <StepRibbon
+        variant="outline"
+        color="#F4F4F1"
+        opacity={0.04}
+        strokeWidth={1}
+        className="pointer-events-none absolute -bottom-8 -left-12 w-[55%] max-w-[800px]"
+        style={{ transform: 'scaleX(-1)' }}
+      />
+
+      <div className="container-main max-w-[860px] text-center relative z-10">
         <div style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out' }}>
-          <span className="font-display text-[48px] text-[#ff6b35] leading-none">&ldquo;</span>
-          <blockquote className="font-display text-[22px] sm:text-[28px] lg:text-[32px] text-[#f5f5f0] leading-[1.4] -mt-4">
-            Fast Access did in eight weeks what our 3PL hadn't managed in two years. Our shipping costs fell 22% and our customers actually got their packages on time.
+          <span className="font-display text-[64px] text-fa-orange-soda leading-none block mb-2">&ldquo;</span>
+          <blockquote className="font-display text-[26px] sm:text-[32px] lg:text-[40px] text-fa-classic-chalk leading-[1.25] tracking-[-0.015em]">
+            Fast Access did in eight weeks what our 3PL hadn't managed in two years.{' '}
+            <span className="text-fa-orange-soda">Our shipping costs fell 22%</span>{' '}
+            and our customers actually got their packages on time.
           </blockquote>
         </div>
-        <div className="mt-8 flex flex-col items-center" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
-          <div className="w-12 h-12 rounded-full flex items-center justify-center text-[#6b6b7b] font-semibold text-base" style={{ background: 'linear-gradient(135deg, #e8e8e8, #d0d0d0)' }}>
+        <div
+          className="mt-10 flex flex-col items-center"
+          style={{
+            opacity: isInView ? 1 : 0,
+            transform: isInView ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'all 500ms ease-out 200ms',
+          }}
+        >
+          <div
+            className="w-12 h-12 rounded-full flex items-center justify-center text-fa-liberty-blue font-semibold text-base font-display"
+            style={{ background: 'linear-gradient(135deg, #FECAC1, #FB7C65)' }}
+          >
             OM
           </div>
-          <div className="mt-3 text-base font-semibold text-[#f5f5f0]">Olivia Martin</div>
-          <div className="text-sm text-[#8a8a9a]">Head of Operations, Northwind Apparel</div>
+          <div className="font-body mt-4 text-base font-semibold text-fa-classic-chalk">Olivia Martin</div>
+          <div className="font-body text-sm text-fa-classic-chalk/55">Head of Operations, Northwind Apparel</div>
         </div>
       </div>
     </section>

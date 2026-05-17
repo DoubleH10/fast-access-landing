@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { Play, ArrowRight, ChevronDown } from 'lucide-react';
+import { Play, ChevronDown } from 'lucide-react';
+import BrandButton from '../components/brand/BrandButton';
+import StepRibbon from '../components/brand/StepRibbon';
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -66,8 +68,8 @@ export default function Hero() {
         ctx.translate(cube.x, y);
 
         // Front face
-        ctx.fillStyle = cube.hover ? 'rgba(255,107,53,0.12)' : 'rgba(255,255,255,0.025)';
-        ctx.strokeStyle = cube.hover ? '#ff6b35' : 'rgba(255,255,255,0.12)';
+        ctx.fillStyle = cube.hover ? 'rgba(241,91,65,0.12)' : 'rgba(255,255,255,0.025)';
+        ctx.strokeStyle = cube.hover ? '#F15B41' : 'rgba(255,255,255,0.12)';
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.rect(-size / 2, -size / 2, size, size);
@@ -75,8 +77,8 @@ export default function Hero() {
         ctx.stroke();
 
         // Top face
-        ctx.fillStyle = cube.hover ? 'rgba(255,107,53,0.08)' : 'rgba(255,255,255,0.015)';
-        ctx.strokeStyle = cube.hover ? 'rgba(255,107,53,0.5)' : 'rgba(255,255,255,0.06)';
+        ctx.fillStyle = cube.hover ? 'rgba(241,91,65,0.08)' : 'rgba(255,255,255,0.015)';
+        ctx.strokeStyle = cube.hover ? 'rgba(241,91,65,0.5)' : 'rgba(255,255,255,0.06)';
         ctx.beginPath();
         ctx.moveTo(-size / 2, -size / 2);
         ctx.lineTo(-size / 2 + size * 0.3, -size / 2 - size * 0.3);
@@ -87,8 +89,8 @@ export default function Hero() {
         ctx.stroke();
 
         // Right face
-        ctx.fillStyle = cube.hover ? 'rgba(255,107,53,0.06)' : 'rgba(255,255,255,0.01)';
-        ctx.strokeStyle = cube.hover ? 'rgba(255,107,53,0.4)' : 'rgba(255,255,255,0.05)';
+        ctx.fillStyle = cube.hover ? 'rgba(241,91,65,0.06)' : 'rgba(255,255,255,0.01)';
+        ctx.strokeStyle = cube.hover ? 'rgba(241,91,65,0.4)' : 'rgba(255,255,255,0.05)';
         ctx.beginPath();
         ctx.moveTo(size / 2, -size / 2);
         ctx.lineTo(size / 2 + size * 0.3, -size / 2 - size * 0.3);
@@ -122,7 +124,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen bg-[#0d0d1a] overflow-hidden">
+    <section className="relative min-h-screen bg-fa-liberty-blue overflow-hidden">
       {/* Background Image — cinematic full-bleed */}
       <div className="absolute inset-0">
         <img
@@ -130,16 +132,33 @@ export default function Hero() {
           alt="Fast Access fulfillment center"
           className="w-full h-full object-cover"
         />
-        {/* Dark overlay */}
+        {/* Brand gradient overlay */}
         <div
           className="absolute inset-0"
           style={{
             background: `
-              linear-gradient(180deg, rgba(13,18,50,0.65) 0%, rgba(13,18,50,0.35) 40%, rgba(13,18,50,0.50) 70%, rgba(13,18,50,0.85) 100%)
+              linear-gradient(180deg, rgba(13,18,50,0.72) 0%, rgba(13,18,50,0.45) 40%, rgba(13,18,50,0.55) 70%, rgba(13,18,50,0.92) 100%)
             `,
           }}
         />
       </div>
+
+      {/* Signature Stepped Ribbon — lower-right brand accent (brandbook style) */}
+      <StepRibbon
+        variant="outline"
+        color="#F15B41"
+        opacity={0.18}
+        strokeWidth={1.2}
+        className="pointer-events-none absolute bottom-0 right-0 w-[70%] max-w-[1100px] z-0"
+        style={{ transform: 'translateY(15%)' }}
+      />
+      <StepRibbon
+        variant="outline"
+        color="#F4F4F1"
+        opacity={0.06}
+        strokeWidth={1}
+        className="pointer-events-none absolute top-1/3 right-0 w-[55%] max-w-[900px] z-0"
+      />
 
       {/* Content */}
       <div className="relative z-10 container-main pt-28 lg:pt-32 pb-8 min-h-screen flex flex-col justify-center">
@@ -151,33 +170,30 @@ export default function Hero() {
               className="hero-fade inline-flex items-center gap-2 px-3 py-1.5 border rounded-full mb-6"
               style={{ borderColor: 'rgba(255,255,255,0.2)' }}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b35]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#F15B41]" />
               <span className="text-xs font-medium text-white/70">
                 Fulfillment, at the speed of click
               </span>
             </div>
 
-            {/* Headline */}
-            <h1 className="hero-fade font-display font-bold text-[40px] sm:text-[56px] lg:text-[68px] text-white leading-[0.95] tracking-tight">
+            {/* Headline — Clash Grotesk, brand orange highlight on the key noun */}
+            <h1 className="hero-fade font-display font-bold text-[44px] sm:text-[58px] lg:text-[72px] text-white leading-[0.95] tracking-[-0.025em]">
               Move every package{' '}
-              <span className="text-[#ff6b35]">forward.</span>
+              <span className="text-fa-orange-soda">forward.</span>
             </h1>
 
             {/* Subhead */}
-            <p className="hero-fade mt-5 text-base lg:text-lg text-white/60 max-w-[480px] leading-relaxed">
+            <p className="hero-fade font-body mt-6 text-base lg:text-lg text-white/65 max-w-[500px] leading-[1.55]">
               A tech-driven fulfillment network that stores your inventory, picks every order, and ships it across the country — all on a single intelligent platform.
             </p>
 
-            {/* CTA Row */}
-            <div className="hero-fade flex flex-wrap items-center gap-4 mt-8">
-              <a href="#quote" className="group inline-flex items-center gap-2 px-6 py-3.5 bg-[#ff6b35] text-white text-sm font-semibold uppercase tracking-wider hover:bg-[#ff8c5a] transition-colors duration-200">
+            {/* CTA Row — brand signature buttons */}
+            <div className="hero-fade flex flex-wrap items-center gap-3 mt-8">
+              <BrandButton variant="filled" href="#quote">
                 Start shipping
-                <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors">
-                  <ArrowRight size={10} />
-                </span>
-              </a>
-              <button className="inline-flex items-center gap-2 px-6 py-3.5 border text-white/80 text-sm font-medium uppercase tracking-wider hover:border-white/50 hover:text-white transition-all duration-200" style={{ borderColor: 'rgba(255,255,255,0.2)' }}>
-                <Play size={14} className="text-white/60" />
+              </BrandButton>
+              <button className="inline-flex items-center gap-2 px-5 py-3 border text-white/80 text-xs font-semibold uppercase tracking-[0.06em] hover:border-white/50 hover:text-white transition-all duration-200 font-body" style={{ borderColor: 'rgba(244,244,241,0.25)' }}>
+                <Play size={13} className="text-white/70" />
                 Watch the demo
               </button>
             </div>
@@ -207,7 +223,7 @@ export default function Hero() {
             <div
               className="relative w-full max-w-[400px] lg:max-w-[440px] rounded-2xl overflow-hidden"
               style={{
-                backgroundColor: 'rgba(26,26,62,0.6)',
+                backgroundColor: 'rgba(13,18,50,0.6)',
                 backdropFilter: 'blur(16px)',
                 boxShadow: '0 32px 64px rgba(0,0,0,0.35), inset 0 1px 0 0 rgba(255,255,255,0.08)',
                 aspectRatio: '4/5',
@@ -216,13 +232,13 @@ export default function Hero() {
               {/* LIVE chip */}
               <div
                 className="absolute top-4 right-4 z-10 flex items-center gap-2 px-3 py-1.5 rounded-full"
-                style={{ background: 'rgba(26,26,62,0.6)', backdropFilter: 'blur(8px)' }}
+                style={{ background: 'rgba(13,18,50,0.6)', backdropFilter: 'blur(8px)' }}
               >
                 <span
-                  className="w-1.5 h-1.5 rounded-full bg-[#ff6b35]"
+                  className="w-1.5 h-1.5 rounded-full bg-[#F15B41]"
                   style={{ animation: 'pulse-glow 2s infinite' }}
                 />
-                <span className="font-mono text-[9px] text-[#f5f5f0] tracking-wide">
+                <span className="font-mono text-[9px] text-[#F4F4F1] tracking-wide">
                   LIVE &middot; 12,408 IN TRANSIT
                 </span>
               </div>
@@ -238,18 +254,18 @@ export default function Hero() {
               <div
                 className="absolute bottom-4 left-4 right-4 rounded-xl p-5"
                 style={{
-                  background: 'rgba(245,245,240,0.96)',
+                  background: 'rgba(244,244,241,0.96)',
                   backdropFilter: 'blur(12px)',
                   boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
                 }}
               >
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm font-semibold text-[#1a1a3e]">Operations Dashboard</span>
+                  <span className="text-sm font-semibold text-[#0D1232]">Operations Dashboard</span>
                 </div>
                 <div className="space-y-3">
                   {[
                     { color: '#22c55e', label: 'Dispatched', date: '10 / 07' },
-                    { color: '#ff6b35', label: 'In transit', date: '12 / 07' },
+                    { color: '#F15B41', label: 'In transit', date: '12 / 07' },
                     { color: '#d1d5db', label: 'Delivery', date: '15 / 07' },
                   ].map((item) => (
                     <div key={item.label} className="flex items-center justify-between">
@@ -267,7 +283,7 @@ export default function Hero() {
                 {/* Progress bar */}
                 <div className="flex h-1 mt-4 rounded-full overflow-hidden bg-[#e8e8e8]">
                   <div className="h-full rounded-l-full" style={{ width: '38%', backgroundColor: '#22c55e' }} />
-                  <div className="h-full" style={{ width: '42%', backgroundColor: '#ff6b35' }} />
+                  <div className="h-full" style={{ width: '42%', backgroundColor: '#F15B41' }} />
                   <div className="h-full rounded-r-full" style={{ width: '20%', backgroundColor: '#d1d5db' }} />
                 </div>
               </div>
@@ -290,8 +306,8 @@ export default function Hero() {
 
       <style>{`
         @keyframes pulse-glow {
-          0%, 100% { box-shadow: 0 0 4px rgba(255,107,53,0.5); }
-          50% { box-shadow: 0 0 12px rgba(255,107,53,0.9); }
+          0%, 100% { box-shadow: 0 0 4px rgba(241,91,65,0.5); }
+          50% { box-shadow: 0 0 12px rgba(241,91,65,0.9); }
         }
         @keyframes bounce-down {
           0%, 100% { transform: translateY(0); opacity: 0.5; }
