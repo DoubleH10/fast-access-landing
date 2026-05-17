@@ -1,6 +1,7 @@
 import { useInView } from '../hooks/useInView';
 import { Check, ArrowRight } from 'lucide-react';
 import SectionChip from '../components/brand/SectionChip';
+import BrandPattern from '../components/brand/BrandPattern';
 
 const sidebarOps = [
   { label: 'Dashboard', active: true, badge: null },
@@ -34,8 +35,15 @@ export default function DashboardPreview() {
   const { ref, isInView } = useInView(0.15);
 
   return (
-    <section ref={ref} className="bg-fa-classic-chalk section-padding border-t border-fa-hairline">
-      <div className="container-main">
+    <section ref={ref} className="relative bg-fa-classic-chalk section-padding border-t border-fa-hairline overflow-hidden">
+      {/* Pattern 3 (lozenge stripe) — soft texture in the upper-right corner */}
+      <BrandPattern
+        pattern="lozenge"
+        tint="navy"
+        opacity={0.05}
+        className="absolute top-0 -right-[10%] w-[60%] max-w-[800px]"
+      />
+      <div className="container-main relative z-10">
         <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-start">
           {/* Left Column */}
           <div className="lg:col-span-2 lg:pt-8">

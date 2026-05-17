@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useInView } from '../hooks/useInView';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import SectionChip from '../components/brand/SectionChip';
-import StepRibbon from '../components/brand/StepRibbon';
+import BrandPattern from '../components/brand/BrandPattern';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -347,19 +347,17 @@ export default function Journey() {
     <section id="platform">
       {/* Intro — dark with brand stepped ribbon accent */}
       <div ref={introRef} className="relative bg-fa-liberty-blue section-padding overflow-hidden">
-        <StepRibbon
-          variant="outline"
-          color="#F15B41"
-          opacity={0.16}
-          strokeWidth={1.2}
-          className="pointer-events-none absolute -bottom-12 right-0 w-[60%] max-w-[900px]"
+        <BrandPattern
+          pattern="ribbon"
+          tint="orange"
+          opacity={0.22}
+          className="absolute -bottom-[15%] -right-[5%] w-[80%] max-w-none"
         />
-        <StepRibbon
-          variant="outline"
-          color="#F4F4F1"
-          opacity={0.05}
-          strokeWidth={1}
-          className="pointer-events-none absolute top-1/4 right-1/3 w-[40%] max-w-[600px]"
+        <BrandPattern
+          pattern="lozenge"
+          tint="white"
+          opacity={0.04}
+          className="absolute top-[15%] -right-[20%] w-[55%] max-w-[800px]"
         />
         <div className="container-main relative z-10">
           <div className="mb-5" style={{ opacity: introInView ? 1 : 0, transform: introInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>

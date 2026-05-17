@@ -1,5 +1,5 @@
 import BrandLogo from '../components/brand/BrandLogo';
-import StepRibbon from '../components/brand/StepRibbon';
+import BrandPattern from '../components/brand/BrandPattern';
 
 export default function Footer() {
   const footerLinks = {
@@ -11,13 +11,13 @@ export default function Footer() {
 
   return (
     <footer className="bg-fa-liberty-blue pt-24 pb-10 relative overflow-hidden">
-      {/* Subtle stepped ribbon accent */}
-      <StepRibbon
-        variant="outline"
-        color="#F4F4F1"
-        opacity={0.05}
-        strokeWidth={1}
-        className="pointer-events-none absolute top-1/4 right-0 w-[60%] max-w-[900px]"
+      {/* Pattern 1 — brand ribbon along the top, signature finishing mark */}
+      <BrandPattern
+        pattern="ribbon"
+        tint="orange"
+        opacity={0.2}
+        className="absolute top-0 -right-[10%] w-[120%] max-w-none"
+        style={{ transform: 'translateY(-30%)' }}
       />
       {/* Background watermark */}
       <div
@@ -36,7 +36,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
           {/* Logo & Description */}
           <div className="col-span-2">
-            <BrandLogo variant="horizontal" mode="dark" height={40} showTagline />
+            <BrandLogo variant="full" mode="dark" height={56} />
             <p className="font-body mt-5 text-sm text-fa-classic-chalk/55 leading-[1.65] max-w-[300px]">
               Fast Access is a tech-driven logistics company built to move businesses forward — connecting storage, fulfillment, and delivery through speed, precision, and innovation.
             </p>

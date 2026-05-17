@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useInView } from '../hooks/useInView';
 import SectionChip from '../components/brand/SectionChip';
+import BrandPattern from '../components/brand/BrandPattern';
 
 const cities = [
   { name: 'San Francisco', x: 14, y: 38, region: 'us' },
@@ -59,75 +60,44 @@ export default function Coverage() {
     const w = rect.width;
     const h = rect.height;
 
+    /**
+     * Dot-stipple "landmass" hit test.
+     * Each continent is approximated as an ellipse (cx, cy, rx, ry) in
+     * normalised 0..1 coordinates. A dot is drawn if it falls inside any
+     * ellipse. Cleaner and more premium than rough polygons.
+     */
+    const landmasses: Array<[number, number, number, number]> = [
+      [0.18, 0.36, 0.13, 0.16], // North America
+      [0.28, 0.72, 0.07, 0.16], // South America
+      [0.52, 0.30, 0.07, 0.10], // Europe
+      [0.55, 0.62, 0.06, 0.18], // Africa
+      [0.72, 0.32, 0.13, 0.14], // Asia (north)
+      [0.78, 0.52, 0.10, 0.10], // SE Asia / India
+      [0.89, 0.74, 0.06, 0.07], // Australia
+    ];
+    const isLand = (nx: number, ny: number) =>
+      landmasses.some(([cx, cy, rx, ry]) => {
+        const dx = (nx - cx) / rx;
+        const dy = (ny - cy) / ry;
+        return dx * dx + dy * dy <= 1;
+      });
+
     let animId: number;
     const animate = (time: number) => {
       ctx.clearRect(0, 0, w, h);
 
-      // Draw faint continental outlines (simplified)
-      ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-      ctx.lineWidth = 1;
-      ctx.fillStyle = 'rgba(255,255,255,0.015)';
-
-      // North America
-      ctx.beginPath();
-      ctx.moveTo(w * 0.08, h * 0.25);
-      ctx.lineTo(w * 0.45, h * 0.22);
-      ctx.lineTo(w * 0.42, h * 0.55);
-      ctx.lineTo(w * 0.15, h * 0.52);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // South America
-      ctx.beginPath();
-      ctx.moveTo(w * 0.22, h * 0.56);
-      ctx.lineTo(w * 0.38, h * 0.58);
-      ctx.lineTo(w * 0.35, h * 0.88);
-      ctx.lineTo(w * 0.25, h * 0.82);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // Europe
-      ctx.beginPath();
-      ctx.moveTo(w * 0.44, h * 0.22);
-      ctx.lineTo(w * 0.62, h * 0.22);
-      ctx.lineTo(w * 0.60, h * 0.42);
-      ctx.lineTo(w * 0.46, h * 0.40);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // Africa
-      ctx.beginPath();
-      ctx.moveTo(w * 0.46, h * 0.44);
-      ctx.lineTo(w * 0.60, h * 0.44);
-      ctx.lineTo(w * 0.58, h * 0.88);
-      ctx.lineTo(w * 0.48, h * 0.82);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // Asia
-      ctx.beginPath();
-      ctx.moveTo(w * 0.62, h * 0.20);
-      ctx.lineTo(w * 0.92, h * 0.20);
-      ctx.lineTo(w * 0.94, h * 0.55);
-      ctx.lineTo(w * 0.72, h * 0.58);
-      ctx.lineTo(w * 0.62, h * 0.44);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // Australia
-      ctx.beginPath();
-      ctx.moveTo(w * 0.82, h * 0.65);
-      ctx.lineTo(w * 0.94, h * 0.65);
-      ctx.lineTo(w * 0.94, h * 0.82);
-      ctx.lineTo(w * 0.82, h * 0.80);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
+      // Dot-stipple world map — elegant landmass suggestion
+      const stepX = 14;
+      const stepY = 14;
+      for (let x = stepX / 2; x < w; x += stepX) {
+        for (let y = stepY / 2; y < h; y += stepY) {
+          if (!isLand(x / w, y / h)) continue;
+          ctx.beginPath();
+          ctx.arc(x, y, 1.1, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(244,244,241,0.18)';
+          ctx.fill();
+        }
+      }
 
       // Draw connections — BRIGHTER
       connections.forEach(([a, b]) => {
@@ -199,6 +169,13 @@ export default function Coverage() {
 
   return (
     <section id="network" ref={ref} className="bg-fa-liberty-blue section-padding relative overflow-hidden">
+      {/* Pattern 5 (isometric ribbons) — atmospheric brand mark behind the map */}
+      <BrandPattern
+        pattern="isometric"
+        tint="orange"
+        opacity={0.08}
+        className="absolute -top-[10%] -right-[15%] w-[70%] max-w-[1100px]"
+      />
       <div className="container-main relative z-10">
         <div className="mb-5" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>
           <SectionChip onDark>The Network</SectionChip>
@@ -210,9 +187,9 @@ export default function Coverage() {
           Hubs across North America, Europe, the Middle East, and Asia-Pacific. Local lanes, regional dispatch, zero handoffs you can feel.
         </p>
 
-        {/* Map Canvas */}
-        <div className="mt-10 relative" style={{ opacity: isInView ? 1 : 0, transition: 'opacity 800ms ease-out 300ms' }}>
-          <div className="relative w-full rounded-xl overflow-hidden border border-[rgba(255,255,255,0.06)]" style={{ aspectRatio: '2/1', minHeight: 280, background: 'rgba(0,0,0,0.2)' }}>
+        {/* Map Canvas — borderless, lets the dot-stipple breathe into the section */}
+        <div className="mt-12 relative" style={{ opacity: isInView ? 1 : 0, transition: 'opacity 800ms ease-out 300ms' }}>
+          <div className="relative w-full" style={{ aspectRatio: '2.2/1', minHeight: 320 }}>
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
           </div>
         </div>

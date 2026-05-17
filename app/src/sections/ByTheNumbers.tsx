@@ -1,6 +1,6 @@
 import { useInView } from '../hooks/useInView';
 import SectionChip from '../components/brand/SectionChip';
-import StepRibbon from '../components/brand/StepRibbon';
+import BrandPattern from '../components/brand/BrandPattern';
 
 const stats = [
   { value: '12', suffix: 'M', label: 'Orders shipped in 2025' },
@@ -18,13 +18,12 @@ export default function ByTheNumbers() {
       id="numbers"
       className="relative bg-fa-classic-chalk section-padding border-t border-fa-hairline overflow-hidden"
     >
-      {/* Faint stepped ribbon outline on the right — paper variant */}
-      <StepRibbon
-        variant="outline"
-        color="#0D1232"
+      {/* Pattern 1 — soft ribbon on the right (paper variant of the brand mark) */}
+      <BrandPattern
+        pattern="ribbon"
+        tint="navy"
         opacity={0.06}
-        strokeWidth={1}
-        className="pointer-events-none absolute -top-10 -right-20 w-[55%] max-w-[800px]"
+        className="absolute -top-[8%] -right-[15%] w-[80%] max-w-none"
       />
 
       <div className="container-main relative z-10">

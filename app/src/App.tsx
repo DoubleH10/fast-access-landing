@@ -15,7 +15,6 @@ import Pricing from './sections/Pricing';
 import Testimonial from './sections/Testimonial';
 import CTA from './sections/CTA';
 import Footer from './sections/Footer';
-import PackageIndicator from './sections/PackageIndicator';
 import ErrorBoundary from './components/ErrorBoundary';
 import SectionChip from './components/brand/SectionChip';
 
@@ -67,7 +66,6 @@ export default function App() {
         <CTA />
       </main>
       <Footer />
-      <PackageIndicator />
     </div>
   );
 }

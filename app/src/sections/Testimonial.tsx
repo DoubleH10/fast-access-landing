@@ -1,24 +1,22 @@
 import { useInView } from '../hooks/useInView';
-import StepRibbon from '../components/brand/StepRibbon';
+import BrandPattern from '../components/brand/BrandPattern';
 
 export default function Testimonial() {
   const { ref, isInView } = useInView(0.2);
 
   return (
     <section ref={ref} className="relative bg-fa-liberty-blue section-padding overflow-hidden">
-      <StepRibbon
-        variant="outline"
-        color="#F15B41"
-        opacity={0.12}
-        strokeWidth={1.2}
-        className="pointer-events-none absolute -top-8 -right-12 w-[55%] max-w-[800px]"
+      <BrandPattern
+        pattern="isometric"
+        tint="orange"
+        opacity={0.14}
+        className="absolute -top-[10%] -right-[10%] w-[55%] max-w-[800px]"
       />
-      <StepRibbon
-        variant="outline"
-        color="#F4F4F1"
+      <BrandPattern
+        pattern="isometric"
+        tint="white"
         opacity={0.04}
-        strokeWidth={1}
-        className="pointer-events-none absolute -bottom-8 -left-12 w-[55%] max-w-[800px]"
+        className="absolute -bottom-[10%] -left-[10%] w-[55%] max-w-[800px]"
         style={{ transform: 'scaleX(-1)' }}
       />
 
