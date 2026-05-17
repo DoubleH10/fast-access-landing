@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navigation from './sections/Navigation';
 import AnnouncementBar from './sections/AnnouncementBar';
+import Hero from './sections/Hero';
 import Calculator from './sections/Calculator';
 import TrustedBy from './sections/TrustedBy';
 import CloudStores from './sections/CloudStores';
@@ -39,6 +40,7 @@ export default function App() {
       <AnnouncementBar />
       <Navigation />
       <main>
+        <Hero />
         <Calculator />
         <TrustedBy />
         <CloudStores />
