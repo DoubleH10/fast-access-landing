@@ -163,6 +163,11 @@ export default function Calculator() {
                   {isAr ? 'فعّل التوصيل من المتاجر السحابية (2–4 ساعات)' : 'Use cloud-store same-day delivery (2–4 hr)'}
                 </span>
               </label>
+              <p className="font-body text-[11px] text-fa-classic-chalk/45 leading-[1.5] -mt-3 pl-12">
+                {isAr
+                  ? 'حوالي ⅓ من المستهلكين في السعودية يفضلون التوصيل في اليوم التالي. متاجرنا السحابية توصل خلال 2–4 ساعات.'
+                  : '~⅓ of Saudi consumers want it next day. Our cloud stores ship in 2–4 hours.'}
+              </p>
             </div>
           </div>
 

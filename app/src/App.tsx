@@ -7,9 +7,7 @@ import AnnouncementBar from './sections/AnnouncementBar';
 import Hero from './sections/Hero';
 import Calculator from './sections/Calculator';
 import TrustedBy from './sections/TrustedBy';
-import CloudStores from './sections/CloudStores';
 import Journey from './sections/Journey';
-import ByTheNumbers from './sections/ByTheNumbers';
 import ServicesGrid from './sections/ServicesGrid';
 import DashboardPreview from './sections/DashboardPreview';
 import Coverage from './sections/Coverage';
@@ -43,7 +41,6 @@ export default function App() {
         <Hero />
         <Calculator />
         <TrustedBy />
-        <CloudStores />
         <ErrorBoundary
           fallback={
             <section id="platform" className="bg-fa-liberty-blue section-padding">
@@ -61,7 +58,6 @@ export default function App() {
         >
           <Journey />
         </ErrorBoundary>
-        <ByTheNumbers />
         <ServicesGrid />
         <DashboardPreview />
         <Coverage />
