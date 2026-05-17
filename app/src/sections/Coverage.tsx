@@ -34,10 +34,11 @@ const connections: [number, number][] = [
   [9, 15], // Dubai -> Cape Town
 ];
 
+// Coverage stats from PPT slide 14 — real region/country numbers TBD
 const stats = [
-  { value: '42+', label: 'Fulfillment centers' },
-  { value: '96%', label: 'US population reached in 2 days' },
-  { value: '11', label: 'Carrier integrations' },
+  { value: 'TBD', label: 'Regions across Saudi Arabia' },
+  { value: 'TBD', label: 'Countries we deliver to' },
+  { value: 'TBD', label: 'Carrier partners' },
   { value: '24/7', label: 'Operations support' },
 ];
 
@@ -181,10 +182,10 @@ export default function Coverage() {
           <SectionChip onDark>The Network</SectionChip>
         </div>
         <h2 className="font-display font-bold text-[32px] sm:text-[40px] lg:text-[56px] text-fa-classic-chalk leading-[1.05] tracking-[-0.02em]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
-          One network. <span className="text-fa-orange-soda">Every market.</span>
+          A wide logistics network across <span className="text-fa-orange-soda">Saudi Arabia</span> and beyond.
         </h2>
         <p className="font-body mt-5 text-base text-fa-classic-chalk/55 max-w-[600px] leading-[1.6]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
-          Hubs across North America, Europe, the Middle East, and Asia-Pacific. Local lanes, regional dispatch, zero handoffs you can feel.
+          From every region of the Kingdom to the Gulf, Europe, and beyond — through the strongest local and international carrier partners.
         </p>
 
         {/* Map Canvas — borderless, lets the dot-stipple breathe into the section */}

@@ -3,14 +3,15 @@ import { ChevronDown } from 'lucide-react';
 import BrandLogo from '../components/brand/BrandLogo';
 import BrandButton from '../components/brand/BrandButton';
 
+// Nav IA per PPT slide 20 footer + slide 18 FAQ entry point
 const navLinks = [
-  { label: 'Platform', href: '#platform' },
-  { label: 'Services', href: '#services' },
+  { label: 'Solutions', href: '#services' },
+  { label: 'Journey', href: '#platform' },
   { label: 'Network', href: '#network' },
   { label: 'Pricing', href: '#pricing' },
 ];
 
-const resourceLinks = ['Documentation', 'Status', 'Help center', 'Security', 'Privacy'];
+const resourceLinks = ['About us', 'Mission & Vision', 'FAQ', 'Blog', 'Contact'];
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);

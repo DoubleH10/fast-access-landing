@@ -1,14 +1,55 @@
 import { useInView } from '../hooks/useInView';
-import { Truck, Warehouse, Package, RefreshCw, BarChart3, Gift, ArrowRight } from 'lucide-react';
+import { Warehouse, Package, Truck, Activity, Zap, Headphones, ArrowRight } from 'lucide-react';
 import SectionChip from '../components/brand/SectionChip';
 
+/**
+ * 6-service taxonomy mirrors PPT slides 6 and 24-25.
+ * Order matters: storage → packing → shipping → tracking → cloud → support
+ * traces the operational arc the customer experiences.
+ */
 const services = [
-  { icon: Truck, number: '01', title: 'Smart Fulfillment', description: 'End-to-end orchestration from cart to doorstep, with intelligent routing that picks the right facility for every order.' },
-  { icon: Warehouse, number: '02', title: 'Network Warehousing', description: '42 fulfillment centers, climate-controlled bays, and dedicated lanes — without the lease.' },
-  { icon: Package, number: '03', title: 'Multi-carrier Shipping', description: 'Rate-shop every label across 11+ carriers in real time. Service rules you set; savings you keep.' },
-  { icon: RefreshCw, number: '04', title: 'Returns \u0026 Reverse', description: 'One-click returns portal for shoppers, automated grading and restocking for you. Closed-loop inventory in hours, not days.' },
-  { icon: BarChart3, number: '05', title: 'Inventory Intelligence', description: 'Demand forecasting and replenishment alerts that look at your sales velocity, lead times, and seasonality.' },
-  { icon: Gift, number: '06', title: 'Branded Unboxing', description: 'Custom inserts, packaging, and post-purchase comms that make every delivery feel intentional.' },
+  {
+    icon: Warehouse,
+    number: '01',
+    title: 'Storage',
+    description:
+      'Spacious warehouses equipped with the latest monitoring and safety systems. Climate control keeps temperature-sensitive products in perfect condition.',
+  },
+  {
+    icon: Package,
+    number: '02',
+    title: 'Packing & Preparation',
+    description:
+      'A trained team packs every order in durable materials and stamps it with your brand identity — custom inserts, cards, and gift options on request.',
+  },
+  {
+    icon: Truck,
+    number: '03',
+    title: 'Shipping & Delivery',
+    description:
+      'Fast delivery across every region of Saudi Arabia and beyond, through the best local and international carrier partners.',
+  },
+  {
+    icon: Activity,
+    number: '04',
+    title: 'Real-time Tracking',
+    description:
+      'A clean, easy dashboard tracks every shipment from receipt to handover — with performance reports that give you the data to grow.',
+  },
+  {
+    icon: Zap,
+    number: '05',
+    title: 'Cloud Stores',
+    description:
+      'Cloud warehouses in city centers deliver in 2 to 4 hours, same day. Built for urgent daily orders, peak hours, and holidays.',
+  },
+  {
+    icon: Headphones,
+    number: '06',
+    title: 'Customer Support',
+    description:
+      '24/7 customer service for questions, urgent supply-chain issues, and operational advice on the logistics you run with us.',
+  },
 ];
 
 export default function ServicesGrid() {
@@ -23,11 +64,11 @@ export default function ServicesGrid() {
               <SectionChip>What we do</SectionChip>
             </div>
             <h2 className="font-display font-bold text-[32px] sm:text-[40px] lg:text-[56px] text-fa-liberty-blue leading-[1.05] tracking-[-0.02em]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
-              One platform, the whole <span className="text-fa-orange-soda">back office</span>.
+              Everything your business needs to <span className="text-fa-orange-soda">grow</span>, in one place.
             </h2>
           </div>
           <p className="font-body lg:col-span-5 text-base text-fa-ink-muted leading-[1.6]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
-            From the inbound dock to the customer's doorstep — and the journey back. Every step instrumented, every decision automated, every shipment yours to see.
+            Stop juggling vendors. Fast Access runs storage, packing, shipping, tracking, and customer support as one tightly-coordinated operation — so every order arrives the way you sold it.
           </p>
         </div>
 

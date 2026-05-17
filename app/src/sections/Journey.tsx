@@ -18,59 +18,63 @@ const STAGES = [
   { progress: 0.95, label: 'Deliver', number: '06' },
 ];
 
+// Stage copy informed by PPT slide 11 (5-step operational arc).
+// We keep the 6-stage scroll for granularity; "Receive" and "Store" map to
+// PPT's "Receipt & Storage", "Pick" and "Pack" map to PPT's "Packaging".
+// Stats are placeholders until real ops data lands — see /tmp/fa-replace.md
 const STAGE_DATA = [
   {
     number: '01', label: 'Receive',
-    headline: 'Your inventory arrives — and Fast Access already knows.',
-    body: 'Inbound shipments are scanned, weighed, and slotted the moment they cross our door. Every SKU is in your dashboard before the truck pulls away.',
+    headline: 'We receive your products — and you can see them instantly.',
+    body: 'Inbound shipments are scanned, weighed, and slotted the moment they cross our door. Every SKU appears in your dashboard before the truck pulls away.',
     stats: [
-      { value: '8m', label: 'Avg. dock-to-shelf' },
-      { value: '100%', label: 'Scan accuracy' },
+      { value: '8m', label: 'Avg. dock-to-shelf' },   // TODO: real number
+      { value: '100%', label: 'Scan accuracy' },       // TODO: real number
     ],
   },
   {
     number: '02', label: 'Store',
-    headline: 'Smart storage that knows what\'s coming.',
-    body: 'Slotting algorithms place fast-movers near pick-paths and seasonal inventory deeper in the network. Climate-controlled bays for sensitive SKUs.',
+    headline: 'Stored safely, ready to ship.',
+    body: 'Climate-controlled bays for temperature-sensitive products. Smart slotting puts fast-movers near pick-paths so urgent orders go out first.',
     stats: [
-      { value: '42', label: 'Fulfillment centers' },
-      { value: '3.6M', label: 'Sq. ft. capacity' },
+      { value: 'TBD', label: 'Fulfillment centers' },  // TODO: replace with real KSA centre count
+      { value: 'TBD', label: 'Total capacity (sq m)' },
     ],
   },
   {
     number: '03', label: 'Pick',
     headline: 'The right unit, from the right slot, every time.',
-    body: 'Pick paths optimize across orders in real time. Robotic assist for high-density zones, human accuracy where it matters.',
+    body: 'Pick paths optimise across orders in real time. Human accuracy where it counts, system speed where it scales.',
     stats: [
-      { value: '99.99%', label: 'Pick accuracy' },
-      { value: '14s', label: 'Avg. pick time' },
+      { value: 'TBD', label: 'Pick accuracy' },
+      { value: 'TBD', label: 'Avg. pick time' },
     ],
   },
   {
     number: '04', label: 'Pack',
-    headline: 'Packed with the right materials, the first time.',
-    body: 'Right-sized boxes, brand-matched inserts, and your own custom unboxing experience — at the same speed as a plain brown box.',
+    headline: 'Packed with your brand identity, every time.',
+    body: 'Durable packaging that protects the product, with your inserts, cards, and gift options stamped right on every box.',
     stats: [
-      { value: '32%', label: 'Less dunnage' },
-      { value: '100%', label: 'Branded unboxing' },
+      { value: '100%', label: 'Branded packaging' },
+      { value: 'TBD', label: 'Damage rate' },
     ],
   },
   {
     number: '05', label: 'Ship',
-    headline: 'The optimal carrier — automatically.',
-    body: 'Rates from every major carrier, ranked against your service-level rules and the package\'s actual route. Cheapest, fastest, or greenest, your choice.',
+    headline: 'The best carrier for every route — automatically.',
+    body: 'We work with the strongest local and international carriers across Saudi Arabia and beyond. Service rules you set; savings you keep.',
     stats: [
-      { value: '11+', label: 'Carrier integrations' },
-      { value: '18%', label: 'Avg. label savings' },
+      { value: 'TBD', label: 'Carrier integrations' },
+      { value: 'TBD', label: 'Avg. label savings' },
     ],
   },
   {
     number: '06', label: 'Deliver',
-    headline: 'On the doorstep — proven, photographed, signed.',
-    body: 'End-to-end tracking your shoppers actually read. Photo proof on delivery. Branded post-purchase comms that turn one order into the next.',
+    headline: 'On the doorstep — tracked, proven, on time.',
+    body: 'Real-time tracking your shoppers actually read. Same-day delivery from cloud stores in 2-4 hours. Performance reports for you.',
     stats: [
-      { value: '1.2d', label: 'Avg. delivery time' },
-      { value: '4.8/5', label: 'Customer CSAT' },
+      { value: '2-4hr', label: 'Same-day window' },
+      { value: 'TBD', label: 'On-time rate' },
     ],
   },
 ];

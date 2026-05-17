@@ -89,23 +89,21 @@ export default function Hero() {
             >
               <span className="w-1.5 h-1.5 rounded-sm bg-fa-orange-soda" />
               <span className="font-body text-[11px] font-semibold uppercase tracking-[0.12em] text-fa-classic-chalk/85">
-                Fulfillment, at the speed of click
+                The fastest partner for your business growth
               </span>
             </div>
 
-            {/* Headline — large, confident, single orange highlight */}
+            {/* Headline — PPT slide 3: "Smart logistics services for every fast-growing brand" */}
             <h1 className="hero-fade font-display font-bold text-[48px] sm:text-[64px] lg:text-[80px] text-fa-classic-chalk leading-[0.96] tracking-[-0.028em]">
-              Move every
-              <br />
-              package{' '}
-              <span className="text-fa-orange-soda">forward.</span>
+              Smart logistics for every{' '}
+              <span className="text-fa-orange-soda">fast-growing</span> brand.
             </h1>
 
-            {/* Subhead */}
-            <p className="hero-fade font-body mt-6 text-base lg:text-lg text-fa-classic-chalk/65 max-w-[480px] leading-[1.55]">
-              A tech-driven fulfillment network that stores your inventory,
-              picks every order, and ships it across the country — on a single
-              intelligent platform.
+            {/* Subhead — PPT slide 5 condensed */}
+            <p className="hero-fade font-body mt-6 text-base lg:text-lg text-fa-classic-chalk/65 max-w-[520px] leading-[1.55]">
+              Storage, packing, shipping, real-time tracking, and same-day
+              cloud-store delivery — built to save merchants time, cut costs,
+              and grow profits.
             </p>
 
             {/* CTAs */}

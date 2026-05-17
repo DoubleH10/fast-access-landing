@@ -24,10 +24,9 @@ export default function Testimonial() {
         <div style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out' }}>
           {/* Compact accent bar instead of giant floating quote mark */}
           <div className="mx-auto mb-8 h-[3px] w-12 bg-fa-orange-soda" />
+          {/* TODO: replace with a real merchant testimonial (PPT slide 16). */}
           <blockquote className="font-display text-[26px] sm:text-[32px] lg:text-[40px] text-fa-classic-chalk leading-[1.22] tracking-[-0.015em]">
-            “Fast Access did in eight weeks what our 3PL hadn't managed in two years.{' '}
-            <span className="text-fa-orange-soda">Our shipping costs fell 22%</span>{' '}
-            and our customers actually got their packages on time.”
+            “Fast Access changed how we ship. <span className="text-fa-orange-soda">Orders that used to take days now arrive the same day</span> — and our customers feel the difference on every box.”
           </blockquote>
         </div>
         <div

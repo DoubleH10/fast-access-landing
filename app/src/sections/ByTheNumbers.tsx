@@ -2,11 +2,13 @@ import { useInView } from '../hooks/useInView';
 import SectionChip from '../components/brand/SectionChip';
 import BrandPattern from '../components/brand/BrandPattern';
 
+// PPT slide 15 KPIs. Real numbers TBD — see /tmp/fa-replace.md for the
+// 5 placeholders that need real data from operations before launch.
 const stats = [
-  { value: '12', suffix: 'M', label: 'Orders shipped in 2025' },
-  { value: '99.99', suffix: '%', label: 'Pick & pack accuracy' },
-  { value: '$0.42', suffix: '', label: 'Avg. label savings vs. baseline' },
-  { value: '1.2', suffix: 'd', label: 'Avg. coast-to-coast delivery' },
+  { value: 'TBD', suffix: '', label: 'Merchants growing with us' },
+  { value: 'TBD', suffix: '', label: 'Products received daily' },
+  { value: 'TBD', suffix: '', label: 'Orders delivered safely' },
+  { value: 'TBD', suffix: '%', label: 'Positive customer ratings' },
 ];
 
 export default function ByTheNumbers() {
@@ -45,7 +47,7 @@ export default function ByTheNumbers() {
             transition: 'all 600ms ease-out 100ms',
           }}
         >
-          Built for <span className="text-fa-orange-soda">operational</span> scale.
+          Every order we receive arrives at the customer — <span className="text-fa-orange-soda">safely</span>.
         </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
           {stats.map((stat, i) => (

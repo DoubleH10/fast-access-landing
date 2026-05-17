@@ -6,6 +6,7 @@ import Navigation from './sections/Navigation';
 import AnnouncementBar from './sections/AnnouncementBar';
 import Hero from './sections/Hero';
 import TrustedBy from './sections/TrustedBy';
+import CloudStores from './sections/CloudStores';
 import Journey from './sections/Journey';
 import ByTheNumbers from './sections/ByTheNumbers';
 import ServicesGrid from './sections/ServicesGrid';
@@ -40,6 +41,7 @@ export default function App() {
       <main>
         <Hero />
         <TrustedBy />
+        <CloudStores />
         <ErrorBoundary
           fallback={
             <section id="platform" className="bg-fa-liberty-blue section-padding">

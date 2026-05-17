@@ -52,14 +52,14 @@ export default function CTA() {
         </h2>
 
         <p
-          className="font-body mt-6 text-base lg:text-lg text-fa-classic-chalk/65 max-w-[520px] mx-auto leading-[1.55]"
+          className="font-body mt-6 text-base lg:text-lg text-fa-classic-chalk/65 max-w-[560px] mx-auto leading-[1.55]"
           style={{
             opacity: isInView ? 1 : 0,
             transform: isInView ? 'translateY(0)' : 'translateY(20px)',
             transition: 'all 500ms ease-out 200ms',
           }}
         >
-          Move your operations to a network that actually moves. Go live in 14 days.
+          Tell us about your business. We'll come back with a tailored plan within one business day.
         </p>
 
         <div

@@ -2,11 +2,13 @@ import BrandLogo from '../components/brand/BrandLogo';
 import BrandPattern from '../components/brand/BrandPattern';
 
 export default function Footer() {
+  // Nav structure from PPT slide 20 footer:
+  // About · Logistics solutions · Pricing · FAQ · Blog · Contact
   const footerLinks = {
-    Platform: ['Dashboard', 'Shipments', 'Inventory', 'Analytics', 'API'],
-    Services: ['Fulfillment', 'Warehousing', 'Shipping', 'Returns', 'Unboxing'],
-    Company: ['About', 'Careers', 'Press', 'Newsroom', 'Contact'],
-    Resources: ['Documentation', 'Status', 'Help center', 'Security', 'Privacy'],
+    Solutions: ['Storage', 'Packing', 'Shipping & Delivery', 'Real-time Tracking', 'Cloud Stores'],
+    Company: ['About us', 'Mission & Vision', 'Industries served', 'Blog'],
+    Resources: ['FAQ', 'Pricing', 'Help center', 'Privacy', 'Terms'],
+    Contact: ['Get a quote', 'Talk to sales', 'WhatsApp', 'support@faccess.co'],
   };
 
   return (
@@ -37,8 +39,11 @@ export default function Footer() {
           {/* Logo & Description */}
           <div className="col-span-2">
             <BrandLogo variant="full" mode="dark" height={56} />
-            <p className="font-body mt-5 text-sm text-fa-classic-chalk/55 leading-[1.65] max-w-[300px]">
-              Fast Access is a tech-driven logistics company built to move businesses forward — connecting storage, fulfillment, and delivery through speed, precision, and innovation.
+            <div className="font-display mt-5 text-base text-fa-classic-chalk font-semibold tracking-[-0.01em]">
+              The fastest partner for your business growth.
+            </div>
+            <p className="font-body mt-3 text-sm text-fa-classic-chalk/55 leading-[1.65] max-w-[320px]">
+              Storage, packing, shipping, real-time tracking, and same-day cloud-store delivery — built around the way your business actually ships.
             </p>
           </div>
 
