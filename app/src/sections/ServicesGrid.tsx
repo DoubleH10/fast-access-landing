@@ -1,6 +1,7 @@
 import { useInView } from '../hooks/useInView';
 import { Warehouse, Package, Truck, Activity, Zap, Headphones, ArrowRight } from 'lucide-react';
 import SectionChip from '../components/brand/SectionChip';
+import BrandPattern from '../components/brand/BrandPattern';
 
 /**
  * 6-service taxonomy mirrors PPT slides 6 and 24-25.
@@ -56,8 +57,14 @@ export default function ServicesGrid() {
   const { ref, isInView } = useInView(0.2);
 
   return (
-    <section id="services" ref={ref} className="bg-fa-classic-chalk section-padding border-t border-fa-hairline">
-      <div className="container-main">
+    <section id="services" ref={ref} className="relative bg-fa-classic-chalk section-padding border-t border-fa-hairline overflow-hidden">
+      <BrandPattern
+        pattern="lozenge"
+        tint="navy"
+        opacity={0.03}
+        className="absolute -top-[8%] -right-[15%] w-[55%] max-w-[800px]"
+      />
+      <div className="container-main relative z-10">
         <div className="grid lg:grid-cols-12 gap-8 items-end mb-14">
           <div className="lg:col-span-7">
             <div className="mb-5" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>

@@ -2,6 +2,7 @@ import { useInView } from '../hooks/useInView';
 import { Check, Box, Package, Gift, Layers } from 'lucide-react';
 import SectionChip from '../components/brand/SectionChip';
 import BrandButton from '../components/brand/BrandButton';
+import BrandPattern from '../components/brand/BrandPattern';
 
 /**
  * Pricing — pivot from fixed 3-tier model to custom-quote per PPT slide 17:
@@ -29,8 +30,15 @@ export default function Pricing() {
   const { ref, isInView } = useInView(0.15);
 
   return (
-    <section id="pricing" ref={ref} className="bg-fa-classic-chalk section-padding border-t border-fa-hairline">
-      <div className="container-main">
+    <section id="pricing" ref={ref} className="relative bg-fa-classic-chalk section-padding border-t border-fa-hairline overflow-hidden">
+      {/* Very subtle navy ribbon on the left — atmosphere only */}
+      <BrandPattern
+        pattern="ribbon"
+        tint="navy"
+        opacity={0.03}
+        className="absolute top-[8%] -left-[25%] w-[80%] max-w-none"
+      />
+      <div className="container-main relative z-10">
         <div className="text-center mx-auto max-w-[720px]">
           <div
             className="inline-flex mb-5"

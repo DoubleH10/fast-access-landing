@@ -1,40 +1,54 @@
-import { useEffect, useRef } from 'react';
 import { useInView } from '../hooks/useInView';
+import { ComposableMap, Geographies, Geography, Marker, Line } from 'react-simple-maps';
 import SectionChip from '../components/brand/SectionChip';
 import BrandPattern from '../components/brand/BrandPattern';
 
-const cities = [
-  { name: 'San Francisco', x: 14, y: 38, region: 'us' },
-  { name: 'Dallas', x: 24, y: 42, region: 'us' },
-  { name: 'Chicago', x: 32, y: 36, region: 'us' },
-  { name: 'New York', x: 40, y: 37, region: 'us' },
-  { name: 'Atlanta', x: 35, y: 43, region: 'us' },
-  { name: 'São Paulo', x: 30, y: 74, region: 'latam' },
-  { name: 'London', x: 48, y: 30, region: 'eu' },
-  { name: 'Berlin', x: 54, y: 31, region: 'eu' },
-  { name: 'Istanbul', x: 60, y: 37, region: 'eu' },
-  { name: 'Dubai', x: 66, y: 45, region: 'me' },
-  { name: 'Mumbai', x: 72, y: 50, region: 'asia' },
-  { name: 'Singapore', x: 78, y: 58, region: 'asia' },
-  { name: 'Shanghai', x: 82, y: 40, region: 'asia' },
-  { name: 'Tokyo', x: 88, y: 36, region: 'asia' },
-  { name: 'Sydney', x: 90, y: 76, region: 'apac' },
-  { name: 'Cape Town', x: 52, y: 80, region: 'africa' },
+/**
+ * Coverage map — real geography rendered via react-simple-maps + a TopoJSON
+ * world atlas (countries-110m, ~120kb). Continents are drawn as muted
+ * paper-tone outlines, cities as orange pins, and trade routes as dashed
+ * orange arcs. Uses the geoEqualEarth projection — looks closer to a
+ * "designer" world map than mercator's stretched poles.
+ */
+
+// CDN-hosted Natural Earth simplified countries (Mike Bostock's world-atlas)
+const TOPO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
+
+type City = { name: string; coords: [number, number]; hub?: boolean };
+
+const cities: City[] = [
+  { name: 'San Francisco', coords: [-122.42, 37.77], hub: true },
+  { name: 'Dallas',        coords: [-96.80, 32.78] },
+  { name: 'Chicago',       coords: [-87.63, 41.88], hub: true },
+  { name: 'New York',      coords: [-74.01, 40.71], hub: true },
+  { name: 'Atlanta',       coords: [-84.39, 33.75] },
+  { name: 'São Paulo',     coords: [-46.63, -23.55] },
+  { name: 'London',        coords: [-0.13, 51.51], hub: true },
+  { name: 'Berlin',        coords: [13.40, 52.52] },
+  { name: 'Istanbul',      coords: [28.98, 41.01] },
+  { name: 'Riyadh',        coords: [46.68, 24.71], hub: true }, // KSA hub
+  { name: 'Dubai',         coords: [55.27, 25.20], hub: true },
+  { name: 'Mumbai',        coords: [72.88, 19.08] },
+  { name: 'Singapore',     coords: [103.82, 1.35], hub: true },
+  { name: 'Shanghai',      coords: [121.47, 31.23], hub: true },
+  { name: 'Tokyo',         coords: [139.65, 35.68], hub: true },
+  { name: 'Sydney',        coords: [151.21, -33.87] },
+  { name: 'Cape Town',     coords: [18.42, -33.92] },
 ];
 
-const connections: [number, number][] = [
-  [0, 1], [1, 2], [2, 3], [3, 4], // US network
-  [3, 6], // NY -> London
-  [6, 7], [7, 8], // Europe
-  [8, 9], [9, 10], // Istanbul -> Dubai -> Mumbai
-  [10, 11], [11, 13], // Mumbai -> Singapore -> Tokyo
-  [11, 14], // Singapore -> Sydney
-  [12, 13], // Shanghai -> Tokyo
-  [1, 5], // Dallas -> São Paulo
-  [9, 15], // Dubai -> Cape Town
+// Indexes refer to the cities array above
+const routes: Array<[number, number]> = [
+  [0, 1], [1, 2], [2, 3], [3, 4],        // US backbone
+  [3, 6],                                  // NY → London
+  [6, 7], [7, 8],                          // EU
+  [8, 9], [9, 10],                         // Istanbul → Riyadh → Dubai
+  [10, 11], [11, 12], [12, 14],            // ME → India → SEA → JP
+  [12, 15],                                 // Singapore → Sydney
+  [13, 14],                                 // Shanghai → Tokyo
+  [1, 5],                                   // Dallas → São Paulo
+  [10, 16],                                 // Dubai → Cape Town
 ];
 
-// Coverage stats from PPT slide 14 — real region/country numbers TBD
 const stats = [
   { value: 'TBD', label: 'Regions across Saudi Arabia' },
   { value: 'TBD', label: 'Countries we deliver to' },
@@ -44,139 +58,16 @@ const stats = [
 
 export default function Coverage() {
   const { ref, isInView } = useInView(0.15);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const dpr = Math.min(window.devicePixelRatio, 2);
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    ctx.scale(dpr, dpr);
-
-    const w = rect.width;
-    const h = rect.height;
-
-    /**
-     * Dot-stipple "landmass" hit test.
-     * Each continent is approximated as an ellipse (cx, cy, rx, ry) in
-     * normalised 0..1 coordinates. A dot is drawn if it falls inside any
-     * ellipse. Cleaner and more premium than rough polygons.
-     */
-    const landmasses: Array<[number, number, number, number]> = [
-      [0.18, 0.36, 0.13, 0.16], // North America
-      [0.28, 0.72, 0.07, 0.16], // South America
-      [0.52, 0.30, 0.07, 0.10], // Europe
-      [0.55, 0.62, 0.06, 0.18], // Africa
-      [0.72, 0.32, 0.13, 0.14], // Asia (north)
-      [0.78, 0.52, 0.10, 0.10], // SE Asia / India
-      [0.89, 0.74, 0.06, 0.07], // Australia
-    ];
-    const isLand = (nx: number, ny: number) =>
-      landmasses.some(([cx, cy, rx, ry]) => {
-        const dx = (nx - cx) / rx;
-        const dy = (ny - cy) / ry;
-        return dx * dx + dy * dy <= 1;
-      });
-
-    let animId: number;
-    const animate = (time: number) => {
-      ctx.clearRect(0, 0, w, h);
-
-      // Dot-stipple world map — elegant landmass suggestion
-      const stepX = 14;
-      const stepY = 14;
-      for (let x = stepX / 2; x < w; x += stepX) {
-        for (let y = stepY / 2; y < h; y += stepY) {
-          if (!isLand(x / w, y / h)) continue;
-          ctx.beginPath();
-          ctx.arc(x, y, 1.1, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(244,244,241,0.18)';
-          ctx.fill();
-        }
-      }
-
-      // Draw connections — BRIGHTER
-      connections.forEach(([a, b]) => {
-        const ca = cities[a];
-        const cb = cities[b];
-        const x1 = (ca.x / 100) * w;
-        const y1 = (ca.y / 100) * h;
-        const x2 = (cb.x / 100) * w;
-        const y2 = (cb.y / 100) * h;
-
-        // Animated dash
-        const dashOffset = (time * 0.02) % 20;
-        ctx.setLineDash([4, 8]);
-        ctx.lineDashOffset = -dashOffset;
-        ctx.strokeStyle = 'rgba(241,91,65,0.35)';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // Static faint line underneath
-        ctx.strokeStyle = 'rgba(241,91,65,0.12)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-      });
-
-      // Draw city dots
-      cities.forEach((city) => {
-        const cx = (city.x / 100) * w;
-        const cy = (city.y / 100) * h;
-        const pulse = 0.5 + 0.5 * Math.sin(time * 0.002 + city.x * 0.1);
-
-        // Outer glow ring
-        ctx.beginPath();
-        ctx.arc(cx, cy, 10 + pulse * 6, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(241,91,65,${0.06 + pulse * 0.1})`;
-        ctx.fill();
-
-        // Middle ring
-        ctx.beginPath();
-        ctx.arc(cx, cy, 5 + pulse * 2, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(241,91,65,${0.25 + pulse * 0.2})`;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-
-        // Center dot
-        ctx.beginPath();
-        ctx.arc(cx, cy, 3, 0, Math.PI * 2);
-        ctx.fillStyle = '#F15B41';
-        ctx.fill();
-
-        // Label (every city)
-        ctx.font = '500 10px Inter, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillStyle = 'rgba(244,244,241,0.55)';
-        ctx.fillText(city.name, cx, cy - 14);
-      });
-
-      animId = requestAnimationFrame(animate);
-    };
-    animId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animId);
-  }, []);
 
   return (
     <section id="network" ref={ref} className="bg-fa-liberty-blue section-padding relative overflow-hidden">
-      {/* Pattern 5 (isometric ribbons) — atmospheric brand mark behind the map */}
       <BrandPattern
         pattern="isometric"
         tint="orange"
-        opacity={0.08}
+        opacity={0.06}
         className="absolute -top-[10%] -right-[15%] w-[70%] max-w-[1100px]"
       />
+
       <div className="container-main relative z-10">
         <div className="mb-5" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>
           <SectionChip onDark>The Network</SectionChip>
@@ -188,17 +79,74 @@ export default function Coverage() {
           From every region of the Kingdom to the Gulf, Europe, and beyond — through the strongest local and international carrier partners.
         </p>
 
-        {/* Map Canvas — borderless, lets the dot-stipple breathe into the section */}
+        {/* Real-geography world map */}
         <div className="mt-12 relative" style={{ opacity: isInView ? 1 : 0, transition: 'opacity 800ms ease-out 300ms' }}>
-          <div className="relative w-full" style={{ aspectRatio: '2.2/1', minHeight: 320 }}>
-            <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
-          </div>
+          <ComposableMap
+            projection="geoEqualEarth"
+            projectionConfig={{ scale: 175, center: [25, 12] }}
+            width={1200}
+            height={520}
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          >
+            <Geographies geography={TOPO_URL}>
+              {({ geographies }) =>
+                geographies.map((geo) => (
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    fill="rgba(244,244,241,0.04)"
+                    stroke="rgba(244,244,241,0.18)"
+                    strokeWidth={0.5}
+                    style={{
+                      default: { outline: 'none' },
+                      hover:   { outline: 'none', fill: 'rgba(244,244,241,0.07)' },
+                      pressed: { outline: 'none' },
+                    }}
+                  />
+                ))
+              }
+            </Geographies>
+
+            {/* Route arcs */}
+            {routes.map(([a, b], i) => (
+              <Line
+                key={`route-${i}`}
+                from={cities[a].coords}
+                to={cities[b].coords}
+                stroke="#F15B41"
+                strokeWidth={1.2}
+                strokeDasharray="4,4"
+                strokeOpacity={0.55}
+                strokeLinecap="round"
+              />
+            ))}
+
+            {/* City markers */}
+            {cities.map((city) => (
+              <Marker key={city.name} coordinates={city.coords}>
+                <circle r={city.hub ? 7 : 4} fill="rgba(241,91,65,0.18)" />
+                <circle r={city.hub ? 3.5 : 2.5} fill="#F15B41" />
+                <text
+                  textAnchor="middle"
+                  y={-12}
+                  style={{
+                    fontFamily: 'Inter Display, sans-serif',
+                    fontSize: city.hub ? 10 : 8.5,
+                    fontWeight: city.hub ? 600 : 500,
+                    fill: city.hub ? 'rgba(244,244,241,0.85)' : 'rgba(244,244,241,0.55)',
+                    pointerEvents: 'none',
+                  }}
+                >
+                  {city.name}
+                </text>
+              </Marker>
+            ))}
+          </ComposableMap>
         </div>
 
-        {/* Stats row — matches ByTheNumbers treatment for visual consistency */}
+        {/* Stats row */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mt-14 pt-10 border-t border-fa-classic-chalk/10">
           {stats.map((stat, i) => {
-            // Split number from unit so we can color-accent the unit
             const match = stat.value.match(/^([\d.]+)(.*)$/);
             const num = match ? match[1] : stat.value;
             const unit = match ? match[2] : '';
