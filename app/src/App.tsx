@@ -15,6 +15,7 @@ import Pricing from './sections/Pricing';
 import Testimonial from './sections/Testimonial';
 import CTA from './sections/CTA';
 import Footer from './sections/Footer';
+import PackageIndicator from './sections/PackageIndicator';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -48,6 +49,7 @@ export default function App() {
         <CTA />
       </main>
       <Footer />
+      <PackageIndicator />
     </div>
   );
 }
