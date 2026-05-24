@@ -16,7 +16,7 @@ const en = {
     headlineHighlight: 'fast‑growing',
     headlineB: 'brand.',
     sub: 'Storage, packing, shipping, real-time tracking, and same-day cloud-store delivery — built to save merchants time, cut costs, and grow profits.',
-    primaryCta: 'Start shipping', secondaryCta: 'Watch the demo',
+    primaryCta: 'Start shipping', secondaryCta: 'Get a quote',
     statOnTime: 'On-time dispatch', statPickPack: 'Avg. pick & pack', statCenters: 'Fulfillment centers',
     livePill: 'Live · 12,408 in transit',
     networkLabel: 'The network, end-to-end',
@@ -102,6 +102,10 @@ const en = {
     primary: 'Inquire Now',
     secondary: 'Book a tour',
   },
+  integrations: {
+    title: 'Seamless integration with your favorite store platform',
+    platforms: ['Salla', 'Zid', 'Shopify', 'WooCommerce', 'Magento'],
+  },
   footer: {
     tagline: 'The fastest partner for your business growth.',
     body: 'Storage, packing, shipping, real-time tracking, and same-day cloud-store delivery — built around the way your business actually ships.',
@@ -126,7 +130,7 @@ const ar = {
     headlineHighlight: 'علامة تجارية',
     headlineB: 'متسارعة النمو.',
     sub: 'تخزين، تجهيز، شحن، متابعة لحظية، وتوصيل في نفس اليوم من المتاجر السحابية — مصممة لتوفير وقت التاجر، تقليل التكلفة، وزيادة الأرباح.',
-    primaryCta: 'ابدأ الشحن', secondaryCta: 'شاهد العرض',
+    primaryCta: 'ابدأ الشحن', secondaryCta: 'اطلب عرض السعر',
     statOnTime: 'إرسال في الوقت', statPickPack: 'متوسط التحضير', statCenters: 'مراكز التوزيع',
     livePill: 'مباشر · 12,408 طلب في الطريق',
     networkLabel: 'الشبكة من البداية للنهاية',
@@ -211,6 +215,10 @@ const ar = {
     body: 'حدّثنا عن تجارتك. سنرد عليك بخطة مخصصة خلال يوم عمل واحد.',
     primary: 'تواصل معنا',
     secondary: 'احجز جولة',
+  },
+  integrations: {
+    title: 'ربط تقني متكامل وسهل مع منصات تجارتك المفضلة',
+    platforms: ['سلة', 'زد', 'شوبيفاي', 'ووكومرس', 'ماجينتو'],
   },
   footer: {
     tagline: 'الشريك الأسرع لنموك التجاري.',

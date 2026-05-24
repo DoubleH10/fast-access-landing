@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useInView } from '../hooks/useInView';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 import SectionChip from '../components/brand/SectionChip';
-import BrandPattern from '../components/brand/BrandPattern';
+import { useT } from '../i18n/I18nContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -127,6 +127,7 @@ const wireframeFragmentShader = `
 `;
 
 export default function Journey() {
+  const { t } = useT();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const canvasContainerRef = useRef<HTMLDivElement>(null);
@@ -161,8 +162,7 @@ export default function Journey() {
 
     const fov = isMobileDevice ? 55 : 45;
     const camera = new THREE.PerspectiveCamera(fov, container.clientWidth / container.clientHeight, 0.1, 1000);
-    camera.position.set(0, 5, 20);
-    camera.lookAt(0, 0, 0);
+    // Initial camera position is set after the curve is built (below).
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(isMobileDevice ? 1.5 : 2, window.devicePixelRatio));
@@ -175,13 +175,34 @@ export default function Journey() {
     const tubeSegments = isMobileDevice ? 100 : 200;
     const pathPoints = curve.getPoints(tubeSegments);
 
+    // Frame the camera on the start of the curve so the package and path
+    // are in view the moment the pinned canvas mounts — no empty-navy void.
+    {
+      const camY = isMobileDevice ? 2.5 : isTabletDevice ? 3 : 3.5;
+      const camZ = isMobileDevice ? 7 : isTabletDevice ? 8 : 9;
+      const start = curve.getPointAt(0.02);
+      const lookStart = curve.getPointAt(0.06);
+      camera.position.set(start.x, start.y + camY, start.z + camZ);
+      camera.lookAt(lookStart);
+    }
+
     // Glowing cable
     const tubeGeo = new THREE.TubeGeometry(curve, tubeSegments, 0.04, isMobileDevice ? 6 : 8, false);
     const tubeMat = new THREE.MeshBasicMaterial({ color: 0xF15B41, transparent: true, opacity: 0.12, depthWrite: false });
     scene.add(new THREE.Mesh(tubeGeo, tubeMat));
 
+    // Path line with per-vertex colors so the portion behind the package
+    // reads as "completed" (bright orange) and the portion ahead reads as
+    // "remaining" (dim). Updated per-frame in the animate loop.
     const lineGeo = new THREE.BufferGeometry().setFromPoints(pathPoints);
-    const lineMat = new THREE.LineBasicMaterial({ color: 0xF15B41, transparent: true, opacity: 0.35, depthWrite: false });
+    const lineColors = new Float32Array(pathPoints.length * 3);
+    for (let i = 0; i < pathPoints.length; i++) {
+      lineColors[i * 3]     = 0.6;  // dim default
+      lineColors[i * 3 + 1] = 0.22;
+      lineColors[i * 3 + 2] = 0.16;
+    }
+    lineGeo.setAttribute('color', new THREE.BufferAttribute(lineColors, 3));
+    const lineMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.6, depthWrite: false });
     scene.add(new THREE.Line(lineGeo, lineMat));
 
     // Grid floor
@@ -315,6 +336,44 @@ export default function Journey() {
       markerLights.push(light);
     });
 
+    // === Destination assembly at the end of the curve ===
+    // Landing pad (flat ring on the ground), vertical light pillar, a
+    // shockwave ring that expands+fades while the user lingers at the end,
+    // and a bright point light. All start invisible and ramp up as the
+    // package approaches stage 06 (progress >= ~0.75).
+    const endPos = curve.getPointAt(1.0);
+
+    const padGeo = new THREE.RingGeometry(0.45, 0.95, 48);
+    const padMat = new THREE.MeshBasicMaterial({ color: 0xF15B41, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false });
+    const destPad = new THREE.Mesh(padGeo, padMat);
+    destPad.position.set(endPos.x, endPos.y - 0.32, endPos.z);
+    destPad.rotation.x = -Math.PI / 2;
+    scene.add(destPad);
+
+    const padCoreGeo = new THREE.CircleGeometry(0.42, 32);
+    const padCoreMat = new THREE.MeshBasicMaterial({ color: 0xF15B41, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false });
+    const destPadCore = new THREE.Mesh(padCoreGeo, padCoreMat);
+    destPadCore.position.set(endPos.x, endPos.y - 0.31, endPos.z);
+    destPadCore.rotation.x = -Math.PI / 2;
+    scene.add(destPadCore);
+
+    const pillarGeo = new THREE.CylinderGeometry(0.06, 0.55, 4.5, 24, 1, true);
+    const pillarMat = new THREE.MeshBasicMaterial({ color: 0xF15B41, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false });
+    const destPillar = new THREE.Mesh(pillarGeo, pillarMat);
+    destPillar.position.set(endPos.x, endPos.y + 1.9, endPos.z);
+    scene.add(destPillar);
+
+    const shockGeo = new THREE.RingGeometry(0.5, 0.6, 64);
+    const shockMat = new THREE.MeshBasicMaterial({ color: 0xF15B41, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false });
+    const destShock = new THREE.Mesh(shockGeo, shockMat);
+    destShock.position.set(endPos.x, endPos.y - 0.30, endPos.z);
+    destShock.rotation.x = -Math.PI / 2;
+    scene.add(destShock);
+
+    const destLight = new THREE.PointLight(0xF15B41, 0, 9);
+    destLight.position.set(endPos.x, endPos.y + 0.5, endPos.z);
+    scene.add(destLight);
+
     // Particles
     const particleCount = isMobileDevice ? 30 : 60;
     const pPositions = new Float32Array(particleCount * 3);
@@ -352,10 +411,15 @@ export default function Journey() {
       const elapsed = clock.getElapsedTime();
       const progress = progressRef.current;
 
-      // Gentle box rotation as it travels — like a package in motion
-      packageMesh.rotation.y = elapsed * 0.4;
-      packageMesh.rotation.x = Math.sin(elapsed * 0.6) * 0.15;
+      // Gentle box rotation as it travels — like a package in motion.
+      // In the final 5% of the journey we slow rotation toward identity
+      // so the box "settles" upright onto the destination pad.
+      const settle = progress > 0.95 ? Math.min((progress - 0.95) / 0.05, 1) : 0;
+      packageMesh.rotation.y = THREE.MathUtils.lerp(elapsed * 0.4, 0, settle);
+      packageMesh.rotation.x = THREE.MathUtils.lerp(Math.sin(elapsed * 0.6) * 0.15, 0, settle);
       const pos = curve.getPointAt(Math.min(progress, 0.999));
+      // Gently lower the package onto the pad on arrival
+      pos.y -= settle * 0.25;
       packageMesh.position.copy(pos);
       packageLight.position.copy(pos);
 
@@ -379,8 +443,44 @@ export default function Journey() {
       camera.position.lerp(ideal, 0.08);
       camera.lookAt(targetPos);
 
-      tubeMat.opacity = Math.min(progress * 1.5, 1) * 0.12;
-      lineMat.opacity = Math.min(progress * 1.5, 1) * 0.35;
+      // Path is always drawn — opacity used to ramp from 0 at progress=0,
+      // which left a navy void at section entry. Keep a steady visible base
+      // and lift slightly as the journey advances so it still feels alive.
+      tubeMat.opacity = 0.18 + Math.min(progress, 1) * 0.10;
+      lineMat.opacity = 0.55 + Math.min(progress, 1) * 0.25;
+
+      // Done-vs-remaining path tint: vertices behind the package glow bright
+      // orange; vertices ahead stay dim. Gives a clear sense of progress.
+      const colorArr = lineGeo.attributes.color.array as Float32Array;
+      for (let i = 0; i < pathPoints.length; i++) {
+        const t = i / (pathPoints.length - 1);
+        if (t <= progress) {
+          colorArr[i * 3]     = 1.00; // F15B41 bright
+          colorArr[i * 3 + 1] = 0.36;
+          colorArr[i * 3 + 2] = 0.25;
+        } else {
+          colorArr[i * 3]     = 0.55; // dim ahead
+          colorArr[i * 3 + 1] = 0.20;
+          colorArr[i * 3 + 2] = 0.15;
+        }
+      }
+      lineGeo.attributes.color.needsUpdate = true;
+
+      // Destination assembly — ramps up as the package approaches, pulses
+      // while you linger at the end. arrivalT goes 0→1 across progress 0.75→1.0.
+      const arrivalT = Math.max(0, Math.min((progress - 0.75) / 0.25, 1));
+      const pulse = 0.65 + Math.sin(elapsed * 2.2) * 0.35;
+      padMat.opacity     = arrivalT * 0.55 * pulse;
+      padCoreMat.opacity = arrivalT * 0.25 * pulse;
+      pillarMat.opacity  = arrivalT * 0.16 * (0.7 + pulse * 0.3);
+      destLight.intensity = arrivalT * 1.8 * pulse;
+      destPad.scale.setScalar(1 + arrivalT * Math.sin(elapsed * 2.2) * 0.04);
+      // Shockwave: only visible in the last ~5% of scroll; expands outward and fades
+      const shockT = progress > 0.95 ? ((progress - 0.95) / 0.05) : 0;
+      // continuous expanding ring driven by time once we're in the arrival zone
+      const shockPhase = shockT > 0 ? ((elapsed * 0.8) % 1) : 0;
+      destShock.scale.setScalar(1 + shockPhase * 3.2);
+      shockMat.opacity = shockT * (1 - shockPhase) * 0.7;
 
       const cIdx = Math.min(Math.floor(progress * 6), 5);
       markers.forEach((marker, i) => {
@@ -419,35 +519,28 @@ export default function Journey() {
 
   return (
     <section id="platform">
-      {/* Intro — dark with brand stepped ribbon accent */}
-      <div ref={introRef} className="relative bg-fa-liberty-blue section-padding overflow-hidden">
-        <BrandPattern
-          pattern="ribbon"
-          tint="orange"
-          opacity={0.22}
-          className="absolute -bottom-[15%] -right-[5%] w-[80%] max-w-none"
-        />
-        <BrandPattern
-          pattern="lozenge"
-          tint="white"
-          opacity={0.04}
-          className="absolute top-[15%] -right-[20%] w-[55%] max-w-[800px]"
-        />
-        <div className="container-main relative z-10">
+      {/* Intro — dark, kept quiet so the 3D canvas below is the visual.
+          We previously had a decorative stepped-ribbon BrandPattern here that
+          read as the start of a journey path and trailed into nothing — it
+          made the section feel disconnected from the 3D scene that follows. */}
+      <div ref={introRef} className="relative bg-fa-classic-chalk overflow-hidden pt-20 lg:pt-28 pb-10 lg:pb-14">
+        <div className="container-main relative z-10 text-left rtl:text-right">
           <div className="mb-5" style={{ opacity: introInView ? 1 : 0, transform: introInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>
-            <SectionChip onDark>The Package Journey</SectionChip>
+            <SectionChip>{t('journey.chip')}</SectionChip>
           </div>
-          <h2 className="font-display font-bold text-[32px] sm:text-[40px] lg:text-[56px] text-fa-classic-chalk leading-[1.05] tracking-[-0.02em] max-w-[800px]" style={{ opacity: introInView ? 1 : 0, transform: introInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
-            Every order, <span className="text-fa-orange-soda">tracked</span> across six steps.
+          <h2 className="font-display font-bold text-[32px] sm:text-[40px] lg:text-[56px] text-fa-liberty-blue leading-[1.05] tracking-[-0.02em] max-w-[800px]" style={{ opacity: introInView ? 1 : 0, transform: introInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
+            {t('journey.headlineA')}{' '}
+            <span className="text-fa-orange-soda">{t('journey.headlineHighlight')}</span>{' '}
+            {t('journey.headlineB')}
           </h2>
-          <p className="font-body mt-5 text-base sm:text-lg text-fa-classic-chalk/65 max-w-[560px] leading-[1.55]" style={{ opacity: introInView ? 1 : 0, transform: introInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
-            From receiving to delivery, your inventory moves through our intelligent network with real-time visibility at every stage.
+          <p className="font-body mt-5 text-base sm:text-lg text-fa-ink-muted max-w-[560px] leading-[1.55]" style={{ opacity: introInView ? 1 : 0, transform: introInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
+            {t('journey.body')}
           </p>
         </div>
       </div>
 
       {/* Journey sticky section */}
-      <div ref={wrapperRef} className="relative" style={{ height: journeyHeight, backgroundColor: '#0D1232' }}>
+      <div ref={wrapperRef} className="relative" style={{ height: journeyHeight, background: 'linear-gradient(to bottom, var(--fa-classic-chalk) 0%, #0D1232 15%, #0D1232 85%, var(--fa-paper) 100%)' }}>
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(255,255,255,0.012) 48px, rgba(255,255,255,0.012) 49px)' }} />
 
         <div ref={stickyRef} className="h-screen w-full relative overflow-hidden">

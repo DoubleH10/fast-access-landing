@@ -11,6 +11,7 @@ module.exports = {
           'blue-rose':    '#2D2E75',
           'orange-soda':  '#F15B41',
           'classic-chalk':'#F4F4F1',
+          'paper':        '#F3F2EC',
           'spritzig':     '#72C6EA',
           'goldfinch':    '#FDD803',
           'navy-900': '#0D1232',

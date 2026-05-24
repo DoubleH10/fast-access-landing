@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Sparkles, TrendingUp, Clock, Wallet } from 'lucide-react';
 import BrandButton from '../components/brand/BrandButton';
-import BrandPattern from '../components/brand/BrandPattern';
 import { useT } from '../i18n/I18nContext';
 
 /**
@@ -56,41 +55,20 @@ export default function Calculator() {
     new Intl.NumberFormat(isAr ? 'ar-EG' : 'en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
 
   return (
-    <section className="relative min-h-screen bg-fa-liberty-blue overflow-hidden pt-32 lg:pt-36 pb-24">
-      {/* Background photo with strong wash */}
-      <div className="absolute inset-0 pointer-events-none">
-        <img src="/assets/hero-bg.jpg" alt="" aria-hidden className="w-full h-full object-cover opacity-30" />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'linear-gradient(180deg, rgba(13,18,50,0.86) 0%, rgba(13,18,50,0.74) 40%, rgba(13,18,50,0.88) 70%, rgba(13,18,50,0.98) 100%)',
-          }}
-        />
-      </div>
-
-      {/* Brand ribbon along the bottom */}
-      <BrandPattern
-        pattern="ribbon"
-        tint="orange"
-        opacity={0.18}
-        className="absolute bottom-0 left-0 w-[110%] max-w-none"
-        style={{ transform: 'translateY(30%)' }}
-      />
-
+    <section className="relative bg-fa-paper overflow-hidden py-20 lg:py-28">
       <div className="container-main relative z-10">
         <div className="grid lg:grid-cols-[1fr_1.05fr] gap-12 lg:gap-16 items-start">
-          {/* LEFT — pitch + inputs */}
+          {/* LEFT — tool label + inputs */}
           <div>
-            <div className="calc-fade inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full mb-7"
-              style={{ backgroundColor: 'rgba(244,244,241,0.06)', boxShadow: 'inset 0 0 0 1px rgba(244,244,241,0.12)' }}>
+            <div className="calc-fade inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full mb-6"
+              style={{ backgroundColor: 'rgba(13,18,50,0.04)', boxShadow: 'inset 0 0 0 1px rgba(13,18,50,0.10)' }}>
               <Sparkles size={12} className="text-fa-orange-soda" />
-              <span className="font-body text-[11px] font-semibold uppercase tracking-[0.12em] text-fa-classic-chalk/85">
-                {isAr ? 'احسب كم توفر مع Fast Access' : 'See what you save with Fast Access'}
+              <span className="font-body text-[11px] font-semibold uppercase tracking-[0.12em] text-fa-liberty-blue/70">
+                {isAr ? 'حاسبة التوفير' : 'Savings calculator'}
               </span>
             </div>
 
-            <h1 className="calc-fade font-display font-bold text-[40px] sm:text-[52px] lg:text-[64px] text-fa-classic-chalk leading-[1.0] tracking-[-0.025em]">
+            <h2 className="calc-fade font-display font-semibold text-[28px] sm:text-[34px] lg:text-[40px] text-fa-liberty-blue leading-[1.1] tracking-[-0.02em]">
               {isAr ? (
                 <>
                   كم تخسر <span className="text-fa-orange-soda">شهرياً</span> على الشحن؟
@@ -101,9 +79,9 @@ export default function Calculator() {
                   <span className="text-fa-orange-soda">losing</span> on shipping?
                 </>
               )}
-            </h1>
+            </h2>
 
-            <p className="calc-fade font-body mt-5 text-base lg:text-lg text-fa-classic-chalk/65 max-w-[500px] leading-[1.55]">
+            <p className="calc-fade font-body mt-4 text-[15px] lg:text-base text-fa-liberty-blue/65 max-w-[500px] leading-[1.55]">
               {isAr
                 ? 'حرّك المؤشرات لتشاهد كم توفّر من المال والوقت — وكم يتحسّن وقت التوصيل — مع Fast Access.'
                 : 'Slide the inputs to see how much money and time you save — and how much faster your customers get their orders — with Fast Access.'}
@@ -150,7 +128,7 @@ export default function Calculator() {
               <label className="flex items-center gap-3 cursor-pointer select-none">
                 <span
                   className="relative inline-flex w-10 h-5 rounded-full transition-colors"
-                  style={{ backgroundColor: cloudStores ? '#F15B41' : 'rgba(244,244,241,0.16)' }}
+                  style={{ backgroundColor: cloudStores ? '#F15B41' : 'rgba(13,18,50,0.16)' }}
                   onClick={() => setCloudStores(!cloudStores)}
                 >
                   <span
@@ -159,11 +137,11 @@ export default function Calculator() {
                   />
                 </span>
                 <input type="checkbox" className="sr-only" checked={cloudStores} onChange={(e) => setCloudStores(e.target.checked)} />
-                <span className="font-body text-sm text-fa-classic-chalk/80">
+                <span className="font-body text-sm text-fa-liberty-blue/80">
                   {isAr ? 'فعّل التوصيل من المتاجر السحابية (2–4 ساعات)' : 'Use cloud-store same-day delivery (2–4 hr)'}
                 </span>
               </label>
-              <p className="font-body text-[11px] text-fa-classic-chalk/45 leading-[1.5] -mt-3 pl-12">
+              <p className="font-body text-[11px] text-fa-liberty-blue/45 leading-[1.5] -mt-3 pl-12">
                 {isAr
                   ? 'حوالي ⅓ من المستهلكين في السعودية يفضلون التوصيل في اليوم التالي. متاجرنا السحابية توصل خلال 2–4 ساعات.'
                   : '~⅓ of Saudi consumers want it next day. Our cloud stores ship in 2–4 hours.'}
@@ -174,12 +152,11 @@ export default function Calculator() {
           {/* RIGHT — results card, sticky so it follows while sliders move */}
           <div className="calc-fade lg:sticky lg:top-32">
             <div
-              className="relative rounded-[20px] p-8 lg:p-10"
+              className="relative rounded-[20px] p-8 lg:p-10 bg-fa-liberty-blue"
               style={{
                 background:
-                  'linear-gradient(135deg, rgba(241,91,65,0.12) 0%, rgba(45,46,117,0.45) 100%)',
-                boxShadow: 'inset 0 0 0 1px rgba(244,244,241,0.10), 0 24px 60px rgba(0,0,0,0.35)',
-                backdropFilter: 'blur(10px)',
+                  'linear-gradient(135deg, #0D1232 0%, #2D2E75 100%)',
+                boxShadow: 'inset 0 0 0 1px rgba(244,244,241,0.10), 0 24px 60px rgba(13,18,50,0.18)',
               }}
             >
               <div className="flex items-center gap-2 mb-6">
@@ -231,7 +208,7 @@ export default function Calculator() {
               </div>
             </div>
 
-            <div className="mt-4 font-body text-[11px] text-fa-classic-chalk/45 text-center">
+            <div className="mt-4 font-body text-[11px] text-fa-liberty-blue/45 text-center">
               {isAr
                 ? 'تقديرات تعتمد على متوسط نتائج تجار Fast Access. النتائج الفعلية تختلف.'
                 : 'Estimates based on average Fast Access merchant outcomes. Actual results vary.'}
@@ -269,7 +246,7 @@ function RangeField({
   return (
     <div>
       <div className="flex justify-between items-baseline mb-2">
-        <label className="font-body text-[12px] uppercase tracking-[0.08em] text-fa-classic-chalk/55 font-semibold">{label}</label>
+        <label className="font-body text-[12px] uppercase tracking-[0.08em] text-fa-liberty-blue/55 font-semibold">{label}</label>
         <span className="font-display text-[20px] font-semibold text-fa-orange-soda tracking-[-0.01em]">{format(value)}</span>
       </div>
       <input
@@ -282,7 +259,7 @@ function RangeField({
         className="w-full calc-range"
       />
       <style>{`
-        .calc-range { -webkit-appearance: none; appearance: none; height: 2px; background: rgba(244,244,241,0.18); border-radius: 999px; outline: none; }
+        .calc-range { -webkit-appearance: none; appearance: none; height: 2px; background: rgba(13,18,50,0.16); border-radius: 999px; outline: none; }
         .calc-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; background: #F15B41; border-radius: 50%; cursor: pointer; box-shadow: 0 0 0 4px rgba(241,91,65,0.18); transition: box-shadow 150ms; }
         .calc-range::-webkit-slider-thumb:hover { box-shadow: 0 0 0 6px rgba(241,91,65,0.28); }
         .calc-range::-moz-range-thumb { width: 18px; height: 18px; background: #F15B41; border-radius: 50%; cursor: pointer; border: none; box-shadow: 0 0 0 4px rgba(241,91,65,0.18); }

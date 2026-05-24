@@ -37,9 +37,9 @@ function lookup(obj: unknown, path: string): string {
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(() => {
-    if (typeof window === 'undefined') return 'en';
+    if (typeof window === 'undefined') return 'ar';
     const saved = window.localStorage.getItem('fa-locale') as Locale | null;
-    return saved === 'ar' || saved === 'en' ? saved : 'en';
+    return saved === 'ar' || saved === 'en' ? saved : 'ar';
   });
 
   useEffect(() => {
