@@ -1,16 +1,50 @@
+import { Link } from 'react-router-dom';
 import BrandLogo from '../components/brand/BrandLogo';
 import { useT } from '../i18n/I18nContext';
+
+type FooterLink = { label: string; to: string };
 
 export default function Footer() {
   const { t } = useT();
   // Nav structure from PPT slide 20 footer:
   // About · Logistics solutions · Pricing · FAQ · Blog · Contact
-  const footerLinks = {
-    Solutions: ['Storage', 'Packing', 'Shipping & Delivery', 'Real-time Tracking', 'Cloud Stores'],
-    Company: ['About us', 'Mission & Vision', 'Industries served', 'Blog'],
-    Resources: ['FAQ', 'Pricing', 'Help center', 'Privacy', 'Terms'],
-    Contact: ['Get a quote', 'Talk to sales', 'WhatsApp', 'support@faccess.co'],
+  // `to`: "/route" → SPA link · "mailto:"/"http" → external · "#" → not built yet.
+  const footerLinks: Record<string, FooterLink[]> = {
+    Solutions: [
+      { label: 'Storage', to: '/solutions' },
+      { label: 'Packing', to: '/solutions' },
+      { label: 'Shipping & Delivery', to: '/solutions' },
+      { label: 'Real-time Tracking', to: '/solutions' },
+      { label: 'Cloud Stores', to: '/solutions' },
+    ],
+    Company: [
+      { label: 'About us', to: '/about' },
+      { label: 'Mission & Vision', to: '/about' },
+      { label: 'Industries served', to: '#' },
+      { label: 'Blog', to: '#' },
+    ],
+    Resources: [
+      { label: 'FAQ', to: '/resources' },
+      { label: 'Pricing', to: '/pricing' },
+      { label: 'Help center', to: '/resources' },
+      { label: 'Privacy', to: '#' },
+      { label: 'Terms', to: '#' },
+    ],
+    Contact: [
+      { label: 'Get a quote', to: '/contact' },
+      { label: 'Talk to sales', to: '/contact' },
+      { label: 'WhatsApp', to: '#' },
+      { label: 'support@faccess.co', to: 'mailto:support@faccess.co' },
+    ],
   };
+
+  const linkClass = 'text-sm text-[#8a8a9a] hover:text-[#F4F4F1] transition-colors duration-150';
+  const renderLink = ({ label, to }: FooterLink) =>
+    to.startsWith('/') ? (
+      <Link to={to} className={linkClass}>{label}</Link>
+    ) : (
+      <a href={to} className={linkClass}>{label}</a>
+    );
 
   return (
     <footer className="bg-fa-liberty-blue pt-24 pb-10 relative overflow-hidden">
@@ -50,14 +84,7 @@ export default function Footer() {
               </div>
               <ul className="space-y-2">
                 {links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      className="text-sm text-[#8a8a9a] hover:text-[#F4F4F1] transition-colors duration-150"
-                    >
-                      {link}
-                    </a>
-                  </li>
+                  <li key={link.label}>{renderLink(link)}</li>
                 ))}
               </ul>
             </div>
