@@ -9,6 +9,23 @@ const en = {
   nav: {
     solutions: 'Solutions', journey: 'Journey', network: 'Network', pricing: 'Pricing',
     resources: 'Resources', login: 'Log in', getQuote: 'Get a quote',
+    about: 'About', contact: 'Contact', home: 'Home',
+  },
+  whatis: {
+    chip: 'What is Fast Access',
+    headlineA: 'We store, pack, and ship your orders —',
+    headlineHighlight: 'you just sell.',
+    body: 'Fast Access is an end-to-end fulfillment partner for online brands in Saudi Arabia. Send us your inventory and we warehouse it, pack every order with your branding, and deliver across the Kingdom and the Gulf — with same-day delivery from cloud stores inside major cities. One partner, one dashboard, every order tracked from receipt to doorstep.',
+    point1: 'Storage, packing & shipping in one place',
+    point2: 'Same-day delivery in 2–4 hours',
+    point3: 'Kingdom-wide coverage + the Gulf',
+  },
+  pages: {
+    solutions: { title: 'Everything we do to move your orders', sub: 'Storage, packing, shipping, tracking, and same-day cloud-store delivery — one coordinated operation, built around how your brand actually ships.' },
+    pricing: { title: 'Clear pricing, no hidden fees', sub: 'A quote tailored to what you actually ship. Estimate your costs, then get an exact plan within one business day.' },
+    about: { title: 'About Fast Access', sub: 'The fastest fulfillment partner for fast-growing brands in Saudi Arabia and the Gulf.' },
+    resources: { title: 'Resources', sub: 'Answers to the questions merchants ask most — plus guides on shipping, storage, and growing with Fast Access.' },
+    mission: { title: 'Our mission', body: 'To give every brand in the region a logistics operation that feels effortless — so founders can spend their time growing, not chasing shipments. We run the warehouses, the packing, and the last mile, and we treat every order like it carries your name. Because it does.' },
   },
   hero: {
     eyebrow: 'The fastest partner for your business growth',
@@ -123,6 +140,23 @@ const ar = {
   nav: {
     solutions: 'الحلول', journey: 'الرحلة', network: 'الشبكة', pricing: 'الباقات',
     resources: 'المزيد', login: 'تسجيل الدخول', getQuote: 'اطلب عرض السعر',
+    about: 'من نحن', contact: 'تواصل', home: 'الرئيسية',
+  },
+  whatis: {
+    chip: 'ما هي Fast Access',
+    headlineA: 'نخزّن ونغلّف ونشحن طلباتك —',
+    headlineHighlight: 'وأنت تبيع فقط.',
+    body: 'Fast Access شريك لوجستي متكامل للعلامات التجارية الإلكترونية في السعودية. أرسل لنا مخزونك ونتولى تخزينه، وتغليف كل طلب بهوية علامتك، وتوصيله لكل مناطق المملكة والخليج — مع توصيل في نفس اليوم من متاجر سحابية داخل المدن الكبرى. شريك واحد، لوحة تحكم واحدة، وكل طلب متتبع من الاستلام حتى باب العميل.',
+    point1: 'تخزين وتغليف وشحن في مكان واحد',
+    point2: 'توصيل في نفس اليوم خلال 2 إلى 4 ساعات',
+    point3: 'تغطية تشمل كل المملكة والخليج',
+  },
+  pages: {
+    solutions: { title: 'كل ما نقوم به لتحريك طلباتك', sub: 'تخزين، تجهيز، شحن، متابعة، وتوصيل في نفس اليوم من المتاجر السحابية — منظومة واحدة متكاملة مصممة على مقاس شحن علامتك.' },
+    pricing: { title: 'تسعير واضح، بدون رسوم خفية', sub: 'عرض سعر مصمم على ما تشحنه فعلاً. احسب تكلفتك التقريبية، واحصل على خطة دقيقة خلال يوم عمل واحد.' },
+    about: { title: 'من نحن', sub: 'الشريك اللوجستي الأسرع للعلامات التجارية المتسارعة النمو في السعودية والخليج.' },
+    resources: { title: 'المصادر', sub: 'إجابات على أكثر أسئلة التجار شيوعًا — بالإضافة إلى أدلة حول الشحن والتخزين والنمو مع Fast Access.' },
+    mission: { title: 'مهمتنا', body: 'أن نمنح كل علامة تجارية في المنطقة عملية لوجستية تبدو سهلة — حتى يقضي المؤسسون وقتهم في النمو، لا في ملاحقة الشحنات. نحن ندير المستودعات والتغليف والميل الأخير، ونتعامل مع كل طلب وكأنه يحمل اسمك. لأنه فعلاً يحمله.' },
   },
   hero: {
     eyebrow: 'الشريك الأسرع لنموك التجاري',

@@ -117,7 +117,7 @@ export default function Pricing() {
               ))}
             </ul>
             <div className="mt-10 flex flex-wrap items-center gap-3">
-              <BrandButton variant="on-dark" href="#quote">
+              <BrandButton variant="on-dark" href="/contact">
                 Get my quote
               </BrandButton>
               <span className="font-body text-[12px] text-fa-classic-chalk/55">

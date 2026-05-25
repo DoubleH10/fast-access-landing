@@ -202,7 +202,7 @@ export default function Calculator() {
                 <span className="font-body text-[12px] text-fa-classic-chalk/55 max-w-[260px] leading-[1.5]">
                   {isAr ? 'احصل على عرض سعر مخصص بناءً على هذه الأرقام.' : 'Get a tailored quote based on these numbers.'}
                 </span>
-                <BrandButton variant="filled" href="#contact">
+                <BrandButton variant="filled" href="/contact">
                   {isAr ? 'اطلب عرضي' : 'Get my quote'}
                 </BrandButton>
               </div>

@@ -5,6 +5,7 @@
 
 import { ArrowRight } from 'lucide-react';
 import type { ComponentProps, ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 
 type Variant = 'filled' | 'outline' | 'on-dark';
 
@@ -35,6 +36,15 @@ export default function BrandButton({
     </>
   );
   if (href) {
+    // Internal routes (start with "/") use SPA navigation; hash anchors and
+    // external links fall back to a plain <a>.
+    if (href.startsWith('/')) {
+      return (
+        <Link to={href} className={classes}>
+          {content}
+        </Link>
+      );
+    }
     return (
       <a href={href} className={classes}>
         {content}

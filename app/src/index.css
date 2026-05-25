@@ -41,7 +41,7 @@
     --fa-orange-soda:  #F15B41;     /* signature energy/momentum */
 
     /* ===== Fast Access — Secondary palette (brandbook pg 44) ===== */
-    --fa-classic-chalk: #F4F4F1;    /* primary "paper" cream */
+    --fa-classic-chalk: #EDF0F5;    /* cool faint grey — alt sections + light text on navy */
     --fa-spritzig:      #72C6EA;    /* sky blue accent */
     --fa-goldfinch:     #FDD803;    /* yellow accent */
 
@@ -75,18 +75,18 @@
     /* ===== Semantic aliases (used by components) ===== */
     /* Dark theme (default) — dark sections stay dark, paper stays paper.
        Light theme below flips dark sections to paper-on-paper.            */
-    --bg-paper:    var(--fa-classic-chalk);
+    --bg-paper:    #FAFBFC;
     --bg-deep:     var(--fa-liberty-blue);
     --ink-primary: var(--fa-liberty-blue);
     --ink-muted:   #6B6B7B;
     --ink-faint:   #8A8A9A;
     --accent:      var(--fa-orange-soda);
     --accent-hover:#FB7C65;
-    --hairline:    #E8E6DE;
+    --hairline:    #E3E7EE;
     --overlay:     rgba(13, 18, 50, 0.85);
 
     /* shadcn-ui vars (kept for primitive components) */
-    --background: 60 14% 95%;
+    --background: 220 24% 98%;
     --foreground: 232 59% 12%;
     --card: 0 0% 100%;
     --card-foreground: 232 59% 12%;

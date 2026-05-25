@@ -48,7 +48,7 @@ export default function ServicesGrid() {
             return (
               <div
                 key={item.number}
-                className="group relative bg-[#FAF9F6] border border-fa-hairline p-8 lg:p-10 transition-all duration-200 ease-out hover:-translate-y-1 hover:bg-white hover:shadow-[0_16px_40px_rgba(13,18,50,0.08)] hover:border-fa-orange-soda/30 cursor-default rounded-sm text-left rtl:text-right"
+                className="group relative bg-white border border-fa-hairline p-8 lg:p-10 transition-all duration-200 ease-out hover:-translate-y-1 hover:bg-white hover:shadow-[0_16px_40px_rgba(13,18,50,0.08)] hover:border-fa-orange-soda/30 cursor-default rounded-sm text-left rtl:text-right"
                 style={{
                   opacity: isInView ? 1 : 0,
                   transform: isInView ? 'translateY(0)' : 'translateY(40px)',

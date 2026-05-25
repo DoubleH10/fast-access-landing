@@ -156,7 +156,7 @@ export default function FAQ() {
             return (
               <div
                 key={i}
-                className="bg-[#FAF9F6] border border-fa-hairline rounded-lg overflow-hidden transition-all duration-200"
+                className="bg-white border border-fa-hairline rounded-lg overflow-hidden transition-all duration-200"
                 style={{
                   boxShadow: isOpen ? '0 8px 24px rgba(13,18,50,0.04)' : 'none',
                   borderColor: isOpen ? 'rgba(241,91,65,0.3)' : '#E8E6DE',
