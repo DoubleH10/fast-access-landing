@@ -1,5 +1,6 @@
 import { Boxes, Clock, MapPin } from 'lucide-react';
 import SectionChip from '../components/brand/SectionChip';
+import SpotlightCard from '../components/brand/SpotlightCard';
 import Reveal from '../components/Reveal';
 import { useT } from '../i18n/I18nContext';
 
@@ -36,15 +37,16 @@ export default function WhatIsFA() {
 
         <div className="grid sm:grid-cols-3 gap-5 mt-12 max-w-[820px]">
           {points.map(({ icon: Icon, label }, i) => (
-            <Reveal
-              key={label}
-              delay={200 + i * 90}
-              className="fa-card flex items-center gap-3.5 px-5 py-4 text-left rtl:text-right"
-            >
-              <span className="fa-iconchip shrink-0 w-10 h-10 rounded-xl">
-                <Icon size={18} strokeWidth={2} />
-              </span>
-              <span className="font-body text-sm font-medium text-fa-liberty-blue leading-snug">{label}</span>
+            <Reveal key={label} delay={200 + i * 90} className="h-full">
+              <SpotlightCard
+                radius={300}
+                className="fa-card fa-card--glow group relative h-full overflow-hidden flex items-center gap-3.5 px-5 py-4 text-left rtl:text-right"
+              >
+                <span className="fa-iconchip shrink-0 w-10 h-10 rounded-xl relative z-10">
+                  <Icon size={18} strokeWidth={2} />
+                </span>
+                <span className="relative z-10 font-body text-sm font-medium text-fa-liberty-blue leading-snug">{label}</span>
+              </SpotlightCard>
             </Reveal>
           ))}
         </div>

@@ -5,6 +5,7 @@
 
 import { TriangleAlert } from 'lucide-react';
 import SectionChip from '../components/brand/SectionChip';
+import SpotlightCard from '../components/brand/SpotlightCard';
 import Reveal from '../components/Reveal';
 import { useT } from '../i18n/I18nContext';
 import { content } from '../i18n/content';
@@ -29,15 +30,16 @@ export default function PainPoints() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
           {items.map((pain, i) => (
-            <Reveal
-              key={i}
-              delay={i * 70}
-              className="fa-card flex items-start gap-3.5 px-5 py-5 text-left rtl:text-right"
-            >
-              <span className="fa-iconchip shrink-0 w-9 h-9 rounded-xl bg-fa-orange-100">
-                <TriangleAlert size={17} strokeWidth={2} className="text-fa-orange-soda" />
-              </span>
-              <p className="font-body text-[15px] text-fa-liberty-blue/85 leading-snug pt-1">“{pain}”</p>
+            <Reveal key={i} delay={i * 70} className="h-full">
+              <SpotlightCard
+                radius={320}
+                className="fa-card fa-card--glow group relative h-full overflow-hidden flex items-start gap-3.5 px-5 py-5 text-left rtl:text-right"
+              >
+                <span className="fa-iconchip shrink-0 w-9 h-9 rounded-xl relative z-10">
+                  <TriangleAlert size={17} strokeWidth={2} />
+                </span>
+                <p className="relative z-10 font-body text-[15px] text-fa-liberty-blue/85 leading-snug pt-1">“{pain}”</p>
+              </SpotlightCard>
             </Reveal>
           ))}
         </div>

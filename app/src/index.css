@@ -340,15 +340,40 @@
     transform: translateY(-3px);
     box-shadow: 0 2px 4px rgba(13,18,50,0.05), 0 22px 44px -20px rgba(13,18,50,0.28);
   }
-  /* Icon chip — brand-coloured square that holds a section/card icon */
+  /* Glow card — deeper lift + a faint orange hairline on hover. Pairs with
+     <SpotlightCard> so the moving glow sits inside a softly framed plate. */
+  .fa-card--glow {
+    transition: transform 320ms cubic-bezier(0.22,1,0.36,1), box-shadow 320ms ease;
+  }
+  .fa-card--glow:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 2px 6px rgba(13,18,50,0.05),
+      0 32px 64px -28px rgba(13,18,50,0.34),
+      inset 0 0 0 1px rgba(241,91,65,0.16);
+  }
+  /* Icon chip — brand-coloured square that holds a section/card icon.
+     Soft gradient + inner ring give it depth; inside a `group` it fills with
+     Orange Soda and lifts on hover. */
   .fa-iconchip {
     display: inline-flex; align-items: center; justify-content: center;
     width: 52px; height: 52px;
     border-radius: 14px;
-    background: var(--fa-orange-100);
+    background: linear-gradient(140deg, var(--fa-orange-100), #ffffff 88%);
     color: var(--fa-orange-soda);
+    box-shadow: inset 0 0 0 1px rgba(241,91,65,0.12), 0 8px 18px -12px rgba(241,91,65,0.5);
+    transition: transform 320ms cubic-bezier(0.22,1,0.36,1), box-shadow 320ms ease, background 320ms ease, color 320ms ease;
   }
-  .fa-iconchip--navy { background: rgba(45,46,117,0.08); color: var(--fa-blue-rose); }
+  .group:hover .fa-iconchip:not(.fa-iconchip--navy) {
+    transform: translateY(-2px) scale(1.05) rotate(-3deg);
+    background: linear-gradient(140deg, var(--fa-orange-soda), var(--fa-orange-700));
+    color: #fff;
+    box-shadow: 0 14px 28px -10px rgba(241,91,65,0.55);
+  }
+  .fa-iconchip--navy {
+    background: rgba(45,46,117,0.08); color: var(--fa-blue-rose);
+    box-shadow: inset 0 0 0 1px rgba(45,46,117,0.14);
+  }
   /* On-dark card variant for navy anchor sections */
   .fa-card--on-dark {
     background: rgba(255,255,255,0.04);

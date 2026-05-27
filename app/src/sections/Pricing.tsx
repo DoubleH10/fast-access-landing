@@ -1,6 +1,7 @@
 import { useInView } from '../hooks/useInView';
 import { Check, Box, Package, Gift, Layers } from 'lucide-react';
 import SectionChip from '../components/brand/SectionChip';
+import SpotlightCard from '../components/brand/SpotlightCard';
 import BrandButton from '../components/brand/BrandButton';
 import BrandPattern from '../components/brand/BrandPattern';
 import { useT } from '../i18n/I18nContext';
@@ -74,39 +75,44 @@ export default function Pricing() {
 
         <div className="grid lg:grid-cols-[1.1fr_1fr] gap-8 mt-14">
           {/* LEFT — what pricing depends on */}
-          <div
-            className="fa-card rounded-2xl p-8 lg:p-12"
+          <SpotlightCard
+            radius={420}
+            className="fa-card fa-card--glow relative overflow-hidden rounded-2xl p-8 lg:p-12"
             style={{
               opacity: isInView ? 1 : 0,
               transform: isInView ? 'translateY(0)' : 'translateY(40px)',
               transition: 'opacity 400ms ease-out 100ms, transform 400ms ease-out 100ms',
             }}
           >
-            <div className="text-[11px] font-semibold uppercase tracking-[0.1em] font-body text-fa-orange-soda">
-              {t('pricing.howEyebrow')}
-            </div>
-            <h3 className="font-display mt-3 text-[22px] lg:text-[26px] font-semibold text-fa-liberty-blue tracking-[-0.01em]">
-              {t('pricing.howTitle')}
-            </h3>
-            <div className="grid sm:grid-cols-2 gap-6 mt-8">
-              {factors.map(({ label, detail }, index) => {
-                const Icon = factorIcons[index].Icon;
-                return (
-                <div key={label} className="flex gap-4">
-                  <Icon size={22} strokeWidth={1.6} className="text-fa-orange-soda flex-shrink-0 mt-0.5" />
-                  <div>
-                    <div className="font-display text-[15px] font-semibold text-fa-liberty-blue tracking-[-0.01em]">
-                      {label}
-                    </div>
-                    <div className="font-body text-[13px] text-fa-ink-muted mt-1 leading-[1.5]">
-                      {detail}
+            <div className="relative z-10">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.1em] font-body text-fa-orange-soda">
+                {t('pricing.howEyebrow')}
+              </div>
+              <h3 className="font-display mt-3 text-[22px] lg:text-[26px] font-semibold text-fa-liberty-blue tracking-[-0.01em]">
+                {t('pricing.howTitle')}
+              </h3>
+              <div className="grid sm:grid-cols-2 gap-6 mt-8">
+                {factors.map(({ label, detail }, index) => {
+                  const Icon = factorIcons[index].Icon;
+                  return (
+                  <div key={label} className="group flex gap-4">
+                    <span className="fa-iconchip shrink-0 w-11 h-11 rounded-xl">
+                      <Icon size={20} strokeWidth={1.7} />
+                    </span>
+                    <div>
+                      <div className="font-display text-[15px] font-semibold text-fa-liberty-blue tracking-[-0.01em]">
+                        {label}
+                      </div>
+                      <div className="font-body text-[13px] text-fa-ink-muted mt-1 leading-[1.5]">
+                        {detail}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-              })}
+                );
+                })}
+              </div>
             </div>
-          </div>
+          </SpotlightCard>
 
           {/* RIGHT — what's always included + CTA (the featured "navy" card) */}
           <div

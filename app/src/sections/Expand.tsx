@@ -35,11 +35,11 @@ export default function Expand() {
           {items.map((it, i) => {
             const Icon = icons[i];
             return (
-              <Reveal key={i} delay={i * 70} className="text-left rtl:text-right">
+              <Reveal key={i} delay={i * 70} className="group text-left rtl:text-right">
                 <span className="fa-iconchip">
                   <Icon size={22} strokeWidth={1.8} />
                 </span>
-                <h3 className="font-display mt-5 text-[19px] lg:text-[21px] font-semibold text-fa-liberty-blue tracking-[-0.01em]">{it.title}</h3>
+                <h3 className="font-display mt-5 text-[19px] lg:text-[21px] font-semibold text-fa-liberty-blue tracking-[-0.01em] transition-colors duration-300 group-hover:text-fa-orange-soda">{it.title}</h3>
                 <p className="font-body mt-2 text-[15px] text-fa-ink-muted leading-[1.6] max-w-[340px]">{it.body}</p>
               </Reveal>
             );

@@ -41,13 +41,13 @@ export default function Partner() {
                 <Reveal
                   key={i}
                   delay={i * 90}
-                  className="flex items-start gap-4 py-6 border-b border-fa-hairline last:border-0 text-left rtl:text-right"
+                  className="group flex items-start gap-4 py-6 border-b border-fa-hairline last:border-0 text-left rtl:text-right"
                 >
                   <span className="fa-iconchip shrink-0">
                     <Icon size={22} strokeWidth={1.8} />
                   </span>
                   <div>
-                    <h3 className="font-display text-[19px] lg:text-[21px] font-semibold text-fa-liberty-blue tracking-[-0.01em]">{it.title}</h3>
+                    <h3 className="font-display text-[19px] lg:text-[21px] font-semibold text-fa-liberty-blue tracking-[-0.01em] transition-colors duration-300 group-hover:text-fa-orange-soda">{it.title}</h3>
                     <p className="font-body mt-1.5 text-[15px] text-fa-ink-muted leading-[1.6]">{it.body}</p>
                   </div>
                 </Reveal>

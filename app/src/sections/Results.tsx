@@ -1,12 +1,14 @@
 /**
  * Results — new-PPT slide 16. Before/after stories from merchants. Each card
- * contrasts the old pain (muted) with the Fast Access outcome (bright).
+ * contrasts the old pain (muted) with the Fast Access outcome (bright), joined
+ * by an orange arrow connector. Spotlight glow + lift on hover.
  *
  * NOTE: the three stories are placeholders — replace with real testimonials.
  */
 
-import { Check } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 import SectionChip from '../components/brand/SectionChip';
+import SpotlightCard from '../components/brand/SpotlightCard';
 import Reveal from '../components/Reveal';
 import { useT } from '../i18n/I18nContext';
 import { content } from '../i18n/content';
@@ -36,22 +38,39 @@ export default function Results() {
 
         <div className="grid md:grid-cols-3 gap-6 mt-14">
           {items.map((it, i) => (
-            <Reveal key={i} delay={i * 90} className="fa-card flex flex-col overflow-hidden text-left rtl:text-right">
-              <div className="px-6 pt-6 pb-4">
-                <div className="font-display text-[15px] font-semibold text-fa-liberty-blue">{it.name}</div>
-              </div>
-              {/* Before */}
-              <div className="px-6 py-5 bg-fa-cream-deep/60">
-                <span className="font-body text-[11px] font-semibold uppercase tracking-[0.1em] text-fa-ink-faint">{beforeLabel}</span>
-                <p className="font-body text-[14px] text-fa-ink-muted leading-[1.55] mt-2">{it.before}</p>
-              </div>
-              {/* After */}
-              <div className="px-6 py-5 flex-1">
-                <span className="inline-flex items-center gap-1.5 font-body text-[11px] font-semibold uppercase tracking-[0.1em] text-fa-orange-soda">
-                  <Check size={13} strokeWidth={3} /> {afterLabel}
-                </span>
-                <p className="font-body text-[14px] text-fa-liberty-blue/90 leading-[1.55] mt-2 font-medium">{it.after}</p>
-              </div>
+            <Reveal key={i} delay={i * 90} className="h-full">
+              <SpotlightCard className="fa-card fa-card--glow group relative h-full flex flex-col overflow-hidden text-left rtl:text-right">
+                <div className="relative z-10 flex h-full flex-col">
+                  {/* Merchant */}
+                  <div className="flex items-center gap-3 px-6 pt-6 pb-4">
+                    <span className="fa-iconchip w-9 h-9 rounded-xl font-display text-[15px] font-bold">
+                      {it.name.trim().charAt(0)}
+                    </span>
+                    <div className="font-display text-[15px] font-semibold text-fa-liberty-blue leading-tight">{it.name}</div>
+                  </div>
+
+                  {/* Before */}
+                  <div className="px-6 py-5 bg-fa-cream-deep/60">
+                    <span className="font-body text-[11px] font-semibold uppercase tracking-[0.1em] text-fa-ink-faint">{beforeLabel}</span>
+                    <p className="font-body text-[14px] text-fa-ink-muted leading-[1.55] mt-2">{it.before}</p>
+                  </div>
+
+                  {/* Connector */}
+                  <div className="relative h-0 flex justify-center">
+                    <span className="absolute -translate-y-1/2 flex items-center justify-center w-7 h-7 rounded-full bg-fa-surface text-fa-orange-soda shadow-[0_4px_12px_rgba(241,91,65,0.28)] ring-1 ring-fa-orange-soda/15 transition-transform duration-300 group-hover:scale-110">
+                      <ArrowDown size={14} strokeWidth={2.6} />
+                    </span>
+                  </div>
+
+                  {/* After */}
+                  <div className="px-6 pt-7 pb-6 flex-1">
+                    <span className="inline-flex items-center gap-1.5 font-body text-[11px] font-semibold uppercase tracking-[0.1em] text-fa-orange-soda">
+                      {afterLabel}
+                    </span>
+                    <p className="font-body text-[14px] text-fa-liberty-blue/90 leading-[1.55] mt-2 font-medium">{it.after}</p>
+                  </div>
+                </div>
+              </SpotlightCard>
             </Reveal>
           ))}
         </div>

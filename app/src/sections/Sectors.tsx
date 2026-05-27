@@ -36,10 +36,10 @@ export default function Sectors() {
               <Reveal
                 key={i}
                 delay={i * 60}
-                className="fa-card fa-card--hover inline-flex items-center gap-2.5 px-5 py-3"
+                className="group fa-card fa-card--glow inline-flex items-center gap-2.5 px-5 py-3"
               >
-                <Icon size={18} strokeWidth={1.9} className="text-fa-orange-soda" />
-                <span className="font-body text-[15px] font-medium text-fa-liberty-blue">{label}</span>
+                <Icon size={18} strokeWidth={1.9} className="text-fa-orange-soda transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6" />
+                <span className="font-body text-[15px] font-medium text-fa-liberty-blue transition-colors duration-300 group-hover:text-fa-orange-soda">{label}</span>
               </Reveal>
             );
           })}
