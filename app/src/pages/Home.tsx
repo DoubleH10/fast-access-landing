@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Hero from '../sections/Hero';
 import WhatIsFA from '../sections/WhatIsFA';
@@ -5,8 +6,10 @@ import ServicesGrid from '../sections/ServicesGrid';
 import PainPoints from '../sections/PainPoints';
 import Partner from '../sections/Partner';
 import Expand from '../sections/Expand';
-import Journey from '../sections/Journey';
 import Steps from '../sections/Steps';
+// Three.js is heavy (~the bulk of the bundle). Code-split the 3D journey so it
+// loads on its own after first paint; the flat Steps shows while it streams in.
+const Journey = lazy(() => import('../sections/Journey'));
 import TrustedBy from '../sections/TrustedBy';
 import Sectors from '../sections/Sectors';
 import Coverage from '../sections/Coverage';
@@ -36,7 +39,9 @@ export default function Home() {
       {/* The 5-step logistics journey — the signature 3D moment.
           Falls back to the flat 5-step layout where WebGL is unavailable. */}
       <ErrorBoundary fallback={<Steps />}>
-        <Journey />
+        <Suspense fallback={<Steps />}>
+          <Journey />
+        </Suspense>
       </ErrorBoundary>
       <TrustedBy />
       <Sectors />
