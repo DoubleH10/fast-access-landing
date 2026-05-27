@@ -1,7 +1,11 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { X, TrendingUp } from 'lucide-react';
+import { useT } from '../i18n/I18nContext';
 
 export default function AnnouncementBar() {
+  const { locale } = useT();
+  const isAr = locale === 'ar';
   const [visible, setVisible] = useState(() => {
     return !sessionStorage.getItem('announcement-dismissed');
   });
@@ -29,22 +33,24 @@ export default function AnnouncementBar() {
           to { transform: translateY(0); opacity: 1; }
         }
       `}</style>
-      <div className="container-main flex items-center justify-center h-9 relative">
-        <div className="flex items-center gap-2">
+      <div className="container-main flex items-center justify-center min-h-9 py-2 relative">
+        <div className="flex items-center justify-center gap-2 text-center max-w-[calc(100%-44px)]">
           <TrendingUp size={12} className="text-[#F15B41] flex-shrink-0" />
-          <p className="text-xs text-white/60">
-            Fast Access raises $80M from secua ventures &amp; Matrix partners
+          <p className="text-[11px] sm:text-xs text-white/65 leading-snug">
+            {isAr
+              ? 'توصيل في نفس اليوم من المتاجر السحابية داخل المدن الرئيسية'
+              : 'Same-day cloud-store delivery is available in major Saudi cities'}
           </p>
-          <a
-            href="#"
+          <Link
+            to="/contact"
             className="text-xs font-semibold text-[#F15B41] hover:text-[#FB7C65] hover:underline underline-offset-2 transition-all duration-150"
           >
-            Read announcement
-          </a>
+            {isAr ? 'اطلب عرضاً' : 'Request quote'}
+          </Link>
         </div>
         <button
           onClick={handleDismiss}
-          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-white/30 hover:text-white/70 transition-colors duration-150"
+          className="absolute end-3 top-1/2 -translate-y-1/2 p-1 text-white/30 hover:text-white/70 transition-colors duration-150"
           aria-label="Dismiss announcement"
         >
           <X size={12} />

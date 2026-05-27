@@ -1,7 +1,9 @@
 import { useInView } from '../hooks/useInView';
-import { Check, ArrowRight } from 'lucide-react';
+import { Check } from 'lucide-react';
 import SectionChip from '../components/brand/SectionChip';
 import BrandPattern from '../components/brand/BrandPattern';
+import BrandButton from '../components/brand/BrandButton';
+import { useT } from '../i18n/I18nContext';
 
 const sidebarOps = [
   { label: 'Dashboard', active: true, badge: null },
@@ -18,24 +20,29 @@ const kpis = [
   { label: 'Orders today', value: '2,841', delta: '12.4%', positive: true },
   { label: 'Shipped', value: '2,604', delta: '8.1%', positive: true },
   { label: 'On-time SLA', value: '99.8%', delta: '0.4 pts', positive: true },
-  { label: 'Avg. label cost', value: '$6.42', delta: '$0.18', positive: false },
+  { label: 'Avg. label cost', value: 'SAR 18.40', delta: 'SAR 0.70', positive: false },
 ];
 
 const chartPoints = [30, 45, 35, 55, 48, 62, 58, 75, 68, 82, 78, 90];
 
 const shipments = [
-  { id: 'FA-30482', name: 'Olivia Martin', status: 'In transit', color: '#F15B41', time: '12m ago' },
-  { id: 'FA-30481', name: 'Daniel Chen', status: 'Delivered', color: '#22c55e', time: '1h ago' },
-  { id: 'FA-30480', name: 'Priya Reddy', status: 'In transit', color: '#F15B41', time: '2h ago' },
-  { id: 'FA-30479', name: 'Marcus Webb', status: 'Picking', color: '#8a8a9a', time: '2h ago' },
-  { id: 'FA-30478', name: 'Sara Lindgren', status: 'Delivered', color: '#22c55e', time: '3h ago' },
+  { id: 'FA-30482', name: 'Riyadh Beauty Co.', status: 'In transit', color: '#F15B41', time: '12m ago' },
+  { id: 'FA-30481', name: 'Jeddah Home Goods', status: 'Delivered', color: '#22c55e', time: '1h ago' },
+  { id: 'FA-30480', name: 'Dammam Activewear', status: 'In transit', color: '#F15B41', time: '2h ago' },
+  { id: 'FA-30479', name: 'Medina Gifts', status: 'Picking', color: '#8a8a9a', time: '2h ago' },
+  { id: 'FA-30478', name: 'Khobar Supply', status: 'Delivered', color: '#22c55e', time: '3h ago' },
 ];
 
 export default function DashboardPreview() {
   const { ref, isInView } = useInView(0.15);
+  const { locale } = useT();
+  const isAr = locale === 'ar';
+  const bullets = isAr
+    ? ['مخزون مباشر عبر كل المواقع', 'تنبيهات إعادة الطلب قبل نفاد المخزون', 'تتبع الشحنة من المستودع إلى الباب']
+    : ['Live inventory counts across all locations', 'Automated reorder alerts before stock runs low', 'Shipment tracking from dock to doorstep'];
 
   return (
-    <section ref={ref} className="relative bg-fa-classic-chalk section-padding border-t border-fa-hairline overflow-hidden">
+    <section ref={ref} className="relative bg-fa-cream section-padding border-t border-fa-hairline overflow-hidden">
       {/* Pattern 3 (lozenge stripe) — soft texture in the upper-right corner */}
       <BrandPattern
         pattern="lozenge"
@@ -48,30 +55,37 @@ export default function DashboardPreview() {
           {/* Left Column */}
           <div className="lg:col-span-2 lg:pt-8">
             <div className="mb-5" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>
-              <SectionChip>The Platform</SectionChip>
+              <SectionChip>{isAr ? 'المنصة' : 'The Platform'}</SectionChip>
             </div>
             <h2 className="font-display font-bold text-[32px] sm:text-[40px] lg:text-[56px] text-fa-liberty-blue leading-[1.05] tracking-[-0.02em]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
-              One dashboard.<br /><span className="text-fa-orange-soda">Every package</span>, always.
+              {isAr ? (
+                <>
+                  لوحة واحدة.<br /><span className="text-fa-orange-soda">كل طلب</span> واضح دائماً.
+                </>
+              ) : (
+                <>
+                  One dashboard.<br /><span className="text-fa-orange-soda">Every package</span>, always.
+                </>
+              )}
             </h2>
             <p className="font-body mt-5 text-base text-fa-ink-muted leading-[1.6]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
-              Real-time visibility for your operations team. Beautiful tracking pages for your customers. APIs for everyone else.
+              {isAr
+                ? 'رؤية لحظية لفريق العمليات، صفحات تتبع واضحة للعملاء، وربط تقني للمنصات التي تعتمد عليها.'
+                : 'Real-time visibility for your operations team. Clear tracking pages for your customers. APIs for the platforms you rely on.'}
             </p>
             <ul className="mt-6 space-y-2.5">
-              {[
-                'Live inventory counts across all locations',
-                'Automated reorder alerts before stock runs low',
-                'Shipment tracking from dock to doorstep',
-              ].map((item, i) => (
+              {bullets.map((item, i) => (
                 <li key={item} className="flex items-start gap-3 text-sm text-[#6b6b7b]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(10px)', transition: `all 400ms ease-out ${300 + i * 100}ms` }}>
                   <Check size={16} className="text-[#F15B41] mt-0.5 flex-shrink-0" />
                   {item}
                 </li>
               ))}
             </ul>
-            <a href="#" className="btn-primary mt-8 inline-flex" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 400ms ease-out 500ms' }}>
-              Explore the Platform
-              <ArrowRight size={16} />
-            </a>
+            <div className="mt-8" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 400ms ease-out 500ms' }}>
+              <BrandButton variant="outline" href="/contact">
+                {isAr ? 'اطلب جولة على المنصة' : 'Explore the platform'}
+              </BrandButton>
+            </div>
           </div>
 
           {/* Right Column - Dashboard */}

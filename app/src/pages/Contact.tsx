@@ -8,7 +8,7 @@ export default function Contact() {
         <title>Contact — Fast Access</title>
         <meta name="description" content="Tell us what you ship and we'll come back with a tailored fulfillment plan within one business day. Talk to the Fast Access team." />
       </Helmet>
-      {/* Navy top pad clears the fixed header; blends seamlessly into CTA's navy. */}
+      {/* Navy top pad clears the fixed header and matches CTA's navy band. */}
       <div className="bg-fa-liberty-blue pt-[88px] lg:pt-[104px]">
         <CTA />
       </div>

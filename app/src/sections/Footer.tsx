@@ -5,35 +5,36 @@ import { useT } from '../i18n/I18nContext';
 type FooterLink = { label: string; to: string };
 
 export default function Footer() {
-  const { t } = useT();
+  const { t, locale } = useT();
+  const isAr = locale === 'ar';
   // Nav structure from PPT slide 20 footer:
   // About · Logistics solutions · Pricing · FAQ · Blog · Contact
-  // `to`: "/route" → SPA link · "mailto:"/"http" → external · "#" → not built yet.
+  // `to`: "/route" → SPA link · "mailto:"/"http" → external.
   const footerLinks: Record<string, FooterLink[]> = {
-    Solutions: [
-      { label: 'Storage', to: '/solutions' },
-      { label: 'Packing', to: '/solutions' },
-      { label: 'Shipping & Delivery', to: '/solutions' },
-      { label: 'Real-time Tracking', to: '/solutions' },
-      { label: 'Cloud Stores', to: '/solutions' },
+    [t('footer.cols.Solutions')]: [
+      { label: isAr ? 'التخزين' : 'Storage', to: '/solutions' },
+      { label: isAr ? 'التغليف' : 'Packing', to: '/solutions' },
+      { label: isAr ? 'الشحن والتوصيل' : 'Shipping & Delivery', to: '/solutions' },
+      { label: isAr ? 'المتابعة اللحظية' : 'Real-time Tracking', to: '/solutions' },
+      { label: isAr ? 'المتاجر السحابية' : 'Cloud Stores', to: '/solutions' },
     ],
-    Company: [
-      { label: 'About us', to: '/about' },
-      { label: 'Mission & Vision', to: '/about' },
-      { label: 'Industries served', to: '#' },
-      { label: 'Blog', to: '#' },
+    [t('footer.cols.Company')]: [
+      { label: isAr ? 'من نحن' : 'About us', to: '/about' },
+      { label: isAr ? 'المهمة والرؤية' : 'Mission & Vision', to: '/about' },
+      { label: isAr ? 'القطاعات التي نخدمها' : 'Industries served', to: '/solutions' },
+      { label: isAr ? 'المصادر' : 'Resources', to: '/resources' },
     ],
-    Resources: [
-      { label: 'FAQ', to: '/resources' },
-      { label: 'Pricing', to: '/pricing' },
-      { label: 'Help center', to: '/resources' },
-      { label: 'Privacy', to: '#' },
-      { label: 'Terms', to: '#' },
+    [t('footer.cols.Resources')]: [
+      { label: isAr ? 'الأسئلة الشائعة' : 'FAQ', to: '/resources' },
+      { label: isAr ? 'التسعير' : 'Pricing', to: '/pricing' },
+      { label: isAr ? 'مركز المساعدة' : 'Help center', to: '/resources' },
+      { label: isAr ? 'الخصوصية' : 'Privacy', to: '/resources#privacy' },
+      { label: isAr ? 'الشروط' : 'Terms', to: '/resources#terms' },
     ],
-    Contact: [
-      { label: 'Get a quote', to: '/contact' },
-      { label: 'Talk to sales', to: '/contact' },
-      { label: 'WhatsApp', to: '#' },
+    [t('footer.cols.Contact')]: [
+      { label: isAr ? 'اطلب عرض سعر' : 'Get a quote', to: '/contact' },
+      { label: isAr ? 'تحدث مع المبيعات' : 'Talk to sales', to: '/contact' },
+      { label: isAr ? 'واتساب' : 'WhatsApp', to: 'https://wa.me/966500000000' },
       { label: 'support@faccess.co', to: 'mailto:support@faccess.co' },
     ],
   };
@@ -97,17 +98,22 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-[13px] text-[#8a8a9a]">
-            © 2026 Fast Access Logistics, Inc.
+            {t('footer.copyright')}
           </div>
           <div className="flex items-center gap-6">
-            {['Privacy', 'Terms', 'Security', 'Cookies'].map((item) => (
-              <a
-                key={item}
-                href="#"
+            {[
+              { label: isAr ? 'الخصوصية' : 'Privacy', to: '/resources#privacy' },
+              { label: isAr ? 'الشروط' : 'Terms', to: '/resources#terms' },
+              { label: isAr ? 'الأمان' : 'Security', to: '/resources#security' },
+              { label: isAr ? 'ملفات الارتباط' : 'Cookies', to: '/resources#cookies' },
+            ].map((item) => (
+              <Link
+                key={item.label}
+                to={item.to}
                 className="text-[13px] text-[#8a8a9a] hover:text-[#F4F4F1] transition-colors duration-150"
               >
-                {item}
-              </a>
+                {item.label}
+              </Link>
             ))}
           </div>
         </div>

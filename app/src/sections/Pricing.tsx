@@ -3,6 +3,7 @@ import { Check, Box, Package, Gift, Layers } from 'lucide-react';
 import SectionChip from '../components/brand/SectionChip';
 import BrandButton from '../components/brand/BrandButton';
 import BrandPattern from '../components/brand/BrandPattern';
+import { useT } from '../i18n/I18nContext';
 
 /**
  * Pricing — pivot from fixed 3-tier model to custom-quote per PPT slide 17:
@@ -10,27 +11,38 @@ import BrandPattern from '../components/brand/BrandPattern';
  * Pricing depends on: product nature, order volume, packing type, extras.
  * The single CTA replaces the old Starter/Growth/Enterprise tiers.
  */
-const factors = [
-  { Icon: Box, label: 'Product nature', detail: 'Size, weight, fragility, temperature needs.' },
-  { Icon: Layers, label: 'Order volume', detail: 'Daily and monthly throughput across your stores.' },
-  { Icon: Package, label: 'Packing type', detail: 'Standard boxes, custom branded, or full unboxing.' },
-  { Icon: Gift, label: 'Extra services', detail: 'Gift wrapping, printed cards, inserts, returns.' },
-];
-
-const inclusions = [
-  'No long-term contracts',
-  'No per-pick hidden fees',
-  'No setup charge',
-  'Volume-based discounts',
-  'Pay only for what you ship',
-  'Same pricing across all regions',
+const factorIcons = [
+  { Icon: Box },
+  { Icon: Layers },
+  { Icon: Package },
+  { Icon: Gift },
 ];
 
 export default function Pricing() {
   const { ref, isInView } = useInView(0.15);
+  const { t, locale } = useT();
+  const isAr = locale === 'ar';
+
+  const factors = isAr
+    ? [
+        { label: 'طبيعة المنتج', detail: 'الحجم، الوزن، القابلية للكسر، واحتياج الحرارة.' },
+        { label: 'حجم الطلبات', detail: 'معدل الطلبات اليومي والشهري عبر متاجرك.' },
+        { label: 'نوع التغليف', detail: 'صناديق قياسية، تغليف بعلامتك، أو تجربة فتح كاملة.' },
+        { label: 'خدمات إضافية', detail: 'تغليف هدايا، بطاقات مطبوعة، إضافات، ومرتجعات.' },
+      ]
+    : [
+        { label: 'Product nature', detail: 'Size, weight, fragility, temperature needs.' },
+        { label: 'Order volume', detail: 'Daily and monthly throughput across your stores.' },
+        { label: 'Packing type', detail: 'Standard boxes, custom branded, or full unboxing.' },
+        { label: 'Extra services', detail: 'Gift wrapping, printed cards, inserts, returns.' },
+      ];
+
+  const inclusions = isAr
+    ? ['بدون عقود طويلة', 'بدون رسوم انتقاء خفية', 'بدون رسوم إعداد', 'خصومات حسب الحجم', 'ادفع على ما تشحنه فقط', 'وضوح في التسعير عبر المناطق']
+    : ['No long-term contracts', 'No per-pick hidden fees', 'No setup charge', 'Volume-based discounts', 'Pay only for what you ship', 'Clear regional pricing'];
 
   return (
-    <section id="pricing" ref={ref} className="relative bg-fa-classic-chalk section-padding border-t border-fa-hairline overflow-hidden">
+    <section id="pricing" ref={ref} className="relative bg-fa-cream section-padding border-t border-fa-hairline overflow-hidden">
       {/* Very subtle navy ribbon on the left — atmosphere only */}
       <BrandPattern
         pattern="ribbon"
@@ -44,26 +56,26 @@ export default function Pricing() {
             className="inline-flex mb-5"
             style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}
           >
-            <SectionChip>Plans &amp; Pricing</SectionChip>
+            <SectionChip>{t('pricing.chip')}</SectionChip>
           </div>
           <h2
             className="font-display font-bold text-[32px] sm:text-[40px] lg:text-[56px] text-fa-liberty-blue leading-[1.05] tracking-[-0.02em]"
             style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}
           >
-            Clear pricing, <span className="text-fa-orange-soda">no hidden fees</span>.
+            {t('pricing.headlineA')} <span className="text-fa-orange-soda">{t('pricing.headlineHighlight')}</span>{t('pricing.headlineB')}
           </h2>
           <p
             className="font-body mt-5 text-base text-fa-ink-muted leading-[1.6]"
             style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}
           >
-            Your budget calculated precisely, before you sign. Fast Access tailors a quote to what you actually ship — no surprises later.
+            {t('pricing.body')}
           </p>
         </div>
 
         <div className="grid lg:grid-cols-[1.1fr_1fr] gap-8 mt-14">
           {/* LEFT — what pricing depends on */}
           <div
-            className="bg-white border border-fa-hairline rounded-sm p-8 lg:p-12"
+            className="fa-card rounded-2xl p-8 lg:p-12"
             style={{
               opacity: isInView ? 1 : 0,
               transform: isInView ? 'translateY(0)' : 'translateY(40px)',
@@ -71,13 +83,15 @@ export default function Pricing() {
             }}
           >
             <div className="text-[11px] font-semibold uppercase tracking-[0.1em] font-body text-fa-orange-soda">
-              How we price
+              {t('pricing.howEyebrow')}
             </div>
             <h3 className="font-display mt-3 text-[22px] lg:text-[26px] font-semibold text-fa-liberty-blue tracking-[-0.01em]">
-              Four factors. One transparent quote.
+              {t('pricing.howTitle')}
             </h3>
             <div className="grid sm:grid-cols-2 gap-6 mt-8">
-              {factors.map(({ Icon, label, detail }) => (
+              {factors.map(({ label, detail }, index) => {
+                const Icon = factorIcons[index].Icon;
+                return (
                 <div key={label} className="flex gap-4">
                   <Icon size={22} strokeWidth={1.6} className="text-fa-orange-soda flex-shrink-0 mt-0.5" />
                   <div>
@@ -89,7 +103,8 @@ export default function Pricing() {
                     </div>
                   </div>
                 </div>
-              ))}
+              );
+              })}
             </div>
           </div>
 
@@ -103,10 +118,10 @@ export default function Pricing() {
             }}
           >
             <div className="text-[11px] font-semibold uppercase tracking-[0.1em] font-body text-fa-orange-soda">
-              Always included
+              {t('pricing.includedEyebrow')}
             </div>
             <h3 className="font-display mt-3 text-[22px] lg:text-[26px] font-semibold text-fa-classic-chalk tracking-[-0.01em]">
-              Built around your business — not the other way round.
+              {t('pricing.includedTitle')}
             </h3>
             <ul className="mt-8 grid sm:grid-cols-2 gap-3">
               {inclusions.map((item) => (
@@ -118,10 +133,10 @@ export default function Pricing() {
             </ul>
             <div className="mt-10 flex flex-wrap items-center gap-3">
               <BrandButton variant="on-dark" href="/contact">
-                Get my quote
+                {t('pricing.cta')}
               </BrandButton>
               <span className="font-body text-[12px] text-fa-classic-chalk/55">
-                Reply within one business day.
+                {t('pricing.replyNote')}
               </span>
             </div>
           </div>

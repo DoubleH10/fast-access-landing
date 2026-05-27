@@ -9,6 +9,12 @@ import { Link } from 'react-router-dom';
 
 type Variant = 'filled' | 'outline' | 'on-dark';
 
+const variantClasses: Record<Variant, string> = {
+  filled: 'btn-brand--filled',
+  outline: 'btn-brand--outline',
+  'on-dark': 'btn-brand--on-dark',
+};
+
 interface Props extends ComponentProps<'button'> {
   variant?: Variant;
   href?: string;
@@ -24,7 +30,7 @@ export default function BrandButton({
   className = '',
   ...rest
 }: Props) {
-  const classes = `btn-brand btn-brand--${variant} ${className}`.trim();
+  const classes = `btn-brand ${variantClasses[variant]} ${className}`.trim();
   const content = (
     <>
       <span className="btn-brand__label">{children}</span>

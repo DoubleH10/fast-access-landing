@@ -1,61 +1,70 @@
-import { useInView } from '../hooks/useInView';
+import Reveal from '../components/Reveal';
 import { useT } from '../i18n/I18nContext';
 
+/** Wordmark weights/letter-spacing tuned per platform so the strip reads like
+ *  real logos, not a uniform text list. */
 const platforms = [
-  { key: 0, weight: 700, letter: '-0.02em', hoverColor: '#00B68C' }, // Salla
-  { key: 1, weight: 600, letter: '0.01em', hoverColor: '#5A2C85' },  // Zid
-  { key: 2, weight: 700, letter: '-0.03em', hoverColor: '#7AB55C' }, // Shopify
-  { key: 3, weight: 500, letter: '-0.01em', hoverColor: '#96588A' }, // WooCommerce
-  { key: 4, weight: 600, letter: '0.02em', hoverColor: '#EE6723' },  // Magento
+  { key: 0, weight: 700, letter: '-0.02em', color: '#00B68C' }, // Salla
+  { key: 1, weight: 600, letter: '0.01em', color: '#5A2C85' },  // Zid
+  { key: 2, weight: 700, letter: '-0.03em', color: '#7AB55C' }, // Shopify
+  { key: 3, weight: 500, letter: '-0.01em', color: '#96588A' }, // WooCommerce
+  { key: 4, weight: 600, letter: '0.02em', color: '#EE6723' },  // Magento
 ];
 
 export default function TrustedBy() {
-  const { ref, isInView } = useInView(0.2);
   const { t } = useT();
+  // Duplicate the list so the track can loop seamlessly at -50%.
+  const loop = [...platforms, ...platforms];
 
   return (
-    <section ref={ref} className="bg-fa-classic-chalk border-t border-fa-hairline py-14 lg:py-18">
+    <section className="bg-fa-cream py-16 lg:py-20 overflow-hidden">
       <div className="container-main">
-        <p
-          className="text-center text-[12px] font-semibold text-[#8a8a9a] uppercase tracking-[0.14em] mb-9 font-body"
-          style={{
-            opacity: isInView ? 1 : 0,
-            transform: isInView ? 'translateY(0)' : 'translateY(10px)',
-            transition: 'all 500ms ease-out',
-          }}
-        >
-          {t('integrations.title')}
-        </p>
-        <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 lg:gap-x-20">
-          {platforms.map((p, i) => {
-            const name = t(`integrations.platforms.${p.key}`);
-            return (
-              <div
-                key={p.key}
-                className="transition-all duration-300 cursor-default select-none text-[20px] lg:text-[24px] font-display"
-                style={{
-                  fontWeight: p.weight,
-                  letterSpacing: p.letter,
-                  color: '#0D1232',
-                  opacity: isInView ? 0.35 : 0,
-                  transform: isInView ? 'translateY(0)' : 'translateY(10px)',
-                  transition: `opacity 500ms ease-out ${i * 70}ms, transform 500ms ease-out ${i * 70}ms, color 200ms, opacity 200ms`,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = p.hoverColor;
-                  e.currentTarget.style.opacity = '1';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#0D1232';
-                  e.currentTarget.style.opacity = isInView ? '0.35' : '0';
-                }}
-              >
-                {name}
-              </div>
-            );
-          })}
-        </div>
+        <Reveal>
+          <p className="text-center text-[12px] font-semibold text-fa-ink-faint uppercase tracking-[0.16em] mb-10 font-body">
+            {t('integrations.title')}
+          </p>
+        </Reveal>
       </div>
+
+      <Reveal
+        className="group relative"
+        // soft fade on both edges so wordmarks dissolve instead of clipping
+        style={{
+          WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)',
+          maskImage: 'linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)',
+        }}
+      >
+        <div className="fa-marquee flex w-max items-center group-hover:[animation-play-state:paused]">
+          {loop.map((p, i) => (
+            <span
+              key={i}
+              className="fa-marquee__item font-display text-[22px] lg:text-[26px] mx-8 lg:mx-12 cursor-default select-none transition-colors duration-300"
+              style={{ fontWeight: p.weight, letterSpacing: p.letter, color: '#0D1232' }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = p.color; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = '#0D1232'; }}
+            >
+              {t(`integrations.platforms.${p.key}`)}
+            </span>
+          ))}
+        </div>
+      </Reveal>
+
+      <style>{`
+        .fa-marquee {
+          animation: fa-marquee-scroll 34s linear infinite;
+          opacity: 0.4;
+        }
+        .fa-marquee:hover { opacity: 0.85; }
+        .fa-marquee__item:hover { opacity: 1; }
+        @keyframes fa-marquee-scroll {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+        html[dir='rtl'] .fa-marquee { animation-direction: reverse; }
+        @media (prefers-reduced-motion: reduce) {
+          .fa-marquee { animation: none; opacity: 0.5; flex-wrap: wrap; justify-content: center; }
+        }
+      `}</style>
     </section>
   );
 }

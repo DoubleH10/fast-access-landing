@@ -29,10 +29,13 @@ export default function Layout() {
 
   return (
     <div>
+      <a className="skip-link" href="#main-content">
+        Skip to content
+      </a>
       <ScrollToTop />
       <AnnouncementBar />
       <Navigation />
-      <main>
+      <main id="main-content">
         <Outlet />
       </main>
       <Footer />

@@ -73,16 +73,20 @@
     --fa-modern-lavender: #A6ABB3;
 
     /* ===== Semantic aliases (used by components) ===== */
-    /* Dark theme (default) — dark sections stay dark, paper stays paper.
+    /* Light-dominant canvas: warm cream is the default surface (matches the
+       brandbook), navy is reserved for the hero + one or two anchor sections.
+       Dark theme (default) — dark sections stay dark, paper stays paper.
        Light theme below flips dark sections to paper-on-paper.            */
-    --bg-paper:    #FAFBFC;
+    --bg-paper:    #F5F3EF;   /* warm cream — page default + light sections */
+    --bg-cream-deep: #EEEBE4; /* slightly deeper cream for alternating bands */
+    --surface:     #FDFCFA;   /* warm white — cards on cream (no cold jump)  */
     --bg-deep:     var(--fa-liberty-blue);
     --ink-primary: var(--fa-liberty-blue);
     --ink-muted:   #6B6B7B;
     --ink-faint:   #8A8A9A;
     --accent:      var(--fa-orange-soda);
     --accent-hover:#FB7C65;
-    --hairline:    #E3E7EE;
+    --hairline:    #E6E1D7;
     --overlay:     rgba(13, 18, 50, 0.85);
 
     /* shadcn-ui vars (kept for primitive components) */
@@ -110,7 +114,7 @@
 
   * { @apply border-border; }
 
-  html { scroll-behavior: auto; }
+  html { scroll-behavior: smooth; }
 
   /* ===== Light theme overrides ===== */
   html[data-theme='light'] body { background-color: #FFFFFF; }
@@ -140,6 +144,38 @@
     letter-spacing: -0.01em;
   }
 
+  /* Film grain — a faint, fixed paper texture over the whole page. Kills the
+     flat "solid-fill" look that reads as templated. Sits above content at a
+     whisper of opacity; never intercepts clicks. */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    body::after { animation: grain-shift 8s steps(6) infinite; }
+  }
+  @keyframes grain-shift {
+    0%,100% { transform: translate(0,0); }
+    20% { transform: translate(-6%, 4%); }
+    40% { transform: translate(4%, -6%); }
+    60% { transform: translate(-4%, 6%); }
+    80% { transform: translate(6%, -4%); }
+  }
+
+  img, svg, video, canvas {
+    max-width: 100%;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--fa-orange-soda);
+    outline-offset: 3px;
+  }
+
   /* RTL: Arabic gets IBM Plex Sans Arabic first; relax kerning since Arabic
      doesn't share Latin's tight letter-spacing aesthetic. */
   html[dir='rtl'] body,
@@ -153,6 +189,11 @@
     font-family: 'Clash Grotesk', 'IBM Plex Sans Arabic', 'Geist', -apple-system, sans-serif;
     letter-spacing: -0.02em;
     color: var(--ink-primary);
+    text-wrap: balance;
+  }
+
+  p, li {
+    text-wrap: pretty;
   }
 }
 
@@ -168,9 +209,10 @@
     max-width: 1240px;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: 18px;
+    padding-right: 18px;
   }
+  @media (min-width: 480px)  { .container-main { padding-left: 24px;  padding-right: 24px;  } }
   @media (min-width: 768px)  { .container-main { padding-left: 48px;  padding-right: 48px;  } }
   @media (min-width: 1024px) { .container-main { padding-left: 80px;  padding-right: 80px;  } }
 
@@ -193,11 +235,15 @@
     transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 200ms ease;
     border-radius: 4px;
     overflow: hidden;
+    min-height: 42px;
   }
   .btn-brand:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(13,18,50,0.15); }
+  .btn-brand:active { transform: translateY(0) scale(0.99); }
+  .btn-brand:focus-visible { outline: 2px solid var(--fa-orange-soda); outline-offset: 3px; }
   .btn-brand__label {
     display: inline-flex; align-items: center;
     padding: 12px 20px;
+    white-space: nowrap;
   }
   .btn-brand__arrow {
     display: inline-flex; align-items: center; justify-content: center;
@@ -208,10 +254,11 @@
     transition: background-color 150ms ease;
   }
   .btn-brand:hover .btn-brand__arrow { background: var(--accent-hover); }
+  html[dir='rtl'] .btn-brand__arrow svg { transform: rotate(180deg); }
 
   .btn-brand--filled {
     background: var(--fa-liberty-blue);
-    color: var(--fa-classic-chalk);
+    color: var(--fa-classic-chalk) !important;
     /* Visible edge so the button keeps presence on any background, including same-color sections */
     box-shadow: inset 0 0 0 1px rgba(244, 244, 241, 0.18);
   }
@@ -220,9 +267,9 @@
   .hero-fade .btn-brand--filled {
     background: var(--fa-blue-rose);
   }
-  .btn-brand--outline { background: transparent; color: var(--fa-liberty-blue); }
+  .btn-brand--outline { background: transparent; color: var(--fa-liberty-blue) !important; }
   .btn-brand--outline .btn-brand__arrow { border-left: 1px solid var(--fa-liberty-blue); }
-  .btn-brand--on-dark { background: transparent; color: var(--fa-classic-chalk); border-color: rgba(244,244,241,0.3); }
+  .btn-brand--on-dark { background: transparent; color: var(--fa-classic-chalk) !important; border-color: rgba(244,244,241,0.3); }
   .btn-brand--on-dark .btn-brand__arrow { border-left: 1px solid rgba(244,244,241,0.3); }
 
   /* === Section chip (eyebrow tag) brandbook pg 56 === */
@@ -261,12 +308,76 @@
     letter-spacing: 0.1em;
     color: var(--fa-orange-soda);
   }
+
+  .skip-link {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 100;
+    transform: translateY(-140%);
+    background: var(--fa-orange-soda);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-family: 'Geist', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    transition: transform 180ms ease;
+  }
+  .skip-link:focus { transform: translateY(0); }
 }
 
-@layer utilities {
-  /* StepRibbon tiled grid utility used as section background */
-  .bg-step-grid {
-    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='80' viewBox='0 0 240 80'%3E%3Cpath d='M0 60 Q 30 60 50 40 T 100 20 L 240 20' fill='none' stroke='%230D1232' stroke-opacity='0.06' stroke-width='1.5'/%3E%3Cpath d='M0 60 L 100 60 Q 130 60 150 40 T 200 20 L 240 20' fill='none' stroke='%230D1232' stroke-opacity='0.04' stroke-width='1'/%3E%3C/svg%3E");
-    background-repeat: repeat;
+@layer components {
+  /* === Soft card (brandbook: white plate, generous radius, no hard border) ===
+     Replaces the old thin 1px-border cards that read "template". */
+  .fa-card {
+    background: var(--surface);
+    border-radius: 18px;
+    box-shadow: 0 1px 2px rgba(13,18,50,0.04), 0 12px 30px -18px rgba(13,18,50,0.18);
+    transition: transform 260ms cubic-bezier(0.22,1,0.36,1), box-shadow 260ms ease;
+  }
+  .fa-card--hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 2px 4px rgba(13,18,50,0.05), 0 22px 44px -20px rgba(13,18,50,0.28);
+  }
+  /* Icon chip — brand-coloured square that holds a section/card icon */
+  .fa-iconchip {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: var(--fa-orange-100);
+    color: var(--fa-orange-soda);
+  }
+  .fa-iconchip--navy { background: rgba(45,46,117,0.08); color: var(--fa-blue-rose); }
+  /* On-dark card variant for navy anchor sections */
+  .fa-card--on-dark {
+    background: rgba(255,255,255,0.04);
+    box-shadow: inset 0 0 0 1px rgba(244,244,241,0.08);
+  }
+}
+
+/* ==========================================================================
+   Reveal-on-scroll — present by default, animate only when JS is ready.
+   index.html adds `anim-ready` to <html> at first paint, so:
+     • no JS / pre-paint → content is fully visible (no blank sections)
+     • JS ready          → items start hidden, then reveal when scrolled in
+   ========================================================================== */
+html.anim-ready .reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 720ms cubic-bezier(0.22, 1, 0.36, 1),
+              transform 720ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+html.anim-ready .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.anim-ready .reveal,
+  html.anim-ready .reveal.is-in {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 import { useT } from '../i18n/I18nContext';
 import SectionChip from '../components/brand/SectionChip';
+import BrandPattern from '../components/brand/BrandPattern';
 
 // FAQ data with translations for all 17 slides questions and answers.
 const faqItems = [
@@ -120,8 +121,12 @@ export default function FAQ() {
 
   return (
     <section id="faq" className="relative bg-fa-paper py-20 lg:py-28 border-t border-fa-hairline">
-      {/* Background decoration */}
-      <div className="absolute inset-0 pointer-events-none opacity-5 bg-step-grid" />
+      <BrandPattern
+        pattern="lozenge"
+        tint="navy"
+        opacity={0.035}
+        className="absolute -top-[10%] -right-[12%] w-[54%] max-w-[760px] pointer-events-none"
+      />
 
       <div className="container-main relative z-10">
         <div className="max-w-[800px] mx-auto text-center mb-14">
@@ -156,7 +161,7 @@ export default function FAQ() {
             return (
               <div
                 key={i}
-                className="bg-white border border-fa-hairline rounded-lg overflow-hidden transition-all duration-200"
+                className="bg-fa-surface border border-fa-hairline rounded-xl overflow-hidden transition-all duration-200"
                 style={{
                   boxShadow: isOpen ? '0 8px 24px rgba(13,18,50,0.04)' : 'none',
                   borderColor: isOpen ? 'rgba(241,91,65,0.3)' : '#E8E6DE',

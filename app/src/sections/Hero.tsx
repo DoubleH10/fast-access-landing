@@ -23,7 +23,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen bg-fa-liberty-blue overflow-hidden flex items-center">
+    <section className="relative min-h-[92svh] bg-fa-liberty-blue overflow-hidden flex items-center">
       {/* Background photograph — softened, behind everything */}
       <div className="absolute inset-0 z-0">
         <img
@@ -49,60 +49,62 @@ export default function Hero() {
         />
       </div>
 
-      {/* Ambient gradient blobs */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        {/* Soft orange soda blob in top-right */}
-        <div 
-          className="absolute -top-[10%] -right-[10%] w-[50%] h-[50%] rounded-full bg-fa-orange-soda/10 blur-[120px] animate-float-slow"
-        />
-        {/* Soft blue rose blob in bottom-left */}
-        <div
-          className="absolute -bottom-[10%] -left-[10%] w-[55%] h-[55%] rounded-full bg-fa-blue-rose/5 blur-[120px] animate-float-medium"
-        />
-      </div>
+      <div
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{
+          background:
+            'radial-gradient(ellipse at 70% 22%, rgba(241,91,65,0.13), transparent 36%), radial-gradient(ellipse at 20% 72%, rgba(114,198,234,0.07), transparent 34%)',
+        }}
+      />
+      <BrandPattern
+        pattern="ribbon"
+        tint="orange"
+        opacity={0.13}
+        className="absolute -left-[10%] bottom-[18%] w-[56%] max-w-[760px] pointer-events-none z-0 hidden md:block"
+      />
 
       {/* Content */}
-      <div className="relative z-10 container-main pt-32 lg:pt-36 pb-24 min-h-screen flex flex-col justify-center w-full">
+      <div className="relative z-10 container-main pt-32 sm:pt-36 lg:pt-36 pb-16 lg:pb-20 min-h-[92svh] flex flex-col justify-center w-full">
         <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-14 items-center">
           {/* LEFT — message column */}
           <div className="max-w-none text-left rtl:text-right">
-            <h1 className="hero-fade font-display font-bold text-[44px] sm:text-[56px] lg:text-[68px] text-fa-classic-chalk leading-[1.0] tracking-[-0.025em] max-w-[640px]">
+            <h1 className="hero-fade font-display font-bold text-[38px] sm:text-[56px] lg:text-[68px] text-fa-classic-chalk leading-[1.0] tracking-[-0.025em] max-w-[680px]">
               {t('hero.headlineA')}{' '}
               <span className="text-fa-orange-soda">{t('hero.headlineHighlight')}</span>{' '}
               {t('hero.headlineB')}
             </h1>
 
-            <p className="hero-fade font-body mt-6 text-base lg:text-lg text-fa-classic-chalk/65 max-w-[520px] leading-[1.55]">
+            <p className="hero-fade font-body mt-6 text-[15px] lg:text-lg text-fa-classic-chalk/70 max-w-[560px] leading-[1.65]">
               {t('hero.sub')}
             </p>
 
-            <div className="hero-fade flex flex-wrap items-center gap-3 mt-9">
+            <div className="hero-fade flex flex-wrap items-center gap-3 mt-8">
               <BrandButton variant="filled" href="/contact">
                 {t('hero.primaryCta')}
               </BrandButton>
-              <BrandButton variant="outline" href="/pricing">
+              <BrandButton variant="on-dark" href="/pricing">
                 {t('hero.secondaryCta')}
               </BrandButton>
             </div>
 
             {/* Hero Stats */}
-            <div className="hero-fade flex items-center gap-0 mt-12 border-t border-fa-classic-chalk/15 pt-8 max-w-[520px]">
+            <div className="hero-fade grid grid-cols-3 gap-0 mt-10 border-t border-fa-classic-chalk/15 pt-7 max-w-[560px]">
               {[
                 { value: '99.8', unit: '%', label: t('hero.statOnTime') },
                 { value: '2', unit: isAr ? 'ساعة' : 'hr', label: t('hero.statPickPack') },
                 { value: '42', unit: '+', label: t('hero.statCenters') },
               ].map((stat, i) => (
-                <div key={stat.label} className="flex items-center">
-                  <div className="pe-8">
-                    <div className="font-display text-[30px] lg:text-[38px] text-fa-classic-chalk leading-none tracking-[-0.02em] font-semibold">
+                <div key={stat.label} className="flex items-stretch">
+                  <div className="pe-3 sm:pe-8">
+                    <div className="font-display text-[25px] sm:text-[30px] lg:text-[38px] text-fa-classic-chalk leading-none tracking-[-0.02em] font-semibold tabular-nums">
                       {stat.value}
                       <span className="text-fa-orange-soda font-medium text-[24px] lg:text-[28px] ms-0.5">{stat.unit}</span>
                     </div>
-                    <div className="font-body text-[10px] font-semibold text-fa-classic-chalk/55 uppercase tracking-[0.1em] mt-2">
+                    <div className="font-body text-[9px] sm:text-[10px] font-semibold text-fa-classic-chalk/60 uppercase tracking-[0.08em] mt-2 leading-snug">
                       {stat.label}
                     </div>
                   </div>
-                  {i < 2 && <div className="w-px h-9 bg-fa-classic-chalk/15 me-8" />}
+                  {i < 2 && <div className="w-px min-h-10 bg-fa-classic-chalk/15 me-3 sm:me-8" />}
                 </div>
               ))}
             </div>
@@ -110,7 +112,7 @@ export default function Hero() {
 
           {/* RIGHT — Pattern 5 (isometric ribbons) hero composition. */}
           <div className="hero-fade relative hidden lg:flex justify-end items-center">
-            <div className="relative w-full max-w-[480px] aspect-square">
+            <div className="relative w-full max-w-[460px] aspect-square">
               {/* Outer glow plate */}
               <div
                 className="absolute inset-0 rounded-[24px]"
@@ -159,7 +161,7 @@ export default function Hero() {
       </div>
 
       {/* Scroll cue */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center pointer-events-none">
+      <div className="absolute bottom-5 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 z-10 hidden sm:flex flex-col items-center pointer-events-none">
         <span className="font-body text-[10px] font-semibold text-fa-classic-chalk/45 uppercase tracking-[0.16em]">
           {t('hero.scrollHint')}
         </span>
@@ -169,20 +171,6 @@ export default function Hero() {
         @keyframes pulse-glow {
           0%, 100% { box-shadow: 0 0 4px rgba(241,91,65,0.5); }
           50%      { box-shadow: 0 0 14px rgba(241,91,65,0.95); }
-        }
-        @keyframes float-slow {
-          0%, 100% { transform: translateY(0px) scale(1); }
-          50%      { transform: translateY(-15px) scale(1.03); }
-        }
-        @keyframes float-medium {
-          0%, 100% { transform: translateY(0px) scale(1); }
-          50%      { transform: translateY(15px) scale(0.97); }
-        }
-        .animate-float-slow {
-          animation: float-slow 8s ease-in-out infinite;
-        }
-        .animate-float-medium {
-          animation: float-medium 6s ease-in-out infinite;
         }
       `}</style>
     </section>

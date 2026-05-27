@@ -9,75 +9,16 @@ import { useT } from '../i18n/I18nContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Five operational stages from the new PPT (slide 11). Copy is pulled from the
+// bilingual `steps` i18n block at render time, so the 3D journey speaks EN + AR.
 const STAGES = [
-  { progress: 0.0, label: 'Receive', number: '01' },
-  { progress: 0.2, label: 'Store', number: '02' },
-  { progress: 0.4, label: 'Pick', number: '03' },
-  { progress: 0.55, label: 'Pack', number: '04' },
-  { progress: 0.75, label: 'Ship', number: '05' },
-  { progress: 0.95, label: 'Deliver', number: '06' },
+  { progress: 0.0,  number: '01' },
+  { progress: 0.25, number: '02' },
+  { progress: 0.5,  number: '03' },
+  { progress: 0.72, number: '04' },
+  { progress: 0.92, number: '05' },
 ];
-
-// Stage copy informed by PPT slide 11 (5-step operational arc).
-// We keep the 6-stage scroll for granularity; "Receive" and "Store" map to
-// PPT's "Receipt & Storage", "Pick" and "Pack" map to PPT's "Packaging".
-// Stats are placeholders until real ops data lands — see /tmp/fa-replace.md
-const STAGE_DATA = [
-  {
-    number: '01', label: 'Receive',
-    headline: 'We receive your products — and you can see them instantly.',
-    body: 'Inbound shipments are scanned, weighed, and slotted the moment they cross our door. Every SKU appears in your dashboard before the truck pulls away.',
-    stats: [
-      { value: '8m', label: 'Avg. dock-to-shelf' },   // TODO: real number
-      { value: '100%', label: 'Scan accuracy' },       // TODO: real number
-    ],
-  },
-  {
-    number: '02', label: 'Store',
-    headline: 'Stored safely, ready to ship.',
-    body: 'Climate-controlled bays for temperature-sensitive products. Smart slotting puts fast-movers near pick-paths so urgent orders go out first.',
-    stats: [
-      { value: 'TBD', label: 'Fulfillment centers' },  // TODO: replace with real KSA centre count
-      { value: 'TBD', label: 'Total capacity (sq m)' },
-    ],
-  },
-  {
-    number: '03', label: 'Pick',
-    headline: 'The right unit, from the right slot, every time.',
-    body: 'Pick paths optimise across orders in real time. Human accuracy where it counts, system speed where it scales.',
-    stats: [
-      { value: 'TBD', label: 'Pick accuracy' },
-      { value: 'TBD', label: 'Avg. pick time' },
-    ],
-  },
-  {
-    number: '04', label: 'Pack',
-    headline: 'Packed with your brand identity, every time.',
-    body: 'Durable packaging that protects the product, with your inserts, cards, and gift options stamped right on every box.',
-    stats: [
-      { value: '100%', label: 'Branded packaging' },
-      { value: 'TBD', label: 'Damage rate' },
-    ],
-  },
-  {
-    number: '05', label: 'Ship',
-    headline: 'The best carrier for every route — automatically.',
-    body: 'We work with the strongest local and international carriers across Saudi Arabia and beyond. Service rules you set; savings you keep.',
-    stats: [
-      { value: 'TBD', label: 'Carrier integrations' },
-      { value: 'TBD', label: 'Avg. label savings' },
-    ],
-  },
-  {
-    number: '06', label: 'Deliver',
-    headline: 'On the doorstep — tracked, proven, on time.',
-    body: 'Real-time tracking your shoppers actually read. Same-day delivery from cloud stores in 2-4 hours. Performance reports for you.',
-    stats: [
-      { value: '2-4hr', label: 'Same-day window' },
-      { value: 'TBD', label: 'On-time rate' },
-    ],
-  },
-];
+const STAGE_COUNT = STAGES.length;
 
 const splinePoints = [
   new THREE.Vector3(-10, 0, 0),
@@ -133,7 +74,6 @@ export default function Journey() {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
   const [currentStageNum, setCurrentStageNum] = useState(1);
-  const [stageData, setStageData] = useState(STAGE_DATA[0]);
   const [journeyProgress, setJourneyProgress] = useState(0);
   const isMobile = useMediaQuery('(max-width: 767px)');
   const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
@@ -143,9 +83,8 @@ export default function Journey() {
   const journeyHeight = isMobile ? '400vh' : isTablet ? '500vh' : '600vh';
 
   const updateStage = useCallback((progress: number) => {
-    const stageIdx = Math.min(Math.floor(progress * 6), 5);
+    const stageIdx = Math.min(Math.floor(progress * STAGE_COUNT), STAGE_COUNT - 1);
     setCurrentStageNum(stageIdx + 1);
-    setStageData(STAGE_DATA[stageIdx]);
     setJourneyProgress(progress);
   }, []);
 
@@ -215,72 +154,61 @@ export default function Journey() {
     (gridHelper.material as THREE.Material).depthWrite = false;
     scene.add(gridHelper);
 
-    // Package mesh — real cardboard box look, with Fast Access logo on the top face
-    const pkgSize = isMobileDevice ? 0.65 : 0.55;
+    // Package mesh — the Fast Access brandmark as a 3D box. Bigger than before,
+    // with the full mark (orange swoosh + navy hex + diamond) on every face so it
+    // reads as the logo from any angle as it travels the route.
+    const pkgSize = isMobileDevice ? 0.95 : 0.9;
     const pkgGeo = new THREE.BoxGeometry(pkgSize, pkgSize, pkgSize);
 
-    // Generate the box face textures procedurally on a 2D canvas.
-    // - Top face: cream cardboard + centered FA logo + brand orange flag bar.
-    // - Side faces: cream cardboard + thin orange tape line.
-    const makeFaceCanvas = (kind: 'top' | 'side') => {
+    // One brandmark texture, used on all six faces.
+    const makeMarkTexture = () => {
+      const S = 512;
       const c = document.createElement('canvas');
-      c.width = 256; c.height = 256;
+      c.width = S; c.height = S;
       const g = c.getContext('2d')!;
-      // base cardboard
+      // clean brand cream base + subtle crafted edge
       g.fillStyle = '#F4F4F1';
-      g.fillRect(0, 0, 256, 256);
-      // light kraft texture noise
-      g.fillStyle = 'rgba(13,18,50,0.04)';
-      for (let i = 0; i < 800; i++) {
-        g.fillRect(Math.random() * 256, Math.random() * 256, 1, 1);
-      }
-      // outer edge shadow
-      g.strokeStyle = 'rgba(13,18,50,0.18)';
-      g.lineWidth = 4;
-      g.strokeRect(2, 2, 252, 252);
-      if (kind === 'top') {
-        // orange flag bars (mimics the FA logo flag)
-        g.fillStyle = '#F15B41';
-        g.fillRect(64, 84, 60, 12);
-        g.fillRect(130, 84, 28, 12);
-        // navy hex/box mark
-        g.fillStyle = '#0D1232';
-        g.beginPath();
-        g.moveTo(128, 110);
-        g.lineTo(168, 130);
-        g.lineTo(168, 170);
-        g.lineTo(128, 190);
-        g.lineTo(88, 170);
-        g.lineTo(88, 130);
-        g.closePath();
-        g.fill();
-        // diamond cut-out
-        g.fillStyle = '#F4F4F1';
-        g.beginPath();
-        g.moveTo(143, 145); g.lineTo(158, 155); g.lineTo(143, 165); g.lineTo(128, 155);
-        g.closePath();
-        g.fill();
-      } else {
-        // tape line across the side
-        g.fillStyle = '#F15B41';
-        g.fillRect(0, 120, 256, 16);
-      }
+      g.fillRect(0, 0, S, S);
+      g.strokeStyle = 'rgba(13,18,50,0.10)';
+      g.lineWidth = 10;
+      g.strokeRect(8, 8, S - 16, S - 16);
+
+      const cx = 256, cy = 268, k = 1.55; // scale the mark up to fill the face
+      // orange swoosh — two stepped bars entering from the upper-left
+      g.fillStyle = '#F15B41';
+      g.fillRect(cx - 96 * k, cy - 132 * k * 0.62, 96 * k, 22 * k);
+      g.fillRect(cx + 14 * k, cy - 132 * k * 0.62, 58 * k, 22 * k);
+      // navy hexagon box mark
+      g.fillStyle = '#0D1232';
+      g.beginPath();
+      g.moveTo(cx,           cy - 78 * k);
+      g.lineTo(cx + 80 * k,  cy - 30 * k);
+      g.lineTo(cx + 80 * k,  cy + 56 * k);
+      g.lineTo(cx,           cy + 104 * k);
+      g.lineTo(cx - 80 * k,  cy + 56 * k);
+      g.lineTo(cx - 80 * k,  cy - 30 * k);
+      g.closePath();
+      g.fill();
+      // diamond cut-out (cream), offset right like the logo slit
+      g.fillStyle = '#F4F4F1';
+      g.beginPath();
+      g.moveTo(cx + 26 * k, cy - 4 * k);
+      g.lineTo(cx + 58 * k, cy + 20 * k);
+      g.lineTo(cx + 26 * k, cy + 44 * k);
+      g.lineTo(cx - 6 * k,  cy + 20 * k);
+      g.closePath();
+      g.fill();
+
       const tex = new THREE.CanvasTexture(c);
       tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = 4;
       return tex;
     };
 
-    const topTex = makeFaceCanvas('top');
-    const sideTex = makeFaceCanvas('side');
-    // BoxGeometry face order: +x, -x, +y, -y, +z, -z
-    const pkgMaterials = [
-      new THREE.MeshStandardMaterial({ map: sideTex, roughness: 0.85, metalness: 0 }),
-      new THREE.MeshStandardMaterial({ map: sideTex, roughness: 0.85, metalness: 0 }),
-      new THREE.MeshStandardMaterial({ map: topTex,  roughness: 0.7,  metalness: 0 }), // top
-      new THREE.MeshStandardMaterial({ map: topTex,  roughness: 0.7,  metalness: 0 }), // bottom
-      new THREE.MeshStandardMaterial({ map: sideTex, roughness: 0.85, metalness: 0 }),
-      new THREE.MeshStandardMaterial({ map: sideTex, roughness: 0.85, metalness: 0 }),
-    ];
+    const markTex = makeMarkTexture();
+    const mkMat = () => new THREE.MeshStandardMaterial({ map: markTex, roughness: 0.55, metalness: 0.05 });
+    // BoxGeometry face order: +x, -x, +y, -y, +z, -z — same mark on all six.
+    const pkgMaterials = [mkMat(), mkMat(), mkMat(), mkMat(), mkMat(), mkMat()];
     const packageMesh = new THREE.Mesh(pkgGeo, pkgMaterials);
     scene.add(packageMesh);
 
@@ -523,7 +451,7 @@ export default function Journey() {
           We previously had a decorative stepped-ribbon BrandPattern here that
           read as the start of a journey path and trailed into nothing — it
           made the section feel disconnected from the 3D scene that follows. */}
-      <div ref={introRef} className="relative bg-fa-classic-chalk overflow-hidden pt-20 lg:pt-28 pb-10 lg:pb-14">
+      <div ref={introRef} className="relative bg-fa-cream overflow-hidden pt-20 lg:pt-28 pb-10 lg:pb-14">
         <div className="container-main relative z-10 text-left rtl:text-right">
           <div className="mb-5" style={{ opacity: introInView ? 1 : 0, transform: introInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>
             <SectionChip>{t('journey.chip')}</SectionChip>
@@ -540,7 +468,7 @@ export default function Journey() {
       </div>
 
       {/* Journey sticky section */}
-      <div ref={wrapperRef} className="relative" style={{ height: journeyHeight, background: 'linear-gradient(to bottom, var(--fa-classic-chalk) 0%, #0D1232 15%, #0D1232 85%, var(--fa-paper) 100%)' }}>
+      <div ref={wrapperRef} className="relative" style={{ height: journeyHeight, background: 'linear-gradient(to bottom, var(--bg-cream-deep) 0%, #0D1232 15%, #0D1232 85%, var(--bg-paper) 100%)' }}>
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(255,255,255,0.012) 48px, rgba(255,255,255,0.012) 49px)' }} />
 
         <div ref={stickyRef} className="h-screen w-full relative overflow-hidden">
@@ -552,7 +480,7 @@ export default function Journey() {
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(13,18,50,0.7)', backdropFilter: 'blur(12px)' }}>
             <span className="w-1.5 h-1.5 rounded-full bg-[#F15B41]" style={{ animation: 'pulse-glow 2s infinite' }} />
             <span className="font-mono text-[10px] text-[#F15B41] tracking-wider">Stage {String(currentStageNum).padStart(2, '0')}</span>
-            <span className="text-[10px] text-[#F4F4F1]/60 font-medium">/ 06</span>
+            <span className="text-[10px] text-[#F4F4F1]/60 font-medium">/ 05</span>
           </div>
 
           {/* Stage detail card */}
@@ -569,22 +497,12 @@ export default function Journey() {
             }}
           >
             <div className="flex items-center gap-2 mb-2">
-              <span className="font-mono text-[11px] text-[#F15B41]">{stageData.number}</span>
-              <span className="text-[11px] font-semibold text-[#0D1232] uppercase tracking-wide">{stageData.label}</span>
+              <span className="font-mono text-[11px] text-[#F15B41]">{String(currentStageNum).padStart(2, '0')}</span>
+              <span className="text-[11px] font-semibold text-[#0D1232] uppercase tracking-wide">{t(`steps.items.${currentStageNum - 1}.title`)}</span>
             </div>
-            <h3 className="text-sm sm:text-base font-semibold text-[#0D1232] leading-snug">{stageData.headline}</h3>
-            <p className="text-xs sm:text-sm text-[#6b6b7b] leading-relaxed mt-2" style={{ display: '-webkit-box', WebkitLineClamp: isMobile ? 3 : 4, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-              {stageData.body}
+            <p className="text-xs sm:text-sm text-[#6b6b7b] leading-relaxed mt-1" style={{ display: '-webkit-box', WebkitLineClamp: isMobile ? 3 : 4, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+              {t(`steps.items.${currentStageNum - 1}.body`)}
             </p>
-            {/* Stage stats */}
-            <div className="flex items-center gap-5 mt-3 pt-3 border-t border-[#e8e8e8]">
-              {stageData.stats.map((s) => (
-                <div key={s.label}>
-                  <div className="font-mono text-[15px] text-[#0D1232] leading-none">{s.value}</div>
-                  <div className="text-[9px] font-medium text-[#8a8a9a] uppercase tracking-wider mt-1">{s.label}</div>
-                </div>
-              ))}
-            </div>
             <div className="mt-3 h-1 rounded-full bg-[#e8e8e8] overflow-hidden">
               <div className="h-full rounded-full bg-[#F15B41] transition-all duration-100" style={{ width: `${journeyProgress * 100}%` }} />
             </div>
@@ -593,7 +511,7 @@ export default function Journey() {
           {/* Desktop sidebar dots */}
           {isDesktop && (
             <div className="absolute right-6 top-1/2 -translate-y-1/2 z-10 flex flex-col items-center gap-4">
-              <span className="font-mono text-xs text-[#F15B41] tracking-wider">{String(currentStageNum).padStart(2, '0')} / 06</span>
+              <span className="font-mono text-xs text-[#F15B41] tracking-wider">{String(currentStageNum).padStart(2, '0')} / 05</span>
               <div className="flex flex-col gap-2.5">
                 {STAGES.map((stage, i) => (
                   <div key={stage.number} className="relative transition-all duration-300" style={{ width: i + 1 === currentStageNum ? 10 : 8, height: i + 1 === currentStageNum ? 10 : 8, borderRadius: '50%', backgroundColor: i + 1 <= currentStageNum ? '#F15B41' : 'transparent', border: i + 1 <= currentStageNum ? 'none' : '1px solid rgba(244,244,241,0.25)', boxShadow: i + 1 === currentStageNum ? '0 0 12px rgba(241,91,65,0.6)' : 'none' }} />

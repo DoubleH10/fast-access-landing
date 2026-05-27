@@ -21,7 +21,7 @@ const formFields = {
     notes: 'Additional Notes / Requirements',
     submit: 'Submit Inquiry',
     submitting: 'Sending...',
-    successTitle: 'Thank you for contacting Fast Access!',
+    successTitle: 'Thank you for contacting Fast Access.',
     successSub: 'Our team will contact you within one business day to discuss your needs and partnership details.',
     types: ['E-Commerce Store', 'Retail Business', 'Startup', 'Other'],
     volumes: ['< 500 orders/month', '500 - 2,000 orders/month', '2,000 - 10,000 orders/month', '10,000+ orders/month'],
@@ -291,13 +291,13 @@ export default function CTA() {
 
                   <div>
                     <label className="block text-[10px] font-semibold text-fa-classic-chalk/50 uppercase tracking-wider mb-3">{f.services}</label>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid sm:grid-cols-2 gap-3">
                       {f.serviceList.map((service) => {
                         const isChecked = formData.services.includes(service);
                         return (
                           <label key={service} className="flex items-center gap-3 cursor-pointer select-none">
                             <span 
-                              className={`w-4.5 h-4.5 border rounded flex items-center justify-center transition-all ${isChecked ? 'bg-fa-orange-soda border-fa-orange-soda text-white' : 'border-white/20 bg-white/5 hover:border-white/40'}`}
+                              className={`w-[18px] h-[18px] border rounded flex items-center justify-center transition-all ${isChecked ? 'bg-fa-orange-soda border-fa-orange-soda text-white' : 'border-white/20 bg-white/5 hover:border-white/40'}`}
                             >
                               {isChecked && <Check size={11} strokeWidth={3} />}
                             </span>

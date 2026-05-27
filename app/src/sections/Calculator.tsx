@@ -21,7 +21,7 @@ export default function Calculator() {
   const isAr = locale === 'ar';
 
   const [orders, setOrders] = useState(2000);
-  const [costPerOrder, setCostPerOrder] = useState(8);
+  const [costPerOrder, setCostPerOrder] = useState(30);
   const [weeklyHours, setWeeklyHours] = useState(20);
   const [deliveryDays, setDeliveryDays] = useState(3);
   const [cloudStores, setCloudStores] = useState(false);
@@ -52,7 +52,7 @@ export default function Calculator() {
 
   const fmt = (n: number) => new Intl.NumberFormat(isAr ? 'ar-EG' : 'en-US').format(n);
   const fmtCurrency = (n: number) =>
-    new Intl.NumberFormat(isAr ? 'ar-EG' : 'en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
+    new Intl.NumberFormat(isAr ? 'ar-SA' : 'en-SA', { style: 'currency', currency: 'SAR', maximumFractionDigits: 0 }).format(n);
 
   return (
     <section className="relative bg-fa-paper overflow-hidden py-20 lg:py-28">
@@ -99,13 +99,13 @@ export default function Calculator() {
                 format={(v) => fmt(v)}
               />
               <RangeField
-                label={isAr ? 'تكلفة الشحن لكل طلب (دولار)' : 'Current cost per order (USD)'}
+                label={isAr ? 'تكلفة الشحن لكل طلب (ريال)' : 'Current cost per order (SAR)'}
                 value={costPerOrder}
                 onChange={setCostPerOrder}
-                min={2}
-                max={30}
-                step={0.5}
-                format={(v) => `$${v}`}
+                min={8}
+                max={100}
+                step={1}
+                format={(v) => (isAr ? `${v} ر.س` : `${v} SAR`)}
               />
               <RangeField
                 label={isAr ? 'الساعات الأسبوعية على العمليات' : 'Hours/week on shipping ops'}
@@ -177,11 +177,15 @@ export default function Calculator() {
                   label={isAr ? 'ساعات وفرتها أسبوعياً' : 'Hours saved/week'}
                   value={`${fmt(results.savedHoursWeekly)} ${isAr ? 'ساعة' : 'hrs'}`}
                 />
+              </div>
+
+              <div className="mt-8 grid gap-6 sm:grid-cols-[minmax(0,1.35fr)_minmax(130px,0.65fr)] items-end">
                 <Stat
                   icon={<TrendingUp size={18} strokeWidth={1.7} />}
                   label={isAr ? 'العائد السنوي' : 'Annual ROI'}
                   value={fmtCurrency(results.annualROI)}
                   highlight
+                  className="min-w-0"
                 />
                 <Stat
                   icon={<Sparkles size={18} strokeWidth={1.7} />}
@@ -268,11 +272,23 @@ function RangeField({
   );
 }
 
-function Stat({ icon, label, value, highlight = false }: { icon: React.ReactNode; label: string; value: string; highlight?: boolean }) {
+function Stat({
+  icon,
+  label,
+  value,
+  highlight = false,
+  className = '',
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  highlight?: boolean;
+  className?: string;
+}) {
   return (
-    <div className="relative">
+    <div className={`relative ${className}`.trim()}>
       <div className="flex items-center gap-2 text-fa-orange-soda mb-3">{icon}</div>
-      <div className={`font-display font-semibold leading-none tracking-[-0.02em] ${highlight ? 'text-[42px] lg:text-[52px] text-fa-orange-soda' : 'text-[28px] lg:text-[36px] text-fa-classic-chalk'}`}>
+      <div className={`font-display font-semibold leading-none tracking-[-0.02em] whitespace-nowrap ${highlight ? 'text-[36px] lg:text-[44px] xl:text-[48px] text-fa-orange-soda' : 'text-[28px] lg:text-[36px] text-fa-classic-chalk'}`}>
         {value}
       </div>
       <div className="mt-2 font-body text-[11px] uppercase tracking-[0.08em] text-fa-classic-chalk/55 font-semibold">{label}</div>

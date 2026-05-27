@@ -8,6 +8,7 @@ import Pricing from './pages/Pricing';
 import About from './pages/About';
 import Resources from './pages/Resources';
 import Contact from './pages/Contact';
+import NotFound from './pages/NotFound';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,7 +23,7 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="*" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>

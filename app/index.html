@@ -10,6 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   </head>
   <body>
+    <!-- Mark the document animation-ready at first paint so reveal-on-scroll
+         items start hidden and animate in. If this script never runs (JS off
+         or failed), content stays visible — no blank sections. -->
+    <script>document.documentElement.classList.add('anim-ready');</script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
