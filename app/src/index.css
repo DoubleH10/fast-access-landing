@@ -622,3 +622,223 @@ html[dir='rtl'] .fa-kicker-track { animation-direction: reverse; }
   .fa-hero-live__pulse { animation: none; }
   .fa-hero-mini__bar .fill { animation: none; transform: translateX(0); }
 }
+
+/* ==========================================================================
+   Journey2D — 2D sticky-scroll "how it works" scene. Tall outer section, a
+   sticky 100vh pane inside, left stage copy + right canvas with blob, grid,
+   floating package, and a stack of frosted data cards.
+   ========================================================================== */
+.fa-journey2 {
+  position: relative;
+  background: var(--fa-liberty-blue);
+  color: var(--fa-classic-chalk);
+  /* outer height set inline (N * 100vh + a settling tail) */
+}
+.fa-journey2::before {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(241, 91, 65, 0.12), transparent 45%),
+    radial-gradient(ellipse at 20% 80%, rgba(45, 46, 117, 0.30), transparent 55%);
+  pointer-events: none;
+}
+.fa-journey2-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  overflow: hidden;
+}
+@media (max-width: 900px) { .fa-journey2-sticky { grid-template-columns: 1fr; } }
+
+.fa-journey2-left {
+  padding: 0 64px 0 80px;
+  display: flex; flex-direction: column;
+  gap: 28px;
+  position: relative; z-index: 2;
+}
+html[dir="rtl"] .fa-journey2-left { padding: 0 80px 0 64px; }
+@media (max-width: 1023px) {
+  .fa-journey2-left, html[dir="rtl"] .fa-journey2-left { padding: 0 32px; }
+}
+
+.fa-journey2-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 500; line-height: 1;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--fa-orange-soda);
+}
+.fa-journey2-eyebrow .num {
+  font-family: var(--fa-font-mono, ui-monospace, monospace);
+  color: var(--fa-orange-soda);
+}
+.fa-journey2-eyebrow .of {
+  color: rgba(244, 244, 241, 0.45);
+}
+
+.fa-journey2-stage {
+  position: relative;
+  min-height: 240px;
+}
+.fa-journey2-stage .stage {
+  position: absolute; inset: 0;
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.fa-journey2-stage .stage.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.fa-journey2-stage h2 {
+  font-family: var(--fa-font-display, 'Inter Display', system-ui, sans-serif);
+  font-weight: 600;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.fa-journey2-stage h2 .accent { color: var(--fa-orange-soda); }
+.fa-journey2-stage p {
+  font-size: 17px;
+  line-height: 1.65;
+  color: rgba(244, 244, 241, 0.72);
+  max-width: 460px;
+}
+
+.fa-journey2-nav {
+  display: flex; gap: 4px;
+  margin-top: 20px;
+}
+.fa-journey2-nav .nv {
+  flex: 1; max-width: 44px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+}
+.fa-journey2-nav .nv .f {
+  position: absolute; inset: 0;
+  background: var(--fa-orange-soda);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fa-journey2-nav .nv.done .f   { transform: scaleX(1); }
+.fa-journey2-nav .nv.active .f { transform: scaleX(var(--cur, 0)); }
+html[dir="rtl"] .fa-journey2-nav .nv .f { transform-origin: 100% 50%; }
+
+/* Right side — moving canvas */
+.fa-journey2-right {
+  position: relative;
+  width: 100%; height: 100vh;
+  overflow: hidden;
+}
+@media (max-width: 900px) { .fa-journey2-right { display: none; } }
+.fa-journey2-canvas {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.fa-journey2-card {
+  position: absolute;
+  width: min(360px, 90%);
+  background: rgba(255, 255, 255, 0.045);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 20px;
+  padding: 24px;
+  opacity: 0;
+  transform: translate3d(40px, 30px, 0) scale(0.94);
+  transition:
+    opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.fa-journey2-card.active {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  z-index: 3;
+}
+.fa-journey2-card .ic-wrap {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: rgba(241, 91, 65, 0.12);
+  color: var(--fa-orange-soda);
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+}
+.fa-journey2-card h4 {
+  font-family: var(--fa-font-display, 'Inter Display', system-ui, sans-serif);
+  font-weight: 600;
+  font-size: 18px; line-height: 1.2;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.fa-journey2-card p {
+  font-size: 13px; line-height: 1.55;
+  color: rgba(244, 244, 241, 0.6);
+}
+.fa-journey2-card .rows {
+  margin-top: 16px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.fa-journey2-card .row {
+  display: flex; justify-content: space-between;
+  font-family: var(--fa-font-mono, ui-monospace, monospace);
+  font-size: 12px; font-weight: 500; line-height: 1;
+  color: rgba(244, 244, 241, 0.7);
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.025);
+}
+.fa-journey2-card .row .v { color: var(--fa-orange-soda); }
+.fa-journey2-card .row .v.green { color: #6BD8A0; }
+
+/* Decorative layers behind the cards */
+.fa-journey2-bg-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+          mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+}
+.fa-journey2-blob {
+  position: absolute;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.6;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), background 1.2s ease;
+}
+.fa-journey2-package {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 64px; height: 64px;
+  margin: -32px 0 0 -32px;
+  border-radius: 14px;
+  background: linear-gradient(140deg, var(--fa-orange-soda), var(--fa-orange-700));
+  box-shadow:
+    0 0 0 8px rgba(241, 91, 65, 0.12),
+    0 0 60px rgba(241, 91, 65, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  z-index: 4;
+  transition: transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fa-journey2-stage .stage,
+  .fa-journey2-card,
+  .fa-journey2-blob,
+  .fa-journey2-package { transition: none !important; }
+}
