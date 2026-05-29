@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import SectionChip from './brand/SectionChip';
 import BrandPattern from './brand/BrandPattern';
+import RevealText from './brand/RevealText';
 
 interface Props {
   chip?: string;
@@ -28,7 +29,7 @@ export default function PageHeader({ chip, title, sub }: Props) {
           </div>
         )}
         <h1 className="font-display font-bold text-[34px] sm:text-[44px] lg:text-[56px] text-fa-classic-chalk leading-[1.05] tracking-[-0.02em] max-w-[820px]">
-          {title}
+          {typeof title === 'string' ? <RevealText stagger={55}>{title}</RevealText> : title}
         </h1>
         {sub && (
           <p className="font-body mt-5 text-base lg:text-lg text-fa-classic-chalk/65 leading-[1.55] max-w-[620px]">

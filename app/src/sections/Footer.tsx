@@ -39,12 +39,20 @@ export default function Footer() {
     ],
   };
 
-  const linkClass = 'text-sm text-[#8a8a9a] hover:text-[#F4F4F1] transition-colors duration-150';
+  // Subtle "slide on hover" feedback on every link so the column feels alive.
+  const linkClass =
+    'inline-flex items-center gap-1.5 text-sm text-[#8a8a9a] hover:text-[#F4F4F1] transition-all duration-200 rtl:flex-row-reverse hover:translate-x-0.5 rtl:hover:-translate-x-0.5';
   const renderLink = ({ label, to }: FooterLink) =>
     to.startsWith('/') ? (
-      <Link to={to} className={linkClass}>{label}</Link>
+      <Link to={to} className={linkClass}>
+        <span className="opacity-0 -translate-x-1 transition-all duration-200 group-hover/li:opacity-60 group-hover/li:translate-x-0 rtl:translate-x-1 rtl:group-hover/li:-translate-x-0 text-fa-orange-soda">›</span>
+        <span>{label}</span>
+      </Link>
     ) : (
-      <a href={to} className={linkClass}>{label}</a>
+      <a href={to} className={linkClass}>
+        <span className="opacity-0 -translate-x-1 transition-all duration-200 group-hover/li:opacity-60 group-hover/li:translate-x-0 rtl:translate-x-1 rtl:group-hover/li:-translate-x-0 text-fa-orange-soda">›</span>
+        <span>{label}</span>
+      </a>
     );
 
   return (
@@ -69,7 +77,12 @@ export default function Footer() {
           {/* Logo & Description */}
           <div className="col-span-2">
             <BrandLogo variant="full" mode="dark" height={56} />
-            <div className="font-display mt-5 text-base text-fa-classic-chalk font-semibold tracking-[-0.01em]">
+            <div className="font-display mt-5 text-base text-fa-classic-chalk font-semibold tracking-[-0.01em] inline-flex items-center gap-2.5">
+              <span
+                className="w-1.5 h-1.5 rounded-full bg-fa-orange-soda inline-block"
+                style={{ animation: 'fa-hero-pulse 2s ease-in-out infinite' }}
+                aria-hidden
+              />
               {t('footer.tagline')}
             </div>
             <p className="font-body mt-3 text-sm text-fa-classic-chalk/55 leading-[1.65] max-w-[320px]">
@@ -85,7 +98,7 @@ export default function Footer() {
               </div>
               <ul className="space-y-2">
                 {links.map((link) => (
-                  <li key={link.label}>{renderLink(link)}</li>
+                  <li key={link.label} className="group/li">{renderLink(link)}</li>
                 ))}
               </ul>
             </div>

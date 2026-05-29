@@ -3,6 +3,8 @@ import { Target, Telescope } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import Coverage from '../sections/Coverage';
 import SectionChip from '../components/brand/SectionChip';
+import SpotlightCard from '../components/brand/SpotlightCard';
+import RevealText from '../components/brand/RevealText';
 import Reveal from '../components/Reveal';
 import { useT } from '../i18n/I18nContext';
 
@@ -35,10 +37,16 @@ export default function About() {
             { icon: Target, title: t('pages.mission.title'), body: t('pages.mission.body') },
             { icon: Telescope, title: t('pages.vision.title'), body: t('pages.vision.body') },
           ].map((b, i) => (
-            <Reveal key={i} delay={i * 100} className="fa-card p-8 lg:p-10 text-left rtl:text-right">
-              <span className="fa-iconchip"><b.icon size={24} strokeWidth={1.8} /></span>
-              <h2 className="font-display mt-6 text-[24px] lg:text-[28px] font-bold text-fa-liberty-blue tracking-[-0.02em]">{b.title}</h2>
-              <p className="font-body mt-3 text-[15px] lg:text-base text-fa-ink-muted leading-[1.7]">{b.body}</p>
+            <Reveal key={i} delay={i * 100} className="h-full">
+              <SpotlightCard className="fa-card fa-card--glow group relative h-full overflow-hidden p-8 lg:p-10 text-left rtl:text-right">
+                <div className="relative z-10">
+                  <span className="fa-iconchip"><b.icon size={24} strokeWidth={1.8} /></span>
+                  <h2 className="font-display mt-6 text-[24px] lg:text-[28px] font-bold text-fa-liberty-blue tracking-[-0.02em]">
+                    <RevealText stagger={45}>{b.title}</RevealText>
+                  </h2>
+                  <p className="font-body mt-3 text-[15px] lg:text-base text-fa-ink-muted leading-[1.7]">{b.body}</p>
+                </div>
+              </SpotlightCard>
             </Reveal>
           ))}
         </div>

@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Hero from '../sections/Hero';
 import WhatIsFA from '../sections/WhatIsFA';
@@ -6,7 +7,10 @@ import ServicesGrid from '../sections/ServicesGrid';
 import PainPoints from '../sections/PainPoints';
 import Partner from '../sections/Partner';
 import Expand from '../sections/Expand';
-import Journey2D from '../sections/Journey2D';
+import Steps from '../sections/Steps';
+// Three.js is heavy (~the bulk of the bundle). Code-split the 3D journey so it
+// loads on its own after first paint; the flat Steps shows while it streams in.
+const Journey = lazy(() => import('../sections/Journey'));
 import TrustedBy from '../sections/TrustedBy';
 import Sectors from '../sections/Sectors';
 import Coverage from '../sections/Coverage';
@@ -15,6 +19,7 @@ import Results from '../sections/Results';
 import Pricing from '../sections/Pricing';
 import FAQ from '../sections/FAQ';
 import CTA from '../sections/CTA';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 export default function Home() {
   return (
@@ -33,10 +38,13 @@ export default function Home() {
       <PainPoints />
       <Partner />
       <Expand />
-      {/* "How it works" — sticky-scroll 2D scene: stage copy fades on the
-          left, frosted data cards swap on the right, with a coloured blob
-          and floating package drifting between them. */}
-      <Journey2D />
+      {/* The 5-step logistics journey — the signature 3D moment.
+          Falls back to the flat 5-step layout where WebGL is unavailable. */}
+      <ErrorBoundary fallback={<Steps />}>
+        <Suspense fallback={<Steps />}>
+          <Journey />
+        </Suspense>
+      </ErrorBoundary>
       <TrustedBy />
       <Sectors />
       {/* Navy "proof" block: network + the numbers */}
