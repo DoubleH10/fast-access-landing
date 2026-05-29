@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Hero from '../sections/Hero';
 import WhatIsFA from '../sections/WhatIsFA';
+import KickerBar from '../sections/KickerBar';
 import ServicesGrid from '../sections/ServicesGrid';
 import PainPoints from '../sections/PainPoints';
 import Partner from '../sections/Partner';
@@ -32,6 +33,7 @@ export default function Home() {
       </Helmet>
       <Hero />
       <WhatIsFA />
+      <KickerBar />
       <ServicesGrid />
       <PainPoints />
       <Partner />

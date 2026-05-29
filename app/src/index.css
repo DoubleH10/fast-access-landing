@@ -406,3 +406,219 @@ html.anim-ready .reveal.is-in {
     transition: none !important;
   }
 }
+
+/* ==========================================================================
+   RevealText — per-word stagger. Words sit at translateY(110%) inside an
+   overflow-hidden wrapper, then rest at 0 once the line gains .is-in.
+   ========================================================================== */
+.rv-line { display: inline; }
+.rv-word-wrap {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  line-height: inherit;
+}
+.rv-word {
+  display: inline-block;
+  transform: translate3d(0, 110%, 0);
+  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.rv-line.is-in .rv-word { transform: translate3d(0, 0, 0); }
+.rv-word.accent { color: var(--fa-orange-soda); }
+.rv-space { display: inline-block; width: 0.27em; }
+@media (prefers-reduced-motion: reduce) {
+  .rv-word, .rv-line.is-in .rv-word { transform: none !important; transition: none !important; }
+}
+
+/* ==========================================================================
+   Scroll progress sliver — 2px orange bar fixed at the top of the viewport.
+   ========================================================================== */
+.fa-scroll-bar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: rgba(13, 18, 50, 0.06);
+  z-index: 100;
+  pointer-events: none;
+}
+.fa-scroll-bar__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--fa-orange-soda), var(--fa-orange-700));
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  transition: transform 80ms linear;
+}
+html[dir='rtl'] .fa-scroll-bar__fill { transform-origin: 100% 50%; }
+
+/* ==========================================================================
+   MagneticButton — wrapper that lets the inner translate freely with cursor.
+   ========================================================================== */
+.mag-wrap { display: inline-block; padding: 12px; margin: -12px; }
+.mag-inner { display: inline-block; will-change: transform; }
+
+/* ==========================================================================
+   KickerBar — large editorial marquee (Store · Pack · Ship · Track · Deliver)
+   ========================================================================== */
+.fa-kicker-bar {
+  background: var(--fa-paper);
+  padding: 80px 0;
+  overflow: hidden;
+  position: relative;
+  border-top: 1px solid var(--fa-hairline);
+  border-bottom: 1px solid var(--fa-hairline);
+}
+.fa-kicker-track {
+  display: flex;
+  align-items: center;
+  gap: 56px;
+  font-family: var(--fa-font-display, 'Inter Display', system-ui, sans-serif);
+  font-weight: 500;
+  font-size: clamp(48px, 8vw, 96px);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--fa-liberty-blue);
+  white-space: nowrap;
+  width: max-content;
+  will-change: transform;
+  animation: fa-kicker-scroll 28s linear infinite;
+}
+.fa-kicker-bar:hover .fa-kicker-track { animation-play-state: paused; }
+.fa-kicker-item { display: inline-flex; align-items: center; gap: 56px; }
+.fa-kicker-star {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 56px; height: 56px;
+  color: var(--fa-orange-soda);
+  flex-shrink: 0;
+  animation: fa-kicker-spin 14s linear infinite;
+}
+@keyframes fa-kicker-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes fa-kicker-spin { to { transform: rotate(360deg); } }
+html[dir='rtl'] .fa-kicker-track { animation-direction: reverse; }
+@media (prefers-reduced-motion: reduce) {
+  .fa-kicker-track { animation: none; flex-wrap: wrap; justify-content: center; }
+  .fa-kicker-star  { animation: none; }
+}
+
+/* ==========================================================================
+   Hero — LIVE ops pill + mini dispatch card. These sit on top of the dark
+   photo hero, replacing the static isometric pattern art.
+   ========================================================================== */
+.fa-hero-live {
+  position: relative;
+  z-index: 3;
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(13, 18, 50, 0.55);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+}
+.fa-hero-live__pulse {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--fa-orange-soda);
+  box-shadow: 0 0 0 0 rgba(241, 91, 65, 0.7);
+  animation: fa-hero-pulse 1.8s infinite;
+  flex-shrink: 0;
+}
+@keyframes fa-hero-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(241, 91, 65, 0.7); }
+  70%  { box-shadow: 0 0 0 12px rgba(241, 91, 65, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(241, 91, 65, 0); }
+}
+.fa-hero-live__lbl {
+  font-family: var(--fa-font-ui, var(--fa-font-body));
+  font-size: 10px; font-weight: 500; line-height: 1;
+  text-transform: uppercase; letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 5px;
+}
+.fa-hero-live__big {
+  font-size: 15px; font-weight: 500; line-height: 1.3;
+  color: rgba(255, 255, 255, 0.92);
+}
+.fa-hero-live__big b {
+  font-family: var(--fa-font-display, var(--fa-font-body));
+  font-weight: 600; font-size: 17px; line-height: 1;
+  color: var(--fa-orange-soda);
+  font-variant-numeric: tabular-nums;
+  margin-inline-end: 4px;
+}
+
+.fa-hero-mini {
+  position: relative;
+  z-index: 3;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(20px);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.30),
+    inset 0 0 0 1px rgba(13, 18, 50, 0.04);
+  color: var(--fa-liberty-blue);
+  max-width: 360px;
+}
+.fa-hero-mini__head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 12px; margin-bottom: 12px;
+  border-bottom: 1px solid var(--fa-hairline);
+}
+.fa-hero-mini__head .t {
+  font-family: var(--fa-font-ui, var(--fa-font-body));
+  font-size: 11px; font-weight: 600; line-height: 1;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--fa-liberty-blue);
+}
+.fa-hero-mini__head .i {
+  font-family: var(--fa-font-mono, ui-monospace, monospace);
+  font-size: 11px; font-weight: 500; line-height: 1;
+  color: var(--fa-ink-faint);
+  letter-spacing: 0.02em;
+}
+.fa-hero-mini__row {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12px; font-weight: 500; line-height: 1;
+}
+.fa-hero-mini__dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #fff; border: 1.5px solid var(--fa-hairline);
+  flex-shrink: 0;
+}
+.fa-hero-mini__dot.is-done {
+  background: var(--fa-orange-soda); border-color: var(--fa-orange-soda);
+}
+.fa-hero-mini__step { color: var(--fa-ink-muted); }
+.fa-hero-mini__step.is-done { color: var(--fa-liberty-blue); font-weight: 600; }
+.fa-hero-mini__bar {
+  flex: 1; height: 2px;
+  background: var(--fa-hairline);
+  border-radius: 999px; overflow: hidden;
+  position: relative;
+}
+.fa-hero-mini__bar .fill {
+  position: absolute; inset: 0 auto 0 0;
+  width: 60%;
+  background: linear-gradient(90deg, var(--fa-orange-soda), var(--fa-orange-700));
+  animation: fa-hero-mini-bar 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+@keyframes fa-hero-mini-bar {
+  0%   { transform: translateX(-100%); }
+  60%  { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
+.fa-hero-mini__foot {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 12px; padding-top: 10px;
+  border-top: 1px solid var(--fa-hairline);
+  font-size: 11px; color: var(--fa-ink-muted);
+}
+.fa-hero-mini__foot .eta { color: var(--fa-liberty-blue); }
+.fa-hero-mini__foot .eta b { color: var(--fa-orange-soda); font-weight: 600; }
+@media (prefers-reduced-motion: reduce) {
+  .fa-hero-live__pulse { animation: none; }
+  .fa-hero-mini__bar .fill { animation: none; transform: translateX(0); }
+}

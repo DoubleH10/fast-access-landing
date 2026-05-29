@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import BrandButton from '../components/brand/BrandButton';
 import BrandPattern from '../components/brand/BrandPattern';
+import MagneticButton from '../components/brand/MagneticButton';
+import RevealText from '../components/brand/RevealText';
 import { useT } from '../i18n/I18nContext';
 
 export default function Hero() {
@@ -69,9 +70,9 @@ export default function Hero() {
           {/* LEFT — message column */}
           <div className="max-w-none text-left rtl:text-right">
             <h1 className="hero-fade font-display font-bold text-[38px] sm:text-[56px] lg:text-[68px] text-fa-classic-chalk leading-[1.0] tracking-[-0.025em] max-w-[680px]">
-              {t('hero.headlineA')}{' '}
-              <span className="text-fa-orange-soda">{t('hero.headlineHighlight')}</span>{' '}
-              {t('hero.headlineB')}
+              <RevealText accent={t('hero.headlineHighlight')} stagger={60}>
+                {`${t('hero.headlineA')} ${t('hero.headlineHighlight')} ${t('hero.headlineB')}`}
+              </RevealText>
             </h1>
 
             <p className="hero-fade font-body mt-6 text-[15px] lg:text-lg text-fa-classic-chalk/70 max-w-[560px] leading-[1.65]">
@@ -79,12 +80,12 @@ export default function Hero() {
             </p>
 
             <div className="hero-fade flex flex-wrap items-center gap-3 mt-8">
-              <BrandButton variant="filled" href="/contact">
+              <MagneticButton variant="filled" href="/contact">
                 {t('hero.primaryCta')}
-              </BrandButton>
-              <BrandButton variant="on-dark" href="/pricing">
+              </MagneticButton>
+              <MagneticButton variant="on-dark" href="/pricing">
                 {t('hero.secondaryCta')}
-              </BrandButton>
+              </MagneticButton>
             </div>
 
             {/* Hero Stats */}
@@ -110,7 +111,9 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* RIGHT — Pattern 5 (isometric ribbons) hero composition. */}
+          {/* RIGHT — isometric backdrop + live-ops composition. The LIVE pill
+              and the mini dispatch card sit on top of the pattern so the side
+              reads as "real logistics in motion" instead of decorative art. */}
           <div className="hero-fade relative hidden lg:flex justify-end items-center">
             <div className="relative w-full max-w-[460px] aspect-square">
               {/* Outer glow plate */}
@@ -122,39 +125,51 @@ export default function Hero() {
                   filter: 'blur(40px)',
                 }}
               />
-              {/* The isometric pattern, layered */}
+              {/* Isometric pattern backdrop — faded behind the data cards. */}
               <BrandPattern
                 pattern="isometric"
                 tint="orange"
-                opacity={0.65}
+                opacity={0.45}
                 className="absolute inset-0 w-full h-full object-contain"
               />
               <BrandPattern
                 pattern="isometric"
                 tint="navy"
-                opacity={0.12}
+                opacity={0.10}
                 className="absolute inset-0 w-full h-full object-contain"
                 style={{ transform: 'translate(12px, -12px) scale(0.96)' }}
               />
 
-              {/* Floating brand badge — minimal status indicator */}
-              <div
-                className="absolute top-6 right-6 z-10 flex items-center gap-2 px-3.5 py-2 rounded-full"
-                style={{
-                  background: 'rgba(255,255,255,0.85)',
-                  backdropFilter: 'blur(10px)',
-                  boxShadow: '0 4px 20px rgba(13,18,50,0.06), inset 0 0 0 1px rgba(13,18,50,0.08)',
-                }}
-              >
-                <span
-                  className="w-1.5 h-1.5 rounded-full bg-fa-orange-soda"
-                  style={{ animation: 'pulse-glow 2s infinite' }}
-                />
-                <span className="font-body text-[10px] font-semibold tracking-[0.1em] text-fa-liberty-blue/90 uppercase">
-                  {t('hero.livePill')}
-                </span>
+              {/* LIVE operations pill */}
+              <div className="fa-hero-live absolute top-6 start-6 end-6">
+                <span className="fa-hero-live__pulse" />
+                <div>
+                  <div className="fa-hero-live__lbl">{isAr ? 'العمليات المباشرة' : 'Live operations'}</div>
+                  <div className="fa-hero-live__big">
+                    <b className="tabular-nums">12,408</b>
+                    {isAr ? ' طرد في الطريق الآن' : 'packages in transit now'}
+                  </div>
+                </div>
               </div>
 
+              {/* Mini dispatch card — a live order moving through the pipeline */}
+              <div className="fa-hero-mini absolute bottom-6 start-6 end-6">
+                <div className="fa-hero-mini__head">
+                  <span className="t">{isAr ? 'الأخير' : 'Recent'}</span>
+                  <span className="i">#FA-83214 · SAR 312</span>
+                </div>
+                <div className="fa-hero-mini__row">
+                  <span className="fa-hero-mini__dot is-done" />
+                  <span className="fa-hero-mini__step is-done">{isAr ? 'تم التجهيز' : 'Packed'}</span>
+                  <span className="fa-hero-mini__bar"><span className="fill" /></span>
+                  <span className="fa-hero-mini__step">{isAr ? 'في الطريق' : 'In transit'}</span>
+                  <span className="fa-hero-mini__dot" />
+                </div>
+                <div className="fa-hero-mini__foot">
+                  <span>{isAr ? 'الرياض ← العليا' : 'Riyadh → Olaya'}</span>
+                  <span className="eta">{isAr ? 'الوصول' : 'ETA'} <b className="tabular-nums">14:30</b></span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

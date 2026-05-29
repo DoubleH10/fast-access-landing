@@ -15,12 +15,28 @@ import { content } from '../i18n/content';
 
 interface Item { name: string; before: string; after: string }
 
+// Headline metric per story (illustrative; replace with the merchant's real
+// numbers when their case study is signed off).
+const metrics: Record<'en' | 'ar', Array<[string, string]>> = {
+  en: [
+    ['3.4×', 'order volume in 90 days'],
+    ['−87%', 'damage returns'],
+    ['98%',  'tickets self-resolved'],
+  ],
+  ar: [
+    ['×3.4', 'حجم الطلبات في 90 يومًا'],
+    ['87%−', 'مرتجعات تالفة'],
+    ['98%',  'حلّ تلقائي للتذاكر'],
+  ],
+};
+
 export default function Results() {
   const { t, locale } = useT();
   const items = content[locale].results.items as readonly Item[];
   const isAr = locale === 'ar';
   const beforeLabel = isAr ? 'قبل' : 'Before';
   const afterLabel = isAr ? 'بعد' : 'After';
+  const metricsForLocale = metrics[locale];
 
   return (
     <section className="relative bg-fa-cream section-padding overflow-hidden">
@@ -63,11 +79,20 @@ export default function Results() {
                   </div>
 
                   {/* After */}
-                  <div className="px-6 pt-7 pb-6 flex-1">
+                  <div className="px-6 pt-7 pb-6 flex-1 flex flex-col">
                     <span className="inline-flex items-center gap-1.5 font-body text-[11px] font-semibold uppercase tracking-[0.1em] text-fa-orange-soda">
                       {afterLabel}
                     </span>
                     <p className="font-body text-[14px] text-fa-liberty-blue/90 leading-[1.55] mt-2 font-medium">{it.after}</p>
+                    {/* Metric ribbon — the quantifiable proof */}
+                    <div className="mt-auto pt-5 flex items-baseline gap-2 border-t border-fa-hairline">
+                      <span className="font-display font-semibold text-[28px] leading-none tracking-[-0.02em] text-fa-orange-soda tabular-nums">
+                        {metricsForLocale[i][0]}
+                      </span>
+                      <span className="font-body text-[13px] text-fa-ink-muted leading-[1.4]">
+                        {metricsForLocale[i][1]}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </SpotlightCard>

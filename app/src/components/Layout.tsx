@@ -7,6 +7,7 @@ import AnnouncementBar from '../sections/AnnouncementBar';
 import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
 import ScrollToTop from './ScrollToTop';
+import ScrollProgressBar from './ScrollProgressBar';
 
 /**
  * Shared site shell: fixed AnnouncementBar + Navigation, the routed page in
@@ -33,6 +34,7 @@ export default function Layout() {
         Skip to content
       </a>
       <ScrollToTop />
+      <ScrollProgressBar />
       <AnnouncementBar />
       <Navigation />
       <main id="main-content">
