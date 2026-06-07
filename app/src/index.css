@@ -622,3 +622,185 @@ html[dir='rtl'] .fa-kicker-track { animation-direction: reverse; }
   .fa-hero-live__pulse { animation: none; }
   .fa-hero-mini__bar .fill { animation: none; transform: translateX(0); }
 }
+
+/* ============================================================
+   Network map (Leaflet) — ported from Claude Design handoff.
+   Saudi-focused hub network: dark CartoDB tiles, custom pulse
+   pins, dashed routes, animated package, counter + legend.
+   ============================================================ */
+.fa-netmap-frame {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #070A1F;
+  border: 1px solid rgba(241,91,65,0.14);
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.03);
+}
+/* Brand atmosphere behind the tiles — navy depth + a warm orange key glow
+   roughly where the Kingdom's core hubs sit. Sits under the map. */
+.fa-netmap-frame::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 55% 45%, rgba(45,46,117,0.5), transparent 60%),
+    radial-gradient(60% 55% at 50% 48%, rgba(241,91,65,0.09), transparent 58%);
+}
+/* isolate so Leaflet's internal panes (z-index 400+) stay contained and
+   don't paint over the counter / legend overlays */
+.fa-netmap-leaflet { position: absolute; inset: 0; isolation: isolate; }
+.fa-netmap-leaflet .leaflet-container {
+  background: transparent;
+  font-family: 'Geist', 'Inter Display', sans-serif;
+  outline: none;
+}
+/* Duotone the grey CartoDB tiles into the brand navy (#0D1232 / #1D2556):
+   sepia warms the greys, hue-rotate swings that hue to brand indigo-navy,
+   saturate sets intensity, brightness/contrast hold the dark mood. */
+.fa-netmap-leaflet .leaflet-tile {
+  filter: grayscale(1) brightness(0.72) contrast(1.22)
+          sepia(0.7) hue-rotate(192deg) saturate(2.2) brightness(0.98);
+}
+/* Let the brand glow behind show through the empty (sea/void) areas */
+.fa-netmap-leaflet .leaflet-tile-pane { mix-blend-mode: lighten; opacity: 0.95; }
+.fa-netmap-leaflet .leaflet-control-attribution,
+.fa-netmap-leaflet .leaflet-control-zoom { display: none; }
+
+/* Inner vignette ring */
+.fa-netmap-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(13,18,50,0.6) 100%);
+  box-shadow: inset 0 0 80px rgba(13,18,50,0.6), inset 0 0 0 1px rgba(255,255,255,0.04);
+  border-radius: 24px;
+}
+
+/* Hub marker DivIcon */
+.fa-hub-icon { background: transparent; border: none; }
+.fa-hub-icon .hub-wrap {
+  position: relative; width: 0; height: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.fa-hub-icon .hub-dot {
+  position: absolute; border-radius: 50%;
+  transform: translate(-50%, -50%);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 2px rgba(13,18,50,0.6), 0 0 12px rgba(0,0,0,0.4);
+  transition: width 200ms ease, height 200ms ease, box-shadow 200ms ease;
+  z-index: 2;
+}
+.fa-hub-icon .hub-core { display: block; width: 30%; height: 30%; border-radius: 50%; }
+.fa-hub-icon.primary .hub-dot {
+  box-shadow: 0 0 0 2px rgba(13,18,50,0.6), 0 0 18px rgba(241,91,65,0.65);
+}
+.fa-hub-icon.active .hub-dot {
+  box-shadow: 0 0 0 3px #fff, 0 0 22px rgba(241,91,65,0.95);
+}
+.fa-hub-icon .hub-ring {
+  position: absolute; width: 28px; height: 28px; border-radius: 50%;
+  border: 1.5px solid rgba(241,91,65,0.65);
+  transform: translate(-50%,-50%);
+  animation: hubRing 2.4s ease-out infinite;
+  pointer-events: none; z-index: 1;
+}
+@keyframes hubRing {
+  0%   { width: 12px; height: 12px; opacity: 0.7; }
+  100% { width: 44px; height: 44px; opacity: 0; }
+}
+.fa-hub-icon .hub-label {
+  position: absolute; left: 12px; top: -7px;
+  font: 500 11px/1 'Geist', 'Inter Display', sans-serif;
+  color: rgba(255,255,255,0.78); white-space: nowrap;
+  letter-spacing: 0.02em; text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  pointer-events: none;
+}
+.fa-hub-icon.primary .hub-label,
+.fa-hub-icon.active .hub-label { color: #fff; font-weight: 600; }
+
+/* Animated package marker */
+.fa-pkt-icon { background: transparent; border: none; }
+.fa-pkt-icon .pkt-core {
+  position: absolute; width: 10px; height: 10px; border-radius: 50%;
+  background: var(--fa-orange-soda);
+  box-shadow: 0 0 0 3px rgba(241,91,65,0.25), 0 0 16px rgba(241,91,65,0.9);
+  transform: translate(-50%,-50%);
+}
+.fa-pkt-icon .pkt-trail {
+  position: absolute; width: 28px; height: 28px; border-radius: 50%;
+  border: 1.5px solid rgba(241,91,65,0.5);
+  transform: translate(-50%,-50%);
+  animation: pktTrail 1.4s ease-out infinite; pointer-events: none;
+}
+@keyframes pktTrail {
+  0%   { width: 8px; height: 8px; opacity: 0.8; }
+  100% { width: 44px; height: 44px; opacity: 0; }
+}
+
+/* Top live counter */
+.fa-netmap-counter {
+  position: absolute; top: 16px; inset-inline-start: 16px; z-index: 5;
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(13,18,50,0.55); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.10); border-radius: 999px;
+  padding: 8px 14px;
+  font: 500 12px/1 'Geist', 'Inter Display', sans-serif;
+  color: rgba(255,255,255,0.85);
+}
+.fa-netmap-counter .pulse {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--fa-orange-soda);
+  animation: counterPulse 1.8s infinite;
+}
+@keyframes counterPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(241,91,65,0.55); }
+  70%  { box-shadow: 0 0 0 9px rgba(241,91,65,0); }
+  100% { box-shadow: 0 0 0 0 rgba(241,91,65,0); }
+}
+.fa-netmap-counter b { color: var(--fa-orange-soda); font-weight: 600; }
+
+/* Legend */
+.fa-netmap-legend {
+  position: absolute; bottom: 16px; inset-inline-end: 16px; z-index: 5;
+  display: flex; flex-direction: column; gap: 8px;
+  background: rgba(13,18,50,0.55); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.10); border-radius: 12px;
+  padding: 12px 14px;
+  font: 500 11px/1 'Geist', 'Inter Display', sans-serif;
+  color: rgba(255,255,255,0.75); letter-spacing: 0.02em;
+}
+.fa-netmap-legend > span { display: flex; align-items: center; gap: 8px; }
+.fa-netmap-legend .lg-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.85); box-shadow: 0 0 0 1.5px rgba(13,18,50,0.6);
+}
+.fa-netmap-legend .lg-dot.primary {
+  background: var(--fa-orange-soda);
+  box-shadow: 0 0 0 1.5px rgba(13,18,50,0.6), 0 0 8px rgba(241,91,65,0.7);
+}
+.fa-netmap-legend .lg-line { width: 18px; height: 0; border-top: 1.5px dashed rgba(241,91,65,0.6); }
+
+/* Active hub detail panel */
+.fa-netmap-active {
+  margin-top: 28px; background: rgba(255,255,255,0.04); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.10); border-radius: 16px;
+  padding: 16px 18px; max-width: 380px;
+}
+.fa-netmap-active-head {
+  display: flex; align-items: baseline; gap: 10px;
+  padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.fa-netmap-active-head .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--fa-orange-soda); }
+.fa-netmap-active-head .cy { font: 600 16px/1 'Clash Grotesk', sans-serif; color: #fff; }
+.fa-netmap-active-head .co {
+  font: 500 11px/1 'Geist', sans-serif; letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(244,244,241,0.5); margin-inline-start: auto;
+}
+.fa-netmap-active-rows { display: flex; flex-direction: column; margin-top: 10px; }
+.fa-netmap-active-rows .row {
+  display: flex; justify-content: space-between; padding: 8px 0;
+  font: 400 13px/1 'Inter Display', sans-serif; color: rgba(244,244,241,0.65);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.fa-netmap-active-rows .row:last-child { border-bottom: none; }
+.fa-netmap-active-rows .vv { color: #fff; font-family: 'Geist Mono', monospace; font-weight: 500; }
+.fa-netmap-active-rows .vv.green { color: #6BD8A0; }
+@media (prefers-reduced-motion: reduce) {
+  .fa-hub-icon .hub-ring, .fa-pkt-icon .pkt-trail, .fa-netmap-counter .pulse { animation: none; }
+}

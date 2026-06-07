@@ -7,15 +7,33 @@ interface Props {
   chip?: string;
   title: ReactNode;
   sub?: string;
+  /** Optional cinematic background image (navy+orange dusk). A navy scrim is
+   *  layered on top so the headline stays legible in both LTR and RTL. */
+  bg?: string;
 }
 
 /**
  * Navy page-hero band for inner routes. Carries the top padding needed to clear
  * the fixed AnnouncementBar + Navigation, and gives every page a clear H1.
  */
-export default function PageHeader({ chip, title, sub }: Props) {
+export default function PageHeader({ chip, title, sub, bg }: Props) {
   return (
     <section className="relative bg-fa-liberty-blue overflow-hidden pt-[120px] lg:pt-[150px] pb-14 lg:pb-20">
+      {bg && (
+        <div className="absolute inset-0" aria-hidden>
+          <img
+            src={bg}
+            alt=""
+            className="h-full w-full object-cover object-center opacity-[0.5]"
+            loading="eager"
+            decoding="async"
+          />
+          {/* Navy wash + vignette: keeps the headline readable over any frame,
+              direction-agnostic so it works for both English and Arabic. */}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,18,50,0.62)_0%,rgba(13,18,50,0.82)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(130%_120%_at_50%_0%,transparent_28%,rgba(13,18,50,0.72)_100%)]" />
+        </div>
+      )}
       <BrandPattern
         pattern="lozenge"
         tint="orange"

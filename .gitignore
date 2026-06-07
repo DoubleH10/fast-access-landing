@@ -34,3 +34,10 @@ pnpm-debug.log*
 # Brandbook source assets (308MB Figma/AI/EPS files — copies live in app/public/)
 /Final/
 FAST ACCESS*.pptx
+
+# Higgsfield AI skills (local, third-party, run with full agent perms)
+.agents/skills/
+**/.agents/skills/
+
+# Local Claude runtime state
+.claude/

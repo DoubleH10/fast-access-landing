@@ -152,24 +152,6 @@ export default function Hero() {
                 </div>
               </div>
 
-              {/* Mini dispatch card — a live order moving through the pipeline */}
-              <div className="fa-hero-mini absolute bottom-6 start-6 end-6">
-                <div className="fa-hero-mini__head">
-                  <span className="t">{isAr ? 'الأخير' : 'Recent'}</span>
-                  <span className="i">#FA-83214 · SAR 312</span>
-                </div>
-                <div className="fa-hero-mini__row">
-                  <span className="fa-hero-mini__dot is-done" />
-                  <span className="fa-hero-mini__step is-done">{isAr ? 'تم التجهيز' : 'Packed'}</span>
-                  <span className="fa-hero-mini__bar"><span className="fill" /></span>
-                  <span className="fa-hero-mini__step">{isAr ? 'في الطريق' : 'In transit'}</span>
-                  <span className="fa-hero-mini__dot" />
-                </div>
-                <div className="fa-hero-mini__foot">
-                  <span>{isAr ? 'الرياض ← العليا' : 'Riyadh → Olaya'}</span>
-                  <span className="eta">{isAr ? 'الوصول' : 'ETA'} <b className="tabular-nums">14:30</b></span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
