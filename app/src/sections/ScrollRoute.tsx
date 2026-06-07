@@ -133,7 +133,7 @@ export default function ScrollRoute() {
   const active = SCENES[activeScene];
 
   return (
-    <section id="route-motion" ref={sectionRef} className="relative h-[460vh] bg-fa-liberty-blue text-fa-classic-chalk">
+    <section id="route-motion" ref={sectionRef} className="relative h-[340vh] bg-fa-liberty-blue text-fa-classic-chalk">
       <div className="sticky top-0 min-h-[100dvh] overflow-hidden">
         <div className="absolute inset-0">
           <video
