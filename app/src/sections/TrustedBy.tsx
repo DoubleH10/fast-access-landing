@@ -13,8 +13,9 @@ const platforms = [
 
 export default function TrustedBy() {
   const { t } = useT();
-  // Duplicate the list so the track can loop seamlessly at -50%.
-  const loop = [...platforms, ...platforms];
+  // Eight copies: the loop shifts by -50% (4 sets), so the remaining 4 must
+  // cover any viewport width — keeps the seam invisible (no whitespace).
+  const loop = Array.from({ length: 8 }, () => platforms).flat();
 
   return (
     <section className="bg-fa-cream py-16 lg:py-20 overflow-hidden">
@@ -51,7 +52,7 @@ export default function TrustedBy() {
 
       <style>{`
         .fa-marquee {
-          animation: fa-marquee-scroll 34s linear infinite;
+          animation: fa-marquee-scroll 136s linear infinite;
           opacity: 0.4;
         }
         .fa-marquee:hover { opacity: 0.85; }

@@ -467,7 +467,7 @@ html[dir='rtl'] .fa-scroll-bar__fill { transform-origin: 100% 50%; }
   white-space: nowrap;
   width: max-content;
   will-change: transform;
-  animation: fa-kicker-scroll 28s linear infinite;
+  animation: fa-kicker-scroll 110s linear infinite;
 }
 .fa-kicker-bar:hover .fa-kicker-track { animation-play-state: paused; }
 .fa-kicker-item { display: inline-flex; align-items: center; gap: 36px; }
@@ -478,9 +478,10 @@ html[dir='rtl'] .fa-scroll-bar__fill { transform-origin: 100% 50%; }
   flex-shrink: 0;
   animation: fa-kicker-spin 14s linear infinite;
 }
+/* Runs left→right — deliberately opposite to the integrations strip above */
 @keyframes fa-kicker-scroll {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-50%, 0, 0); }
+  from { transform: translate3d(-50%, 0, 0); }
+  to   { transform: translate3d(0, 0, 0); }
 }
 @keyframes fa-kicker-spin { to { transform: rotate(360deg); } }
 html[dir='rtl'] .fa-kicker-track { animation-direction: reverse; }

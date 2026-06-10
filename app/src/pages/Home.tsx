@@ -5,6 +5,7 @@ import TrustedBy from '../sections/TrustedBy';
 import KickerBar from '../sections/KickerBar';
 import ServicesGrid from '../sections/ServicesGrid';
 import ScrollRoute from '../sections/ScrollRoute';
+import DashboardPreview from '../sections/DashboardPreview';
 import Sectors from '../sections/Sectors';
 import Coverage from '../sections/Coverage';
 import StatStrip from '../sections/StatStrip';
@@ -32,6 +33,9 @@ export default function Home() {
       <ServicesGrid />
       {/* The journey beat: cinematic order-in-motion */}
       <ScrollRoute />
+      {/* The platform: live-ops dashboard — follows the journey's
+          "live readout" story with the tool that delivers it */}
+      <DashboardPreview />
       <Sectors />
       {/* Navy "proof" block: network + the numbers */}
       <Coverage />

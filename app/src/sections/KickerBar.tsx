@@ -32,8 +32,9 @@ function Star() {
 export default function KickerBar() {
   const { locale } = useT();
   const verbs = verbsByLocale[locale];
-  // Two identical sets so the linear-scroll animation can loop seamlessly.
-  const sets = [0, 1];
+  // Eight identical sets: the loop shifts by 50% (4 sets), so the other 4
+  // must be wide enough to cover any viewport — no whitespace at the seam.
+  const sets = [0, 1, 2, 3, 4, 5, 6, 7];
 
   return (
     <section className="fa-kicker-bar" aria-hidden>
