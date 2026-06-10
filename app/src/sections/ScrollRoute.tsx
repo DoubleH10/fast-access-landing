@@ -159,23 +159,25 @@ export default function ScrollRoute() {
         </div>
 
         <div className="relative z-[1] flex min-h-[100dvh] flex-col justify-between px-5 py-20 sm:px-8 lg:px-16">
-          <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(320px,0.9fr)_minmax(240px,0.8fr)_minmax(320px,0.72fr)] lg:items-start">
+          {/* flex-1 + mt-auto on the panel keep the truck footage visible
+              between headline and card on mobile instead of a wall of text */}
+          <div className="flex flex-1 flex-col gap-8 lg:grid lg:grid-cols-[minmax(320px,0.9fr)_minmax(240px,0.8fr)_minmax(320px,0.72fr)] lg:items-start">
             <div className="max-w-[560px] pt-7">
               <SectionChip onDark>{isAr ? 'تغيرات الطريق' : 'Scenery signals'}</SectionChip>
               <h2 className="mt-5 font-display text-[34px] font-semibold leading-[0.98] tracking-[-0.025em] text-fa-classic-chalk sm:text-[50px] lg:text-[68px]">
                 {isAr ? (
                   <>
                     عندما يتغير الطريق،{' '}
-                    <span className="text-fa-orange-soda">تتغير المعلومة</span>.
+                    <span className="text-fa-orange-soda">تتغير المعلومة</span>
                   </>
                 ) : (
                   <>
                     When the scenery changes,{' '}
-                    <span className="text-fa-orange-soda">the signal changes</span>.
+                    <span className="text-fa-orange-soda">the signal changes</span>
                   </>
                 )}
               </h2>
-              <p className="mt-5 max-w-[34rem] font-body text-[14px] leading-[1.75] text-fa-classic-chalk/68 sm:text-base">
+              <p className="mt-5 hidden max-w-[34rem] font-body text-[14px] leading-[1.75] text-fa-classic-chalk/68 sm:block sm:text-base">
                 {isAr
                   ? 'المشهد هنا ليس شرحاً جديداً للخطوات، بل قراءة تشغيلية لما يحدث حول الشاحنة أثناء انتقالها بين البيئات.'
                   : 'This is not another steps list. It is a live readout of what changes around the truck as it crosses each environment.'}
@@ -184,7 +186,7 @@ export default function ScrollRoute() {
 
             <div className="hidden min-h-[50vh] lg:block" aria-hidden />
 
-            <div className="route-active-panel mt-2 w-full max-w-[390px] justify-self-end overflow-hidden border border-fa-classic-chalk/18 bg-fa-liberty-blue/58 p-5 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] backdrop-blur-xl lg:mt-20">
+            <div className="route-active-panel mt-auto w-full max-w-[390px] overflow-hidden border border-fa-classic-chalk/18 bg-fa-liberty-blue/58 p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:p-5 lg:mt-20 lg:justify-self-end">
               <div key={activeScene} className="route-panel">
                 <div className="route-panel__el flex items-center justify-between gap-4 border-b border-fa-classic-chalk/12 pb-4">
                   <span className="font-ui text-[11px] font-semibold uppercase tracking-[0.16em] text-fa-orange-soda">
@@ -197,10 +199,10 @@ export default function ScrollRoute() {
                     <span className="ms-2">· {active.label[lang]}</span>
                   </span>
                 </div>
-                <h3 className="route-panel__el mt-5 font-display text-[24px] font-semibold leading-[1.05] text-fa-classic-chalk sm:text-[28px]">
+                <h3 className="route-panel__el mt-4 font-display text-[20px] font-semibold leading-[1.05] text-fa-classic-chalk sm:mt-5 sm:text-[28px]">
                   {active.title[lang]}
                 </h3>
-                <p className="route-panel__el mt-4 font-body text-[13px] leading-[1.65] text-fa-classic-chalk/62 sm:text-sm">
+                <p className="route-panel__el mt-3 line-clamp-3 font-body text-[13px] leading-[1.65] text-fa-classic-chalk/62 sm:mt-4 sm:line-clamp-none sm:text-sm">
                   {active.detail[lang]}
                 </p>
                 <div className="route-panel__el mt-6 inline-flex items-center gap-2 border border-fa-orange-soda/35 bg-fa-orange-soda/12 px-3 py-2 font-ui text-[12px] font-semibold uppercase tracking-[0.12em] text-fa-classic-chalk">

@@ -77,12 +77,9 @@ export default function Footer() {
           {/* Logo & Description */}
           <div className="col-span-2">
             <BrandLogo variant="full" mode="dark" height={56} />
-            <div className="font-display mt-5 text-base text-fa-classic-chalk font-semibold tracking-[-0.01em] inline-flex items-center gap-2.5">
-              <span
-                className="w-1.5 h-1.5 rounded-full bg-fa-orange-soda inline-block"
-                style={{ animation: 'fa-hero-pulse 2s ease-in-out infinite' }}
-                aria-hidden
-              />
+            {/* Tagline sits flush with the logo's left edge — the old pulsing
+                dot indented it and read as a misalignment. */}
+            <div className="font-display mt-5 text-base text-fa-classic-chalk font-semibold tracking-[-0.01em]">
               {t('footer.tagline')}
             </div>
             <p className="font-body mt-3 text-sm text-fa-classic-chalk/55 leading-[1.65] max-w-[320px]">

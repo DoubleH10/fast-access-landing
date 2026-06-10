@@ -25,11 +25,19 @@ export default function ServicesGrid() {
 
   return (
     <section id="services" className="relative bg-fa-cream-deep section-padding overflow-hidden">
+      {/* Pattern turned up ("maximal") per client feedback — it should read
+          as a deliberate brand moment, not a barely-there texture. */}
       <BrandPattern
         pattern="lozenge"
         tint="navy"
-        opacity={0.03}
-        className="absolute -top-[8%] -right-[15%] w-[55%] max-w-[800px]"
+        opacity={0.09}
+        className="absolute -top-[10%] -right-[12%] w-[72%] max-w-[1050px]"
+      />
+      <BrandPattern
+        pattern="ribbon"
+        tint="orange"
+        opacity={0.07}
+        className="absolute -left-[10%] bottom-[-6%] w-[48%] max-w-[680px]"
       />
       <div className="container-main relative z-10">
         <div className="mb-14 max-w-[820px] text-left rtl:text-right">

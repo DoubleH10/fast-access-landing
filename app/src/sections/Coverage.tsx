@@ -14,36 +14,57 @@ import { useT } from '../i18n/I18nContext';
  * pulse ring on same-day hubs, dashed routes that brighten for the active
  * hub, an animated package marker, a live counter and a legend.
  *
- * Scoped to Saudi Arabia: the map fits to the Kingdom's hubs only.
+ * Scope: from the Kingdom outwards — KSA hubs, GCC lanes, and international
+ * gateways, per client feedback ("amend the map to be from kingdom to all
+ * over the world"). Numbers are kept generalized (no per-hub order counts).
  */
 
-type Size = 'mega' | 'lg' | 'sm';
+type Size = 'mega' | 'lg' | 'sm' | 'partner';
+type Kind = 'ksa' | 'gcc' | 'intl';
 type Bi = { en: string; ar: string };
 type Hub = {
   id: string;
   city: Bi;
+  country: Bi;
   lat: number;
   lng: number;
   size: Size;
-  orders: string;
+  kind: Kind;
   same: boolean;
   primary?: boolean;
 };
 
-// KSA-only hub network (real lat/lng)
+const KSA: Bi = { en: 'KSA', ar: 'السعودية' };
+
+// Kingdom core + GCC reach + international gateways (real lat/lng)
 const HUBS: Hub[] = [
-  { id: 'ryd', city: { en: 'Riyadh', ar: 'الرياض' }, lat: 24.7136, lng: 46.6753, size: 'mega', orders: '4,210', same: true, primary: true },
-  { id: 'jed', city: { en: 'Jeddah', ar: 'جدة' }, lat: 21.5433, lng: 39.1728, size: 'mega', orders: '2,840', same: true, primary: true },
-  { id: 'dmm', city: { en: 'Dammam', ar: 'الدمام' }, lat: 26.4207, lng: 50.0888, size: 'mega', orders: '1,520', same: true, primary: true },
-  { id: 'mec', city: { en: 'Makkah', ar: 'مكة' }, lat: 21.3891, lng: 39.8579, size: 'lg', orders: '820', same: false },
-  { id: 'med', city: { en: 'Madinah', ar: 'المدينة' }, lat: 24.5247, lng: 39.5692, size: 'lg', orders: '640', same: false },
-  { id: 'tbk', city: { en: 'Tabuk', ar: 'تبوك' }, lat: 28.3998, lng: 36.5700, size: 'sm', orders: '180', same: false },
-  { id: 'abh', city: { en: 'Abha', ar: 'أبها' }, lat: 18.2164, lng: 42.5053, size: 'sm', orders: '260', same: false },
+  { id: 'ryd', city: { en: 'Riyadh', ar: 'الرياض' }, country: KSA, lat: 24.7136, lng: 46.6753, size: 'mega', kind: 'ksa', same: true, primary: true },
+  { id: 'jed', city: { en: 'Jeddah', ar: 'جدة' }, country: KSA, lat: 21.5433, lng: 39.1728, size: 'mega', kind: 'ksa', same: true, primary: true },
+  { id: 'dmm', city: { en: 'Dammam', ar: 'الدمام' }, country: KSA, lat: 26.4207, lng: 50.0888, size: 'mega', kind: 'ksa', same: true, primary: true },
+  { id: 'mec', city: { en: 'Makkah', ar: 'مكة' }, country: KSA, lat: 21.3891, lng: 39.8579, size: 'lg', kind: 'ksa', same: false },
+  { id: 'med', city: { en: 'Madinah', ar: 'المدينة' }, country: KSA, lat: 24.5247, lng: 39.5692, size: 'lg', kind: 'ksa', same: false },
+  { id: 'tbk', city: { en: 'Tabuk', ar: 'تبوك' }, country: KSA, lat: 28.3998, lng: 36.5700, size: 'sm', kind: 'ksa', same: false },
+  { id: 'abh', city: { en: 'Abha', ar: 'أبها' }, country: KSA, lat: 18.2164, lng: 42.5053, size: 'sm', kind: 'ksa', same: false },
+  // GCC — fast cross-border shipping
+  { id: 'kwi', city: { en: 'Kuwait City', ar: 'الكويت' }, country: { en: 'Kuwait', ar: 'الكويت' }, lat: 29.3759, lng: 47.9774, size: 'partner', kind: 'gcc', same: false },
+  { id: 'bah', city: { en: 'Manama', ar: 'المنامة' }, country: { en: 'Bahrain', ar: 'البحرين' }, lat: 26.2285, lng: 50.5860, size: 'partner', kind: 'gcc', same: false },
+  { id: 'doh', city: { en: 'Doha', ar: 'الدوحة' }, country: { en: 'Qatar', ar: 'قطر' }, lat: 25.2854, lng: 51.5310, size: 'partner', kind: 'gcc', same: false },
+  { id: 'dxb', city: { en: 'Dubai', ar: 'دبي' }, country: { en: 'UAE', ar: 'الإمارات' }, lat: 25.2048, lng: 55.2708, size: 'partner', kind: 'gcc', same: false },
+  { id: 'mct', city: { en: 'Muscat', ar: 'مسقط' }, country: { en: 'Oman', ar: 'عُمان' }, lat: 23.5880, lng: 58.3829, size: 'partner', kind: 'gcc', same: false },
+  // International gateways — carrier-partner lanes
+  { id: 'ist', city: { en: 'Istanbul', ar: 'إسطنبول' }, country: { en: 'Türkiye', ar: 'تركيا' }, lat: 41.0082, lng: 28.9784, size: 'partner', kind: 'intl', same: false },
+  { id: 'lon', city: { en: 'London', ar: 'لندن' }, country: { en: 'UK', ar: 'المملكة المتحدة' }, lat: 51.5072, lng: -0.1276, size: 'partner', kind: 'intl', same: false },
+  { id: 'sin', city: { en: 'Singapore', ar: 'سنغافورة' }, country: { en: 'Singapore', ar: 'سنغافورة' }, lat: 1.3521, lng: 103.8198, size: 'partner', kind: 'intl', same: false },
 ];
 
 const ROUTES: Array<[string, string]> = [
+  // Kingdom lanes
   ['ryd', 'jed'], ['ryd', 'dmm'], ['ryd', 'med'], ['ryd', 'mec'], ['ryd', 'abh'],
   ['jed', 'mec'], ['jed', 'med'], ['med', 'tbk'],
+  // GCC lanes
+  ['dmm', 'kwi'], ['dmm', 'bah'], ['ryd', 'doh'], ['ryd', 'dxb'], ['dxb', 'mct'],
+  // International lanes
+  ['jed', 'ist'], ['ist', 'lon'], ['dxb', 'sin'],
 ];
 
 type Pt = [number, number];
@@ -74,11 +95,17 @@ function curve([lat1, lng1]: Pt, [lat2, lng2]: Pt, bend = 0.09): Pt[] {
   return pts;
 }
 
-const sizeRadius: Record<Size, number> = { mega: 12, lg: 10, sm: 6 };
+const sizeRadius: Record<Size, number> = { mega: 10, lg: 8, sm: 5, partner: 5.5 };
 const sizeName: Record<Size, Bi> = {
   mega: { en: 'Mega hub', ar: 'مركز رئيسي' },
   lg: { en: 'Large', ar: 'كبير' },
   sm: { en: 'Standard', ar: 'قياسي' },
+  partner: { en: 'Partner network', ar: 'شبكة شركاء' },
+};
+const kindName: Record<Kind, Bi> = {
+  ksa: { en: 'Saudi network', ar: 'الشبكة السعودية' },
+  gcc: { en: 'GCC delivery', ar: 'توصيل خليجي' },
+  intl: { en: 'International lane', ar: 'خط دولي' },
 };
 
 const ACCENT = '#F15B41';
@@ -86,6 +113,11 @@ const ACCENT = '#F15B41';
 function makeHubIcon(hub: Hub, isActive: boolean, lang: 'en' | 'ar') {
   const r = sizeRadius[hub.size];
   const ring = hub.primary ? '<span class="hub-ring"></span>' : '';
+  // At world zoom the KSA hubs cluster tightly — permanent labels would pile
+  // on top of each other (the old Jeddah/Makkah collision). Only Riyadh and
+  // the international gateways keep standing labels; everything else labels
+  // on hover/tap.
+  const showLabel = isActive || hub.kind === 'intl' || hub.id === 'ryd';
   return L.divIcon({
     className: `fa-hub-icon${isActive ? ' active' : ''}${hub.primary ? ' primary' : ''}`,
     html: `
@@ -94,7 +126,7 @@ function makeHubIcon(hub: Hub, isActive: boolean, lang: 'en' | 'ar') {
         <span class="hub-dot" style="width:${r * 2}px;height:${r * 2}px;background:${hub.primary ? ACCENT : '#FFFFFF'};">
           <span class="hub-core" style="background:${hub.primary ? '#fff' : '#0D1232'};"></span>
         </span>
-        <span class="hub-label">${hub.city[lang]}</span>
+        ${showLabel ? `<span class="hub-label">${hub.city[lang]}</span>` : ''}
       </div>
     `,
     iconSize: [0, 0],
@@ -117,10 +149,12 @@ export default function Coverage() {
   const byId = useMemo(() => Object.fromEntries(HUBS.map((h) => [h.id, h])) as Record<string, Hub>, []);
   const activeHub = byId[active];
 
+  // Generalized per client feedback — no hard counts; the story is
+  // nationwide coverage, speed to the Gulf, and international reach.
   const stats = [
-    { value: '42', unit: '+', label: isAr ? 'مركز توزيع' : 'Fulfilment centres' },
-    { value: '13', unit: '', label: isAr ? 'منطقة مغطّاة' : 'Regions covered' },
-    { value: '6', unit: '', label: isAr ? 'مدن توصيل بنفس اليوم' : 'Same-day cities' },
+    { value: isAr ? 'السعودية' : 'KSA', unit: '', label: isAr ? 'تغطية وطنية — كل المدن الرئيسية' : 'Nationwide — every major city' },
+    { value: isAr ? 'الخليج' : 'GCC', unit: '', label: isAr ? 'شحن سريع لجميع دول الخليج' : 'Fast shipping to all GCC countries' },
+    { value: isAr ? 'دولي' : 'Global', unit: '', label: isAr ? 'شحنات دولية عبر شركاء موثوقين' : 'International shipments' },
   ];
 
   // Init Leaflet once
@@ -129,7 +163,7 @@ export default function Coverage() {
     const map = L.map(elRef.current, {
       center: [24.2, 45.0],
       zoom: 5,
-      minZoom: 4,
+      minZoom: 2,
       maxZoom: 7,
       zoomControl: false,
       scrollWheelZoom: false,
@@ -216,9 +250,9 @@ export default function Coverage() {
     }
     if (!reduce) raf = requestAnimationFrame(step);
 
-    // Fit tight to the Kingdom's hubs
+    // Fit from the Kingdom out to every gateway — London to Singapore
     const bounds = L.latLngBounds(HUBS.map((h) => [h.lat, h.lng] as [number, number]));
-    map.fitBounds(bounds, { padding: [42, 42], maxZoom: 6 });
+    map.fitBounds(bounds, { padding: [36, 36], maxZoom: 5 });
 
     const ro = new ResizeObserver(() => map.invalidateSize());
     ro.observe(elRef.current);
@@ -297,12 +331,12 @@ export default function Coverage() {
               <div className="fa-netmap-active-head">
                 <span className="dot" style={{ background: activeHub.primary ? ACCENT : 'rgba(255,255,255,0.4)' }} />
                 <span className="cy">{activeHub.city[lang]}</span>
-                <span className="co">{isAr ? 'السعودية' : 'KSA'}</span>
+                <span className="co">{activeHub.country[lang]}</span>
               </div>
               <div className="fa-netmap-active-rows">
                 <div className="row">
-                  <span>{isAr ? 'طلبات / يوم' : 'Orders / day'}</span>
-                  <span className="vv">{activeHub.orders}</span>
+                  <span>{isAr ? 'الشبكة' : 'Network'}</span>
+                  <span className="vv">{kindName[activeHub.kind][lang]}</span>
                 </div>
                 <div className="row">
                   <span>{isAr ? 'توصيل بنفس اليوم' : 'Same-day delivery'}</span>

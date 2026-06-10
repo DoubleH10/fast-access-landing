@@ -19,8 +19,8 @@ function Star() {
     <svg
       className="fa-kicker-star"
       viewBox="0 0 24 24"
-      width={56}
-      height={56}
+      width={18}
+      height={18}
       fill="currentColor"
       aria-hidden
     >
