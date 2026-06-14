@@ -101,24 +101,40 @@ export default function ScrollRoute() {
     // scrub reads as frozen on iPhone. Instead the clip *plays* only while the
     // user is actively scrolling this section and pauses the instant they stop —
     // so the truck drives with the scroll and holds still when idle, while real
-    // playback keeps every frame painting on iOS. scrub:1 lets the motion coast
-    // for a beat after the finger lifts before settling; loop keeps the journey
-    // going across repeated passes.
+    // playback keeps every frame painting on iOS. loop keeps the journey going.
+    //
+    // Critical: iOS throttles GSAP's rAF-driven onUpdate during touch/momentum
+    // scrolling, so gating playback off it alone leaves the video paused. We gate
+    // off real scroll + touchmove events (which iOS does fire continuously) and
+    // prime the decoder once so the first play() paints immediately.
     if (isMobile) {
       video.loop = true;
-      video.pause();
+      // Prime the decoder: a muted play()→pause() warms the pipeline so the very
+      // first scroll-driven play paints a frame instead of staying black.
+      const primed = video.play();
+      if (primed && typeof primed.then === 'function') {
+        primed.then(() => video.pause()).catch(() => {});
+      }
 
       let idle: ReturnType<typeof setTimeout> | undefined;
-      const drive = () => {
+      let inView = false;
+      const stop = () => {
+        if (!video.paused) video.pause();
+      };
+      const go = () => {
+        if (!inView) return;
         if (video.paused) {
           const played = video.play();
           if (played && typeof played.catch === 'function') played.catch(() => {});
         }
-        // Generous enough that the gaps between scroll/momentum events don't
-        // stutter playback, tight enough that the truck visibly stops on idle.
+        // Pause shortly after scroll motion ceases. iOS fires scroll/touchmove
+        // frequently mid-gesture, so this only trips once the truck is truly idle.
         if (idle) clearTimeout(idle);
-        idle = setTimeout(() => video.pause(), 220);
+        idle = setTimeout(stop, 200);
       };
+
+      window.addEventListener('scroll', go, { passive: true });
+      window.addEventListener('touchmove', go, { passive: true });
 
       const trigger = ScrollTrigger.create({
         trigger: section,
@@ -126,9 +142,13 @@ export default function ScrollRoute() {
         end: 'bottom bottom',
         scrub: 1,
         onUpdate: (self) => {
-          drive();
+          go();
           progress.style.transform = `scaleX(${self.progress})`;
           updateActiveScene(self.progress);
+        },
+        onToggle: (self) => {
+          inView = self.isActive;
+          if (!inView) stop();
         },
       });
 
@@ -136,6 +156,8 @@ export default function ScrollRoute() {
 
       return () => {
         if (idle) clearTimeout(idle);
+        window.removeEventListener('scroll', go);
+        window.removeEventListener('touchmove', go);
         video.removeEventListener('loadedmetadata', handleMetadata);
         trigger.kill();
       };
@@ -207,12 +229,13 @@ export default function ScrollRoute() {
         </div>
 
         <div className="relative z-[1] flex min-h-[100dvh] flex-col justify-between px-5 pt-16 pb-6 sm:px-8 lg:px-16 lg:py-20">
-          {/* Mobile order: headline → truck band → scrubber line → card footer.
-              Headline is kept compact (small type, tight top) so the centered
-              truck band below it has clear air and the card never crowds it.
+          {/* Mobile order: headline → fixed truck band → scrubber → card →
+              flexible road spacer. The truck band is a FIXED height so the card's
+              top edge is anchored: longer scenes grow the card DOWNWARD into the
+              road spacer below instead of creeping up over the truck.
               On lg this becomes the 3-col grid (headline | spacer | card) with the
               scrubber spanning a full-width bottom row. */}
-          <div className="flex flex-1 flex-col gap-6 lg:grid lg:grid-cols-[minmax(320px,0.9fr)_minmax(240px,0.8fr)_minmax(320px,0.72fr)] lg:grid-rows-[1fr_auto] lg:items-start lg:gap-x-8 lg:gap-y-0">
+          <div className="flex flex-1 flex-col gap-3 lg:grid lg:grid-cols-[minmax(320px,0.9fr)_minmax(240px,0.8fr)_minmax(320px,0.72fr)] lg:grid-rows-[1fr_auto] lg:items-start lg:gap-x-8 lg:gap-y-0">
             <div className="order-1 max-w-[560px] pt-1 lg:col-start-1 lg:row-start-1 lg:pt-7">
               <SectionChip onDark>{isAr ? 'تغيرات الطريق' : 'Scenery signals'}</SectionChip>
               <h2 className="mt-3 font-display text-[25px] font-semibold leading-[1.02] tracking-[-0.025em] text-fa-classic-chalk sm:mt-5 sm:text-[50px] sm:leading-[0.98] lg:text-[68px]">
@@ -235,9 +258,13 @@ export default function ScrollRoute() {
               </p>
             </div>
 
+            {/* Fixed truck band (mobile): clear air for the footage; its fixed
+                height anchors the card top so the card grows downward, not up. */}
+            <div className="order-2 h-[26vh] shrink-0 lg:hidden" aria-hidden />
+
             <div className="hidden min-h-[50vh] lg:col-start-2 lg:row-start-1 lg:block" aria-hidden />
 
-            <div className="route-active-panel order-3 w-full max-w-[390px] overflow-hidden border border-fa-classic-chalk/18 bg-fa-liberty-blue/58 p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:p-5 lg:col-start-3 lg:row-start-1 lg:mt-20 lg:justify-self-end">
+            <div className="route-active-panel order-4 w-full max-w-[390px] overflow-hidden border border-fa-classic-chalk/18 bg-fa-liberty-blue/58 p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:p-5 lg:col-start-3 lg:row-start-1 lg:mt-20 lg:justify-self-end">
               <div key={activeScene} className="route-panel">
                 <div className="route-panel__el flex items-center justify-between gap-4 border-b border-fa-classic-chalk/12 pb-3 sm:pb-4">
                   <span className="font-ui text-[11px] font-semibold uppercase tracking-[0.16em] text-fa-orange-soda">
@@ -263,10 +290,9 @@ export default function ScrollRoute() {
               </div>
             </div>
 
-            {/* Slim scrubber — on mobile mt-auto pushes it (and the card below it)
-                to the foot of the frame so the truck band above stays clear; on lg
+            {/* Slim scrubber sits between the fixed truck band and the card; on lg
                 it spans a full-width bottom row beneath the headline + card grid. */}
-            <div className="order-2 mt-auto pb-1 lg:col-span-3 lg:row-start-2 lg:mt-0">
+            <div className="order-3 pb-1 lg:col-span-3 lg:row-start-2 lg:mt-0">
               <div className="flex items-center gap-4 sm:gap-6">
               <span className="hidden whitespace-nowrap font-ui text-[10px] font-semibold uppercase tracking-[0.16em] text-fa-classic-chalk/55 sm:inline">
                 {isAr ? 'تقدم المشهد' : 'Scenery scrub'}
@@ -294,8 +320,12 @@ export default function ScrollRoute() {
                 {active.time}
               </span>
             </div>
+            </div>
+
+            {/* Flexible road spacer (mobile): absorbs leftover height so the card
+                above it grows downward into this space instead of pushing up. */}
+            <div className="order-5 min-h-[8vh] flex-1 lg:hidden" aria-hidden />
           </div>
-        </div>
         </div>
       </div>
 
