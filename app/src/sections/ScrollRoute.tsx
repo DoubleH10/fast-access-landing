@@ -96,30 +96,37 @@ export default function ScrollRoute() {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isMobile = window.innerWidth < 1024;
 
-    // --- Mobile / touch path -------------------------------------------------
-    // iOS Safari will not paint frames produced by JS currentTime seeking unless
-    // the video has been decoded through real playback, so a scroll-scrubbed clip
-    // shows up frozen (often black) on iPhone. Instead we let the 16:9 truck pan
-    // autoplay on a loop (muted + playsInline is allowed without a gesture) so the
-    // truck genuinely moves. ScrollTrigger still drives the progress bar and the
-    // scene cards, just not the frame. object-contain (set in markup) keeps the
-    // whole truck in a centered band that never collides with the headline/card.
+    // --- Mobile / touch path: scroll-gated playback --------------------------
+    // iOS Safari won't paint frames produced by JS currentTime seeking, so a true
+    // scrub reads as frozen on iPhone. Instead the clip *plays* only while the
+    // user is actively scrolling this section and pauses the instant they stop —
+    // so the truck drives with the scroll and holds still when idle, while real
+    // playback keeps every frame painting on iOS. scrub:1 lets the motion coast
+    // for a beat after the finger lifts before settling; loop keeps the journey
+    // going across repeated passes.
     if (isMobile) {
       video.loop = true;
-      const tryPlay = () => {
-        const played = video.play();
-        if (played && typeof played.catch === 'function') played.catch(() => {});
-      };
-      tryPlay();
-      video.addEventListener('canplay', tryPlay);
-      video.addEventListener('loadedmetadata', tryPlay);
+      video.pause();
 
-      const ambient = ScrollTrigger.create({
+      let idle: ReturnType<typeof setTimeout> | undefined;
+      const drive = () => {
+        if (video.paused) {
+          const played = video.play();
+          if (played && typeof played.catch === 'function') played.catch(() => {});
+        }
+        // Generous enough that the gaps between scroll/momentum events don't
+        // stutter playback, tight enough that the truck visibly stops on idle.
+        if (idle) clearTimeout(idle);
+        idle = setTimeout(() => video.pause(), 220);
+      };
+
+      const trigger = ScrollTrigger.create({
         trigger: section,
         start: 'top top',
         end: 'bottom bottom',
         scrub: 1,
         onUpdate: (self) => {
+          drive();
           progress.style.transform = `scaleX(${self.progress})`;
           updateActiveScene(self.progress);
         },
@@ -128,10 +135,9 @@ export default function ScrollRoute() {
       updateActiveScene(0);
 
       return () => {
+        if (idle) clearTimeout(idle);
         video.removeEventListener('loadedmetadata', handleMetadata);
-        video.removeEventListener('canplay', tryPlay);
-        video.removeEventListener('loadedmetadata', tryPlay);
-        ambient.kill();
+        trigger.kill();
       };
     }
 
@@ -181,7 +187,7 @@ export default function ScrollRoute() {
         <div className="absolute inset-0">
           <video
             ref={videoRef}
-            className="h-full w-full object-contain object-[center_42%] will-change-transform lg:object-cover lg:object-[center_60%]"
+            className="h-full w-full object-cover object-[center_55%] will-change-transform lg:object-[center_60%]"
             src="/assets/scroll-route-truck.mp4"
             poster="/assets/scroll-route-truck-poster.jpg"
             preload="auto"
