@@ -84,6 +84,45 @@ export default function ScrollRoute() {
       }
     };
 
+    // iOS Safari refuses to paint frames produced by JS currentTime seeking
+    // unless the video has been decoded through real playback — a scrubbed-only
+    // <video> shows up black. Touch scrubbing is also janky there. So on
+    // coarse-pointer devices we let the footage autoplay on a loop (muted +
+    // playsInline is allowed without a gesture) and keep ScrollTrigger purely
+    // for the progress bar + scene cards. Desktop keeps the frame-accurate scrub.
+    const canScrub = window.matchMedia('(pointer: fine)').matches;
+
+    if (!canScrub) {
+      const tryPlay = () => {
+        video.muted = true;
+        video.loop = true;
+        const played = video.play();
+        if (played && typeof played.catch === 'function') played.catch(() => {});
+      };
+      tryPlay();
+      video.addEventListener('loadedmetadata', tryPlay);
+      video.addEventListener('canplay', tryPlay);
+
+      const ambientTrigger = ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 1,
+        onUpdate: (self) => {
+          progress.style.transform = `scaleX(${self.progress})`;
+          updateActiveScene(self.progress);
+        },
+      });
+
+      updateActiveScene(0);
+
+      return () => {
+        video.removeEventListener('loadedmetadata', tryPlay);
+        video.removeEventListener('canplay', tryPlay);
+        ambientTrigger.kill();
+      };
+    }
+
     const handleMetadata = () => {
       if (Number.isFinite(video.duration) && video.duration > 0) {
         duration = video.duration;

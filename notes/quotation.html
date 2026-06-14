@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: A4; margin: 0; }
+  :root{
+    --ink:#0D1232; --blue:#2D2E75; --orange:#F15B41; --orange-700:#B33620;
+    --paper:#FBF7F2; --bone:#F3ECE3; --line:#E5DED4; --muted:#6B6F86;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; color:var(--ink); background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .page{ width:210mm; min-height:297mm; padding:0 0 24mm; position:relative; }
+
+  /* Header band */
+  .head{ background:var(--ink); color:#fff; padding:26mm 16mm 16mm; position:relative; overflow:hidden; }
+  .head::after{ content:""; position:absolute; right:-40mm; top:-40mm; width:90mm; height:90mm; border-radius:50%; background:var(--orange); opacity:.16; }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .mark{ width:34px; height:34px; border-radius:9px; background:var(--orange); display:flex; align-items:center; justify-content:center; font-weight:800; color:#fff; font-size:20px; }
+  .brand h1{ font-size:20px; letter-spacing:.5px; font-weight:700; }
+  .doc-type{ margin-top:18px; font-size:34px; font-weight:800; letter-spacing:-.5px; }
+  .doc-meta{ margin-top:6px; color:#B9BCD0; font-size:12px; }
+
+  /* Parties */
+  .row{ display:flex; gap:16mm; padding:14mm 16mm 0; }
+  .col{ flex:1; }
+  .lbl{ font-size:10px; text-transform:uppercase; letter-spacing:1.4px; color:var(--muted); margin-bottom:6px; }
+  .col p{ font-size:13px; line-height:1.7; }
+  .col .name{ font-weight:700; font-size:14px; }
+
+  /* Table */
+  .tbl-wrap{ padding:12mm 16mm 0; }
+  table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  thead th{ text-align:left; background:var(--bone); color:var(--ink); padding:11px 12px; font-size:10px; text-transform:uppercase; letter-spacing:1px; }
+  thead th.r{ text-align:right; }
+  tbody td{ padding:13px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+  tbody td.r{ text-align:right; white-space:nowrap; }
+  .item-title{ font-weight:700; margin-bottom:3px; }
+  .item-desc{ color:var(--muted); font-size:11.5px; line-height:1.5; }
+
+  /* Totals */
+  .totals{ display:flex; justify-content:flex-end; padding:8mm 16mm 0; }
+  .totals .box{ width:78mm; }
+  .totals .line{ display:flex; justify-content:space-between; padding:8px 0; font-size:13px; border-bottom:1px solid var(--line); }
+  .totals .muted{ color:var(--muted); }
+  .totals .grand{ display:flex; justify-content:space-between; align-items:center; margin-top:10px; background:var(--ink); color:#fff; padding:13px 16px; border-radius:10px; }
+  .totals .grand .g-lbl{ font-size:11px; text-transform:uppercase; letter-spacing:1.2px; color:#B9BCD0; }
+  .totals .grand .g-val{ font-size:20px; font-weight:800; }
+  .accent{ color:var(--orange); }
+
+  /* Notes / terms */
+  .terms{ padding:12mm 16mm 0; }
+  .terms h3{ font-size:11px; text-transform:uppercase; letter-spacing:1.2px; color:var(--ink); margin-bottom:8px; }
+  .terms ul{ list-style:none; }
+  .terms li{ font-size:11.5px; color:var(--muted); line-height:1.8; padding-left:16px; position:relative; }
+  .terms li::before{ content:""; position:absolute; left:0; top:9px; width:6px; height:6px; border-radius:50%; background:var(--orange); }
+
+  /* Footer */
+  .foot{ position:absolute; bottom:0; left:0; right:0; padding:7mm 16mm; border-top:3px solid var(--orange); display:flex; justify-content:space-between; font-size:10.5px; color:var(--muted); }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="head">
+      <div class="brand">
+        <div class="mark">F</div>
+        <h1>FAST&nbsp;ACCESS</h1>
+      </div>
+      <div class="doc-type">Quotation</div>
+      <div class="doc-meta">Quote No. FA-2026-001 &nbsp;·&nbsp; Date: 14 June 2026 &nbsp;·&nbsp; Valid for 30 days</div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="lbl">From</div>
+        <p class="name">Fast Access</p>
+        <p>AI-powered fulfilment &amp; logistics<br>Riyadh, Kingdom of Saudi Arabia<br>hadi.hijazi@bloq-ai.net</p>
+      </div>
+      <div class="col">
+        <div class="lbl">Billed To</div>
+        <p class="name">[Client Name]</p>
+        <p>[Company]<br>[Address]<br>[Email]</p>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th class="r">Qty</th>
+            <th class="r">Amount (SAR)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="item-title">Fast Access marketing website — design &amp; build</div>
+              <div class="item-desc">
+                Custom responsive website for the Fast Access brand. Includes Home,
+                Solutions, Pricing, Resources and Contact pages; bilingual (Arabic / English)
+                with RTL support; light/dark themes; scroll-driven package-journey animation,
+                live pricing calculator, dashboard preview, and full section library
+                (hero, sectors, coverage, testimonials, FAQ, CTAs). Built to the brand
+                guideline and delivered production-ready.
+              </div>
+            </td>
+            <td class="r">1</td>
+            <td class="r">5,000.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="totals">
+      <div class="box">
+        <div class="line"><span class="muted">Subtotal (excl. tax)</span><span>SAR 5,000.00</span></div>
+        <div class="line"><span class="muted">VAT (15%)</span><span>SAR 750.00</span></div>
+        <div class="grand">
+          <span class="g-lbl">Total Due</span>
+          <span class="g-val">SAR 5,750.00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="terms">
+      <h3>Terms &amp; Notes</h3>
+      <ul>
+        <li>Prices are quoted in Saudi Riyal (SAR). VAT charged at the standard KSA rate of 15%.</li>
+        <li>50% deposit to commence, 50% on delivery. This quotation is valid for 30 days from the date above.</li>
+        <li>Scope covers the deliverables listed above; additional pages or features can be quoted separately.</li>
+      </ul>
+    </div>
+
+    <div class="foot">
+      <span>Fast Access · Riyadh, KSA</span>
+      <span>Thank you for your business</span>
+    </div>
+  </div>
+</body>
+</html>
