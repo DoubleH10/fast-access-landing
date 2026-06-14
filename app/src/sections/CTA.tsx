@@ -116,7 +116,7 @@ export default function CTA() {
             </div>
 
             <h2 className="font-display font-bold text-[36px] sm:text-[48px] lg:text-[56px] text-fa-classic-chalk leading-[1.05] tracking-[-0.025em]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
-              {t('cta.headlineA')} <span className="text-fa-orange-soda">{t('cta.headlineHighlight')}</span> {t('cta.headlineB')}
+              {t('cta.headlineA')} <span className="text-fa-orange-soda">{t('cta.headlineHighlight')}</span>{t('cta.headlineB')}
             </h2>
 
             <p className="font-body mt-6 text-base text-fa-classic-chalk/65 max-w-[500px] leading-[1.6]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
