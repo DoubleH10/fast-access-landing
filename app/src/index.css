@@ -136,6 +136,9 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    /* Stop any horizontal rubber-band bounce from revealing the paper background
+       as "white space" on touch devices. */
+    overscroll-behavior-x: none;
     letter-spacing: -0.01em;
   }
 
@@ -449,6 +452,10 @@ html[dir='rtl'] .fa-scroll-bar__fill { transform-origin: 100% 50%; }
   background: var(--fa-paper);
   padding: 30px 0;
   overflow: hidden;
+  /* contain:paint forces the clip to apply to the GPU-composited (will-change:
+     transform) scrolling track too — without it, iOS Safari lets the wide track
+     bleed past overflow:hidden and the whole page scrolls sideways into white. */
+  contain: paint;
   position: relative;
   border-top: 1px solid var(--fa-hairline);
   border-bottom: 1px solid var(--fa-hairline);

@@ -28,7 +28,11 @@ export default function TrustedBy() {
       </div>
 
       <Reveal
-        className="group relative"
+        // overflow-hidden + contain:paint clip the wide GPU-animated marquee
+        // track here at its own wrapper; the mask only fades the edges, it does
+        // not clip, so without this the track bleeds past and lets the whole page
+        // scroll sideways into white space on iOS Safari.
+        className="group relative overflow-hidden [contain:paint]"
         // soft fade on both edges so wordmarks dissolve instead of clipping
         style={{
           WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)',
