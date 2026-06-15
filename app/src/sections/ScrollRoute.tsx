@@ -259,8 +259,9 @@ export default function ScrollRoute() {
             </div>
 
             {/* Fixed truck band (mobile): clear air for the footage; its fixed
-                height anchors the card top so the card grows downward, not up. */}
-            <div className="order-2 h-[26vh] shrink-0 lg:hidden" aria-hidden />
+                height anchors the card top so the card grows downward, not up.
+                Taller band = card sits lower in the frame. */}
+            <div className="order-2 h-[34vh] shrink-0 lg:hidden" aria-hidden />
 
             <div className="hidden min-h-[50vh] lg:col-start-2 lg:row-start-1 lg:block" aria-hidden />
 
@@ -324,7 +325,7 @@ export default function ScrollRoute() {
 
             {/* Flexible road spacer (mobile): absorbs leftover height so the card
                 above it grows downward into this space instead of pushing up. */}
-            <div className="order-5 min-h-[8vh] flex-1 lg:hidden" aria-hidden />
+            <div className="order-5 min-h-[4vh] flex-1 lg:hidden" aria-hidden />
           </div>
         </div>
       </div>
