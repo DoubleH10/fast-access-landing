@@ -209,7 +209,7 @@ export default function ScrollRoute() {
         <div className="absolute inset-0">
           <video
             ref={videoRef}
-            className="h-full w-full object-cover object-[center_55%] will-change-transform lg:object-[center_60%]"
+            className="h-full w-full object-cover object-[38%_46%] will-change-transform lg:object-[center_60%]"
             src="/assets/scroll-route-truck.mp4"
             poster="/assets/scroll-route-truck-poster.jpg"
             preload="auto"
@@ -219,8 +219,10 @@ export default function ScrollRoute() {
           />
           {/* Side scrims keep the copy legible over the footage */}
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(13,18,50,0.9)_0%,rgba(13,18,50,0.34)_36%,rgba(13,18,50,0.16)_62%,rgba(13,18,50,0.86)_100%)]" />
-          {/* Bottom anchor so the scene rail + progress card sit on solid ground */}
-          <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(11,15,42,0.92)_0%,rgba(11,15,42,0.45)_16%,transparent_42%)]" />
+          {/* Bottom anchor so the scene rail + progress card sit on solid ground.
+              Kept short (transparent by ~32%) so the truck riding mid-frame isn't
+              dimmed; the card carries its own backdrop-blur for legibility. */}
+          <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(11,15,42,0.9)_0%,rgba(11,15,42,0.38)_13%,transparent_32%)]" />
           {/* Top fade smooths the seam from the hero */}
           <div className="absolute inset-x-0 top-0 h-40 bg-[linear-gradient(180deg,rgba(11,15,42,0.7)_0%,transparent_100%)]" />
           {/* Warm key glow on the truck + cinematic vignette */}
@@ -260,14 +262,15 @@ export default function ScrollRoute() {
 
             {/* Fixed truck band (mobile): clear air for the footage; its fixed
                 height anchors the card top so the card grows downward, not up.
-                Taller band = card sits lower in the frame. */}
-            <div className="order-2 h-[34vh] shrink-0 lg:hidden" aria-hidden />
+                Sized so the card's top sits BELOW the truck (which rides at ~58%
+                of the frame) — keeping the truck visible the whole scroll. */}
+            <div className="order-2 h-[42vh] shrink-0 lg:hidden" aria-hidden />
 
             <div className="hidden min-h-[50vh] lg:col-start-2 lg:row-start-1 lg:block" aria-hidden />
 
-            <div className="route-active-panel order-4 w-full max-w-[390px] overflow-hidden border border-fa-classic-chalk/18 bg-fa-liberty-blue/58 p-4 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:p-5 lg:col-start-3 lg:row-start-1 lg:mt-20 lg:justify-self-end">
+            <div className="route-active-panel order-4 w-full max-w-[390px] overflow-hidden border border-fa-classic-chalk/18 bg-fa-liberty-blue/58 p-3.5 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:p-5 lg:col-start-3 lg:row-start-1 lg:mt-20 lg:justify-self-end">
               <div key={activeScene} className="route-panel">
-                <div className="route-panel__el flex items-center justify-between gap-4 border-b border-fa-classic-chalk/12 pb-3 sm:pb-4">
+                <div className="route-panel__el flex items-center justify-between gap-4 border-b border-fa-classic-chalk/12 pb-2.5 sm:pb-4">
                   <span className="font-ui text-[11px] font-semibold uppercase tracking-[0.16em] text-fa-orange-soda">
                     {active.time}
                   </span>
@@ -278,13 +281,13 @@ export default function ScrollRoute() {
                     <span className="ms-2">· {active.label[lang]}</span>
                   </span>
                 </div>
-                <h3 className="route-panel__el mt-3 font-display text-[19px] font-semibold leading-[1.08] text-fa-classic-chalk sm:mt-5 sm:text-[28px] sm:leading-[1.05]">
+                <h3 className="route-panel__el mt-2.5 font-display text-[18px] font-semibold leading-[1.08] text-fa-classic-chalk sm:mt-5 sm:text-[28px] sm:leading-[1.05]">
                   {active.title[lang]}
                 </h3>
-                <p className="route-panel__el mt-2 line-clamp-2 font-body text-[13px] leading-[1.55] text-fa-classic-chalk/62 sm:mt-4 sm:line-clamp-none sm:text-sm sm:leading-[1.65]">
+                <p className="route-panel__el mt-1.5 line-clamp-2 font-body text-[12.5px] leading-[1.5] text-fa-classic-chalk/62 sm:mt-4 sm:line-clamp-none sm:text-sm sm:leading-[1.65]">
                   {active.detail[lang]}
                 </p>
-                <div className="route-panel__el mt-4 inline-flex items-center gap-2 border border-fa-orange-soda/35 bg-fa-orange-soda/12 px-3 py-2 font-ui text-[12px] font-semibold uppercase tracking-[0.12em] text-fa-classic-chalk sm:mt-6">
+                <div className="route-panel__el mt-3 inline-flex items-center gap-2 border border-fa-orange-soda/35 bg-fa-orange-soda/12 px-3 py-1.5 font-ui text-[12px] font-semibold uppercase tracking-[0.12em] text-fa-classic-chalk sm:mt-6 sm:py-2">
                   <span className="inline-block h-1.5 w-1.5 rounded-full bg-fa-orange-soda" />
                   {active.metric[lang]}
                 </div>
