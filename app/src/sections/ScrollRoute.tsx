@@ -96,70 +96,42 @@ export default function ScrollRoute() {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isMobile = window.innerWidth < 1024;
 
-    // --- Mobile / touch path: scroll-gated playback --------------------------
-    // iOS Safari won't paint frames produced by JS currentTime seeking, so a true
-    // scrub reads as frozen on iPhone. Instead the clip *plays* only while the
-    // user is actively scrolling this section and pauses the instant they stop —
-    // so the truck drives with the scroll and holds still when idle, while real
-    // playback keeps every frame painting on iOS. loop keeps the journey going.
-    //
-    // Critical: iOS throttles GSAP's rAF-driven onUpdate during touch/momentum
-    // scrolling, so gating playback off it alone leaves the video paused. We gate
-    // off real scroll + touchmove events (which iOS does fire continuously) and
-    // prime the decoder once so the first play() paints immediately.
+    // --- Mobile / touch path: scroll-scrub (video follows scroll, like desktop) -
+    // The footage is scrubbed to the scroll position so the truck drives exactly
+    // with the finger — same feel as desktop. We compute progress from scrollY
+    // ourselves and drive it from real scroll/touchmove events (throttled via
+    // rAF), NOT GSAP's onUpdate, which iOS throttles during momentum scrolling and
+    // would make the scrub freeze then jump. The decoder is primed once (muted
+    // play→pause) so iOS paints the seeked frames instead of showing black.
     if (isMobile) {
-      video.loop = true;
-      // Prime the decoder: a muted play()→pause() warms the pipeline so the very
-      // first scroll-driven play paints a frame instead of staying black.
+      video.pause();
       const primed = video.play();
       if (primed && typeof primed.then === 'function') {
         primed.then(() => video.pause()).catch(() => {});
       }
-
-      let idle: ReturnType<typeof setTimeout> | undefined;
-      let inView = false;
-      const stop = () => {
-        if (!video.paused) video.pause();
+      let raf = 0;
+      const sync = () => {
+        raf = 0;
+        const total = section.offsetHeight - window.innerHeight;
+        const scrolled = Math.min(Math.max(-section.getBoundingClientRect().top, 0), Math.max(total, 1));
+        const p = total > 0 ? scrolled / total : 0;
+        const t = Math.min(duration - 0.05, Math.max(0, duration * p));
+        if (Math.abs(video.currentTime - t) > 0.02) video.currentTime = t;
+        progress.style.transform = `scaleX(${p})`;
+        updateActiveScene(p);
       };
-      const go = () => {
-        if (!inView) return;
-        if (video.paused) {
-          const played = video.play();
-          if (played && typeof played.catch === 'function') played.catch(() => {});
-        }
-        // Pause shortly after scroll motion ceases. iOS fires scroll/touchmove
-        // frequently mid-gesture, so this only trips once the truck is truly idle.
-        if (idle) clearTimeout(idle);
-        idle = setTimeout(stop, 200);
+      const onScroll = () => {
+        if (!raf) raf = requestAnimationFrame(sync);
       };
-
-      window.addEventListener('scroll', go, { passive: true });
-      window.addEventListener('touchmove', go, { passive: true });
-
-      const trigger = ScrollTrigger.create({
-        trigger: section,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 1,
-        onUpdate: (self) => {
-          go();
-          progress.style.transform = `scaleX(${self.progress})`;
-          updateActiveScene(self.progress);
-        },
-        onToggle: (self) => {
-          inView = self.isActive;
-          if (!inView) stop();
-        },
-      });
-
-      updateActiveScene(0);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('touchmove', onScroll, { passive: true });
+      sync();
 
       return () => {
-        if (idle) clearTimeout(idle);
-        window.removeEventListener('scroll', go);
-        window.removeEventListener('touchmove', go);
+        if (raf) cancelAnimationFrame(raf);
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('touchmove', onScroll);
         video.removeEventListener('loadedmetadata', handleMetadata);
-        trigger.kill();
       };
     }
 
@@ -230,7 +202,7 @@ export default function ScrollRoute() {
           <div className="absolute inset-0 bg-[radial-gradient(125%_125%_at_50%_42%,transparent_52%,rgba(7,10,30,0.62)_100%)]" />
         </div>
 
-        <div className="relative z-[1] flex min-h-[100dvh] flex-col justify-between px-5 pt-16 pb-6 sm:px-8 lg:px-16 lg:py-20">
+        <div className="relative z-[1] flex min-h-[100dvh] flex-col justify-between px-5 pt-16 pb-4 sm:px-8 sm:pb-6 lg:px-16 lg:py-20">
           {/* Mobile order: headline → fixed truck band → scrubber → card →
               flexible road spacer. The truck band is a FIXED height so the card's
               top edge is anchored: longer scenes grow the card DOWNWARD into the
@@ -264,11 +236,11 @@ export default function ScrollRoute() {
                 height anchors the card top so the card grows downward, not up.
                 Sized so the card's top sits BELOW the truck (which rides at ~58%
                 of the frame) — keeping the truck visible the whole scroll. */}
-            <div className="order-2 h-[45vh] shrink-0 lg:hidden" aria-hidden />
+            <div className="order-2 h-[46vh] shrink-0 lg:hidden" aria-hidden />
 
             <div className="hidden min-h-[50vh] lg:col-start-2 lg:row-start-1 lg:block" aria-hidden />
 
-            <div className="route-active-panel order-4 w-full max-w-[390px] overflow-hidden border border-fa-classic-chalk/18 bg-fa-liberty-blue/58 p-3.5 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:p-5 lg:col-start-3 lg:row-start-1 lg:mt-20 lg:justify-self-end">
+            <div className="route-active-panel order-4 w-full max-w-[390px] overflow-hidden border border-fa-classic-chalk/18 bg-fa-liberty-blue/58 p-3 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:p-5 lg:col-start-3 lg:row-start-1 lg:mt-20 lg:justify-self-end">
               <div key={activeScene} className="route-panel">
                 <div className="route-panel__el flex items-center justify-between gap-4 border-b border-fa-classic-chalk/12 pb-2.5 sm:pb-4">
                   <span className="font-ui text-[11px] font-semibold uppercase tracking-[0.16em] text-fa-orange-soda">
@@ -287,7 +259,7 @@ export default function ScrollRoute() {
                 <p className="route-panel__el mt-1.5 line-clamp-2 font-body text-[12.5px] leading-[1.5] text-fa-classic-chalk/62 sm:mt-4 sm:line-clamp-none sm:text-sm sm:leading-[1.65]">
                   {active.detail[lang]}
                 </p>
-                <div className="route-panel__el mt-3 inline-flex items-center gap-2 border border-fa-orange-soda/35 bg-fa-orange-soda/12 px-3 py-1.5 font-ui text-[12px] font-semibold uppercase tracking-[0.12em] text-fa-classic-chalk sm:mt-6 sm:py-2">
+                <div className="route-panel__el mt-2.5 inline-flex items-center gap-2 border border-fa-orange-soda/35 bg-fa-orange-soda/12 px-3 py-1.5 font-ui text-[12px] font-semibold uppercase tracking-[0.12em] text-fa-classic-chalk sm:mt-6 sm:py-2">
                   <span className="inline-block h-1.5 w-1.5 rounded-full bg-fa-orange-soda" />
                   {active.metric[lang]}
                 </div>
