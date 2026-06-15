@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- minimum-scale=1.0 stops pinch-zoom-OUT below 100% (which would reveal the
+         cream body background as "white space" around the content on mobile).
+         Zoom-IN is still allowed for accessibility. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
     <title>Fast Access — Move Every Package Forward</title>
     <link rel="icon" type="image/png" href="/assets/logo-mark.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">

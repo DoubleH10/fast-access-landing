@@ -264,7 +264,7 @@ export default function ScrollRoute() {
                 height anchors the card top so the card grows downward, not up.
                 Sized so the card's top sits BELOW the truck (which rides at ~58%
                 of the frame) — keeping the truck visible the whole scroll. */}
-            <div className="order-2 h-[42vh] shrink-0 lg:hidden" aria-hidden />
+            <div className="order-2 h-[45vh] shrink-0 lg:hidden" aria-hidden />
 
             <div className="hidden min-h-[50vh] lg:col-start-2 lg:row-start-1 lg:block" aria-hidden />
 
