@@ -199,7 +199,7 @@ export default function ScrollRoute() {
       video.removeEventListener('loadedmetadata', handleMetadata);
       trigger.kill();
     };
-  }, []);
+  }, [shouldLoadVideo]);
 
   const active = SCENES[activeScene];
 
