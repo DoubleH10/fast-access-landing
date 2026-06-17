@@ -36,10 +36,10 @@ export default function About() {
 
       {/* Who we are */}
       <section className="relative bg-fa-cream section-padding overflow-hidden">
-        <div className="container-main relative z-10 max-w-[860px] text-left rtl:text-right">
-          <Reveal className="mb-5"><SectionChip>{t('pages.whoTitle')}</SectionChip></Reveal>
+        <div className="container-main relative z-10 max-w-[740px] text-left rtl:text-right">
+          <Reveal className="mb-6"><SectionChip>{t('pages.whoTitle')}</SectionChip></Reveal>
           <Reveal delay={80}>
-            <p className="font-display font-medium text-[24px] sm:text-[30px] lg:text-[38px] text-fa-liberty-blue leading-[1.32] tracking-[-0.015em]">
+            <p className="font-display font-normal text-[22px] sm:text-[27px] lg:text-[33px] text-fa-liberty-blue leading-[1.6] tracking-[-0.01em] text-justify">
               {t('pages.whoBody')}
             </p>
           </Reveal>

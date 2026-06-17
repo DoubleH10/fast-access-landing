@@ -140,17 +140,6 @@ export default function Hero() {
                 style={{ transform: 'translate(12px, -12px) scale(0.96)' }}
               />
 
-              {/* LIVE operations pill */}
-              <div className="fa-hero-live absolute top-6 start-6 end-6">
-                <span className="fa-hero-live__pulse" />
-                <div>
-                  <div className="fa-hero-live__lbl">{isAr ? 'العمليات المباشرة' : 'Live operations'}</div>
-                  <div className="fa-hero-live__big">
-                    <b className="tabular-nums">12,408</b>
-                    {isAr ? ' طرد في الطريق الآن' : 'packages in transit now'}
-                  </div>
-                </div>
-              </div>
 
             </div>
           </div>

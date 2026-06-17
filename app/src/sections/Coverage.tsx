@@ -1,6 +1,3 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
 import { useInView } from '../hooks/useInView';
 import SectionChip from '../components/brand/SectionChip';
 import RevealText from '../components/brand/RevealText';
@@ -8,131 +5,89 @@ import BrandPattern from '../components/brand/BrandPattern';
 import { useT } from '../i18n/I18nContext';
 
 /**
- * Coverage / Network map — ported from the Claude Design handoff
- * (claude.ai/design "Landing Page.html"). Real geography via Leaflet +
- * CartoDB dark tiles (toned to the brand navy), custom DivIcon pins with a
- * pulse ring on same-day hubs, dashed routes that brighten for the active
- * hub, an animated package marker, a live counter and a legend.
+ * Coverage / Network map — simplified per client feedback ("make it simpler
+ * and better looking: just the highlighted Kingdom and arrows out of it
+ * showing international shipping; drop the live-operations data").
  *
- * Scope: from the Kingdom outwards — KSA hubs, GCC lanes, and international
- * gateways, per client feedback ("amend the map to be from kingdom to all
- * over the world"). Numbers are kept generalized (no per-hub order counts).
+ * No Leaflet, no tiles, no live counters. A self-contained SVG: the Saudi
+ * Arabia outline highlighted in brand orange with one origin hub (Riyadh),
+ * and animated shipping arrows fanning out to the world's regions.
  */
 
-type Size = 'mega' | 'lg' | 'sm' | 'partner';
-type Kind = 'ksa' | 'gcc' | 'intl';
-type Bi = { en: string; ar: string };
-type Hub = {
-  id: string;
-  city: Bi;
-  country: Bi;
-  lat: number;
-  lng: number;
-  size: Size;
-  kind: Kind;
-  same: boolean;
-  primary?: boolean;
+// ── Equirectangular projection tuned so the Kingdom sits centred in an
+// 800×600 frame, leaving margins for the outbound arrows. Riyadh is the
+// anchor point; longitude is cos-corrected at the Kingdom's mid-latitude.
+const RX = 410;
+const RY = 285;
+const K = 20; // px per degree latitude
+const KX = K * Math.cos((24.7136 * Math.PI) / 180); // px per degree longitude
+const proj = (lat: number, lng: number): [number, number] => [
+  RX + (lng - 46.6753) * KX,
+  RY - (lat - 24.7136) * K,
+];
+
+// Simplified Saudi Arabia boundary ([lat, lng], Douglas–Peucker reduced).
+const KSA_BOUNDARY: [number, number][] = [
+  [32.155, 39.203], [31.501, 37.002], [30.501, 37.996], [29.998, 37.5], [29.869, 36.752],
+  [29.185, 36.072], [29.355, 34.933], [27.941, 34.486], [27.737, 35.272], [25.923, 36.584],
+  [25.572, 36.436], [25.26, 37.013], [24.242, 37.458], [23.483, 38.546], [22.584, 38.958],
+  [21.974, 38.82], [20.977, 39.15], [19.467, 40.798], [18.151, 41.418], [17.387, 42.237],
+  [16.42, 42.731], [16.647, 43.215], [17.524, 43.292], [17.288, 46.752], [16.957, 47.181],
+  [18.167, 48.186], [18.62, 49.114], [19.0, 52.0], [20.002, 54.998], [22.002, 55.665],
+  [22.706, 55.213], [22.94, 52.581], [24.257, 51.59], [24.317, 51.332], [24.64, 51.467],
+  [24.545, 50.929], [26.04, 50.028], [26.154, 50.238], [26.686, 50.146], [26.962, 49.73],
+  [27.311, 49.709], [27.369, 49.481], [27.159, 49.434], [27.512, 49.286], [27.677, 48.884],
+  [28.495, 48.512], [28.524, 47.704], [29.0, 47.466], [29.203, 44.72], [31.12, 42.079],
+  [31.945, 40.424], [32.155, 39.203],
+];
+
+const KSA_PATH =
+  KSA_BOUNDARY.map(([lat, lng], i) => {
+    const [x, y] = proj(lat, lng);
+    return `${i === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`;
+  }).join(' ') + ' Z';
+
+// The three main regional hubs. Outbound arrows emanate from whichever hub
+// faces the destination, so the read is "three regions, out to the world".
+type Hub = { x: number; y: number; lx: number; ly: number; anchor: 'start' | 'middle' | 'end'; en: string; ar: string };
+const mkHub = (lat: number, lng: number, ldx: number, ldy: number, anchor: Hub['anchor'], en: string, ar: string): Hub => {
+  const [x, y] = proj(lat, lng);
+  return { x, y, lx: x + ldx, ly: y + ldy, anchor, en, ar };
+};
+const HUBS: Record<'jed' | 'ryd' | 'dmm', Hub> = {
+  jed: mkHub(21.5433, 39.1728, 0, 20, 'middle', 'Jeddah', 'جدة'),
+  ryd: mkHub(24.7136, 46.6753, 12, 4, 'start', 'Riyadh', 'الرياض'),
+  dmm: mkHub(26.4207, 50.0888, 0, -13, 'middle', 'Dammam', 'الدمام'),
 };
 
-const KSA: Bi = { en: 'KSA', ar: 'السعودية' };
-
-// Kingdom core + GCC reach + international gateways (real lat/lng)
-const HUBS: Hub[] = [
-  { id: 'ryd', city: { en: 'Riyadh', ar: 'الرياض' }, country: KSA, lat: 24.7136, lng: 46.6753, size: 'mega', kind: 'ksa', same: true, primary: true },
-  { id: 'jed', city: { en: 'Jeddah', ar: 'جدة' }, country: KSA, lat: 21.5433, lng: 39.1728, size: 'mega', kind: 'ksa', same: true, primary: true },
-  { id: 'dmm', city: { en: 'Dammam', ar: 'الدمام' }, country: KSA, lat: 26.4207, lng: 50.0888, size: 'mega', kind: 'ksa', same: true, primary: true },
-  { id: 'mec', city: { en: 'Makkah', ar: 'مكة' }, country: KSA, lat: 21.3891, lng: 39.8579, size: 'lg', kind: 'ksa', same: false },
-  { id: 'med', city: { en: 'Madinah', ar: 'المدينة' }, country: KSA, lat: 24.5247, lng: 39.5692, size: 'lg', kind: 'ksa', same: false },
-  { id: 'tbk', city: { en: 'Tabuk', ar: 'تبوك' }, country: KSA, lat: 28.3998, lng: 36.5700, size: 'sm', kind: 'ksa', same: false },
-  { id: 'abh', city: { en: 'Abha', ar: 'أبها' }, country: KSA, lat: 18.2164, lng: 42.5053, size: 'sm', kind: 'ksa', same: false },
-  // GCC — fast cross-border shipping
-  { id: 'kwi', city: { en: 'Kuwait City', ar: 'الكويت' }, country: { en: 'Kuwait', ar: 'الكويت' }, lat: 29.3759, lng: 47.9774, size: 'partner', kind: 'gcc', same: false },
-  { id: 'bah', city: { en: 'Manama', ar: 'المنامة' }, country: { en: 'Bahrain', ar: 'البحرين' }, lat: 26.2285, lng: 50.5860, size: 'partner', kind: 'gcc', same: false },
-  { id: 'doh', city: { en: 'Doha', ar: 'الدوحة' }, country: { en: 'Qatar', ar: 'قطر' }, lat: 25.2854, lng: 51.5310, size: 'partner', kind: 'gcc', same: false },
-  { id: 'dxb', city: { en: 'Dubai', ar: 'دبي' }, country: { en: 'UAE', ar: 'الإمارات' }, lat: 25.2048, lng: 55.2708, size: 'partner', kind: 'gcc', same: false },
-  { id: 'mct', city: { en: 'Muscat', ar: 'مسقط' }, country: { en: 'Oman', ar: 'عُمان' }, lat: 23.5880, lng: 58.3829, size: 'partner', kind: 'gcc', same: false },
-  // International gateways — carrier-partner lanes
-  { id: 'ist', city: { en: 'Istanbul', ar: 'إسطنبول' }, country: { en: 'Türkiye', ar: 'تركيا' }, lat: 41.0082, lng: 28.9784, size: 'partner', kind: 'intl', same: false },
-  { id: 'lon', city: { en: 'London', ar: 'لندن' }, country: { en: 'UK', ar: 'المملكة المتحدة' }, lat: 51.5072, lng: -0.1276, size: 'partner', kind: 'intl', same: false },
-  { id: 'sin', city: { en: 'Singapore', ar: 'سنغافورة' }, country: { en: 'Singapore', ar: 'سنغافورة' }, lat: 1.3521, lng: 103.8198, size: 'partner', kind: 'intl', same: false },
+// Outbound shipping arrows — each fans from a hub toward a world region.
+type Arrow = {
+  from: 'jed' | 'ryd' | 'dmm';
+  x: number; y: number; lx: number; ly: number;
+  anchor: 'start' | 'middle' | 'end';
+  en: string; ar: string;
+};
+const ARROWS: Arrow[] = [
+  { from: 'jed', x: 150, y: 150, lx: 150, ly: 128, anchor: 'middle', en: 'Europe', ar: 'أوروبا' },
+  { from: 'jed', x: 100, y: 300, lx: 94, ly: 300, anchor: 'end', en: 'Americas', ar: 'الأمريكتان' },
+  { from: 'jed', x: 175, y: 505, lx: 175, ly: 528, anchor: 'middle', en: 'Africa', ar: 'أفريقيا' },
+  { from: 'ryd', x: 400, y: 58, lx: 400, ly: 42, anchor: 'middle', en: 'Türkiye', ar: 'تركيا' },
+  { from: 'dmm', x: 560, y: 515, lx: 560, ly: 537, anchor: 'middle', en: 'South Asia', ar: 'جنوب آسيا' },
+  { from: 'dmm', x: 720, y: 322, lx: 712, ly: 322, anchor: 'end', en: 'East Asia', ar: 'شرق آسيا' },
 ];
 
-const ROUTES: Array<[string, string]> = [
-  // Kingdom lanes
-  ['ryd', 'jed'], ['ryd', 'dmm'], ['ryd', 'med'], ['ryd', 'mec'], ['ryd', 'abh'],
-  ['jed', 'mec'], ['jed', 'med'], ['med', 'tbk'],
-  // GCC lanes
-  ['dmm', 'kwi'], ['dmm', 'bah'], ['ryd', 'doh'], ['ryd', 'dxb'], ['dxb', 'mct'],
-  // International lanes
-  ['jed', 'ist'], ['ist', 'lon'], ['dxb', 'sin'],
-];
-
-type Pt = [number, number];
-
-/**
- * Smooth route arc between two hubs — a quadratic curve bulging perpendicular
- * to the chord, sampled as a polyline. Reads like a real logistics route map
- * instead of a straight ruler line.
- */
-function curve([lat1, lng1]: Pt, [lat2, lng2]: Pt, bend = 0.09): Pt[] {
-  const mx = (lat1 + lat2) / 2;
-  const my = (lng1 + lng2) / 2;
-  const dx = lat2 - lat1;
-  const dy = lng2 - lng1;
-  // control point offset perpendicular to the chord (consistent rotation)
-  const cx = mx + -dy * bend;
-  const cy = my + dx * bend;
-  const N = 36;
-  const pts: Pt[] = [];
-  for (let i = 0; i <= N; i++) {
-    const t = i / N;
-    const u = 1 - t;
-    pts.push([
-      u * u * lat1 + 2 * u * t * cx + t * t * lat2,
-      u * u * lng1 + 2 * u * t * cy + t * t * lng2,
-    ]);
-  }
-  return pts;
+// Gentle quadratic arc from a hub origin to an outbound endpoint.
+function arrowPath(ox: number, oy: number, ex: number, ey: number): string {
+  const mx = (ox + ex) / 2;
+  const my = (oy + ey) / 2;
+  const dx = ex - ox;
+  const dy = ey - oy;
+  const cx = mx - dy * 0.1;
+  const cy = my + dx * 0.1;
+  return `M${ox.toFixed(1)} ${oy.toFixed(1)} Q${cx.toFixed(1)} ${cy.toFixed(1)} ${ex} ${ey}`;
 }
-
-const sizeRadius: Record<Size, number> = { mega: 10, lg: 8, sm: 5, partner: 5.5 };
-const sizeName: Record<Size, Bi> = {
-  mega: { en: 'Mega hub', ar: 'مركز رئيسي' },
-  lg: { en: 'Large', ar: 'كبير' },
-  sm: { en: 'Standard', ar: 'قياسي' },
-  partner: { en: 'Partner network', ar: 'شبكة شركاء' },
-};
-const kindName: Record<Kind, Bi> = {
-  ksa: { en: 'Saudi network', ar: 'الشبكة السعودية' },
-  gcc: { en: 'GCC delivery', ar: 'توصيل خليجي' },
-  intl: { en: 'International lane', ar: 'خط دولي' },
-};
 
 const ACCENT = '#F15B41';
-
-function makeHubIcon(hub: Hub, isActive: boolean, lang: 'en' | 'ar') {
-  const r = sizeRadius[hub.size];
-  const ring = hub.primary ? '<span class="hub-ring"></span>' : '';
-  // At world zoom the KSA hubs cluster tightly — permanent labels would pile
-  // on top of each other (the old Jeddah/Makkah collision). Only Riyadh and
-  // the international gateways keep standing labels; everything else labels
-  // on hover/tap.
-  const showLabel = isActive || hub.kind === 'intl' || hub.id === 'ryd';
-  return L.divIcon({
-    className: `fa-hub-icon${isActive ? ' active' : ''}${hub.primary ? ' primary' : ''}`,
-    html: `
-      <div class="hub-wrap">
-        ${ring}
-        <span class="hub-dot" style="width:${r * 2}px;height:${r * 2}px;background:${hub.primary ? ACCENT : '#FFFFFF'};">
-          <span class="hub-core" style="background:${hub.primary ? '#fff' : '#0D1232'};"></span>
-        </span>
-        ${showLabel ? `<span class="hub-label">${hub.city[lang]}</span>` : ''}
-      </div>
-    `,
-    iconSize: [0, 0],
-    iconAnchor: [0, 0],
-  });
-}
 
 export default function Coverage() {
   const { ref, isInView } = useInView(0.15);
@@ -140,151 +95,12 @@ export default function Coverage() {
   const isAr = locale === 'ar';
   const lang: 'en' | 'ar' = isAr ? 'ar' : 'en';
 
-  const elRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<L.Map | null>(null);
-  const markersRef = useRef<Record<string, L.Marker>>({});
-  const routesRef = useRef<Array<{ a: string; b: string; line: L.Polyline; halo: L.Polyline }>>([]);
-  const [active, setActive] = useState('ryd');
-
-  const byId = useMemo(() => Object.fromEntries(HUBS.map((h) => [h.id, h])) as Record<string, Hub>, []);
-  const activeHub = byId[active];
-
-  // Generalized per client feedback — no hard counts; the story is
-  // nationwide coverage, speed to the Gulf, and international reach.
+  // High-level reach — no live counts, just the coverage story.
   const stats = [
-    { value: isAr ? 'السعودية' : 'KSA', unit: '', label: isAr ? 'تغطية وطنية — كل المدن الرئيسية' : 'Nationwide — every major city' },
-    { value: isAr ? 'الخليج' : 'GCC', unit: '', label: isAr ? 'شحن سريع لجميع دول الخليج' : 'Fast shipping to all GCC countries' },
-    { value: isAr ? 'دولي' : 'Global', unit: '', label: isAr ? 'شحنات دولية عبر شركاء موثوقين' : 'International shipments' },
+    { value: isAr ? 'السعودية' : 'KSA', label: isAr ? 'تغطية وطنية — كل المدن الرئيسية' : 'Nationwide — every major city' },
+    { value: isAr ? 'الخليج' : 'GCC', label: isAr ? 'شحن سريع لجميع دول الخليج' : 'Fast shipping to all GCC countries' },
+    { value: isAr ? 'دولي' : 'Global', label: isAr ? 'شحنات دولية عبر شركاء موثوقين' : 'International shipments worldwide' },
   ];
-
-  // Init Leaflet once
-  useEffect(() => {
-    if (!elRef.current || mapRef.current) return;
-    const map = L.map(elRef.current, {
-      center: [24.2, 45.0],
-      zoom: 5,
-      minZoom: 2,
-      maxZoom: 7,
-      zoomControl: false,
-      scrollWheelZoom: false,
-      doubleClickZoom: false,
-      dragging: false,
-      attributionControl: false,
-      zoomSnap: 0.25,
-    });
-
-    // CartoDB dark, no labels — we draw our own
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
-      subdomains: 'abcd',
-      maxZoom: 19,
-    }).addTo(map);
-
-    // Navy wash over the tiles
-    L.rectangle([[-90, -180], [90, 180]], {
-      color: 'transparent', fillColor: '#0D1232', fillOpacity: 0.22, interactive: false,
-    }).addTo(map);
-
-    // Routes — curved arcs with a soft glowing halo under a dashed core
-    ROUTES.forEach(([a, b]) => {
-      const A = byId[a], B = byId[b];
-      const pts = curve([A.lat, A.lng], [B.lat, B.lng]);
-      const halo = L.polyline(pts, {
-        color: '#F15B41', weight: 3.5, opacity: 0.07, lineCap: 'round', lineJoin: 'round', interactive: false,
-      }).addTo(map);
-      const line = L.polyline(pts, {
-        color: 'rgba(241,91,65,0.5)', weight: 1, dashArray: '2 6', opacity: 0.7, lineCap: 'round', interactive: false,
-      }).addTo(map);
-      routesRef.current.push({ a, b, line, halo });
-    });
-
-    // Hubs
-    HUBS.forEach((h) => {
-      const m = L.marker([h.lat, h.lng], {
-        icon: makeHubIcon(h, h.id === 'ryd', lang),
-        riseOnHover: true,
-        keyboard: false,
-      }).addTo(map);
-      m.on('mouseover click', () => setActive(h.id));
-      markersRef.current[h.id] = m;
-    });
-
-    // Animated package marker travelling the same-day lanes
-    const pkt = L.marker([HUBS[0].lat, HUBS[0].lng], {
-      icon: L.divIcon({
-        className: 'fa-pkt-icon',
-        html: '<span class="pkt-core"></span><span class="pkt-trail"></span>',
-        iconSize: [0, 0], iconAnchor: [0, 0],
-      }),
-      interactive: false, keyboard: false,
-    }).addTo(map);
-
-    const lanes = ROUTES.filter(([a, b]) => byId[a].primary || byId[b].primary);
-    const laneCurves = lanes.map(([a, b]) => curve([byId[a].lat, byId[a].lng], [byId[b].lat, byId[b].lng]));
-    let laneIdx = 0;
-    let raf = 0;
-    let start = performance.now();
-    const DUR = 2600, PAUSE = 700;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    function step(now: number) {
-      const tt = Math.max(0, Math.min(1, (now - start) / DUR));
-      const eased = 1 - Math.pow(1 - tt, 3);
-      // Follow the curved lane so the package rides the visible arc
-      const pts = laneCurves[laneIdx];
-      const fpos = eased * (pts.length - 1);
-      const i0 = Math.floor(fpos);
-      const i1 = Math.min(pts.length - 1, i0 + 1);
-      const f = fpos - i0;
-      pkt.setLatLng([
-        pts[i0][0] + (pts[i1][0] - pts[i0][0]) * f,
-        pts[i0][1] + (pts[i1][1] - pts[i0][1]) * f,
-      ]);
-      if (tt >= 1) {
-        window.setTimeout(() => {
-          laneIdx = (laneIdx + 1) % lanes.length;
-          start = performance.now();
-          raf = requestAnimationFrame(step);
-        }, PAUSE);
-        return;
-      }
-      raf = requestAnimationFrame(step);
-    }
-    if (!reduce) raf = requestAnimationFrame(step);
-
-    // Fit from the Kingdom out to every gateway — London to Singapore
-    const bounds = L.latLngBounds(HUBS.map((h) => [h.lat, h.lng] as [number, number]));
-    map.fitBounds(bounds, { padding: [36, 36], maxZoom: 5 });
-
-    const ro = new ResizeObserver(() => map.invalidateSize());
-    ro.observe(elRef.current);
-
-    mapRef.current = map;
-    return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-      map.remove();
-      mapRef.current = null;
-      markersRef.current = {};
-      routesRef.current = [];
-    };
-  }, [byId, lang]);
-
-  // Highlight routes + active marker when selection (or language) changes
-  useEffect(() => {
-    routesRef.current.forEach(({ a, b, line, halo }) => {
-      const involved = a === active || b === active;
-      line.setStyle({
-        color: involved ? '#F15B41' : 'rgba(241,91,65,0.32)',
-        weight: involved ? 1.6 : 1,
-        opacity: involved ? 1 : 0.5,
-        dashArray: involved ? undefined : '2 6',
-      });
-      halo.setStyle({ opacity: involved ? 0.16 : 0.06, weight: involved ? 5 : 3.5 });
-    });
-    HUBS.forEach((h) => {
-      const m = markersRef.current[h.id];
-      if (m) m.setIcon(makeHubIcon(h, h.id === active, lang));
-    });
-  }, [active, lang]);
 
   return (
     <section id="network" ref={ref} className="bg-fa-liberty-blue section-padding relative overflow-hidden">
@@ -297,7 +113,7 @@ export default function Coverage() {
 
       <div className="container-main relative z-10">
         <div className="grid lg:grid-cols-[0.85fr_1.15fr] gap-12 lg:gap-16 items-center">
-          {/* LEFT — copy + stats + active hub */}
+          {/* LEFT — copy + reach */}
           <div>
             <div className="mb-4" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out' }}>
               <SectionChip onDark>{t('coverage.chip')}</SectionChip>
@@ -311,13 +127,12 @@ export default function Coverage() {
               {t('coverage.body')}
             </p>
 
-            {/* Stats */}
+            {/* Reach stats */}
             <div className="grid grid-cols-3 gap-4 mt-9 pt-8 border-t border-fa-classic-chalk/10 max-w-[460px]" style={{ opacity: isInView ? 1 : 0, transition: 'opacity 600ms ease-out 300ms' }}>
               {stats.map((s) => (
                 <div key={s.label}>
-                  <div className="font-display font-semibold text-[34px] lg:text-[38px] text-fa-classic-chalk leading-none tracking-[-0.02em] tabular-nums">
+                  <div className="font-display font-semibold text-[34px] lg:text-[38px] text-fa-classic-chalk leading-none tracking-[-0.02em]">
                     {s.value}
-                    {s.unit && <span className="text-fa-orange-soda font-medium text-[24px] ms-0.5">{s.unit}</span>}
                   </div>
                   <div className="mt-2 text-[11px] font-semibold text-fa-classic-chalk/55 uppercase tracking-[0.08em] font-body leading-snug">
                     {s.label}
@@ -325,44 +140,78 @@ export default function Coverage() {
                 </div>
               ))}
             </div>
-
-            {/* Active hub detail */}
-            <div className="fa-netmap-active" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 400ms' }}>
-              <div className="fa-netmap-active-head">
-                <span className="dot" style={{ background: activeHub.primary ? ACCENT : 'rgba(255,255,255,0.4)' }} />
-                <span className="cy">{activeHub.city[lang]}</span>
-                <span className="co">{activeHub.country[lang]}</span>
-              </div>
-              <div className="fa-netmap-active-rows">
-                <div className="row">
-                  <span>{isAr ? 'الشبكة' : 'Network'}</span>
-                  <span className="vv">{kindName[activeHub.kind][lang]}</span>
-                </div>
-                <div className="row">
-                  <span>{isAr ? 'توصيل بنفس اليوم' : 'Same-day delivery'}</span>
-                  <span className={`vv ${activeHub.same ? 'green' : ''}`}>{activeHub.same ? (isAr ? 'متاح' : 'Available') : '—'}</span>
-                </div>
-                <div className="row">
-                  <span>{isAr ? 'فئة المركز' : 'Hub class'}</span>
-                  <span className="vv">{sizeName[activeHub.size][lang]}</span>
-                </div>
-              </div>
-            </div>
           </div>
 
-          {/* RIGHT — Leaflet map */}
+          {/* RIGHT — highlighted Kingdom + outbound arrows */}
           <div style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(40px)', transition: 'all 800ms ease-out 200ms' }}>
             <div className="fa-netmap-frame">
-              <div ref={elRef} className="fa-netmap-leaflet" />
-              <div className="fa-netmap-counter">
-                <span className="pulse" />
-                <span><b>12,408</b> {isAr ? 'طرد مباشر الآن' : 'packages live now'}</span>
-              </div>
-              <div className="fa-netmap-legend">
-                <span><span className="lg-dot primary" />{isAr ? 'مركز توصيل بنفس اليوم' : 'Same-day hub'}</span>
-                <span><span className="lg-dot" />{isAr ? 'مركز توزيع' : 'Fulfilment centre'}</span>
-                <span><span className="lg-line" />{isAr ? 'مسار' : 'Lane'}</span>
-              </div>
+              <svg className="fa-reachmap" viewBox="0 0 800 600" role="img"
+                aria-label={isAr ? 'خريطة تغطية: السعودية وشحن دولي' : 'Coverage map: Saudi Arabia shipping internationally'}>
+                <defs>
+                  <radialGradient id="ksaFill" cx="50%" cy="45%" r="65%">
+                    <stop offset="0%" stopColor={ACCENT} stopOpacity="0.42" />
+                    <stop offset="100%" stopColor={ACCENT} stopOpacity="0.16" />
+                  </radialGradient>
+                  <marker id="reachArrow" viewBox="0 0 10 10" refX="8" refY="5"
+                    markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M0 0 L10 5 L0 10 z" fill={ACCENT} />
+                  </marker>
+                </defs>
+
+                {/* Faint coordinate-dot backdrop */}
+                <g opacity="0.05" fill="#FFFFFF">
+                  {Array.from({ length: 15 }, (_, r) =>
+                    Array.from({ length: 20 }, (_, c) => (
+                      <circle key={`${r}-${c}`} cx={c * 42 + 20} cy={r * 42 + 18} r="1.1" />
+                    )),
+                  )}
+                </g>
+
+                {/* Reach rings emanating from the Kingdom */}
+                {[150, 250, 350].map((rr) => (
+                  <circle key={rr} cx={HUBS.ryd.x} cy={HUBS.ryd.y} r={rr} fill="none"
+                    stroke={ACCENT} strokeOpacity="0.07" strokeWidth="1" />
+                ))}
+
+                {/* Highlighted Saudi Arabia */}
+                <path d={KSA_PATH} fill="url(#ksaFill)" stroke={ACCENT}
+                  strokeWidth="1.6" strokeLinejoin="round"
+                  style={{ filter: 'drop-shadow(0 0 14px rgba(241,91,65,0.35))' }} />
+
+                {/* Outbound shipping arrows — from the facing regional hub */}
+                <g>
+                  {ARROWS.map((a) => {
+                    const o = HUBS[a.from];
+                    return (
+                      <g key={a.en}>
+                        <path className="fa-reach-arrow" d={arrowPath(o.x, o.y, a.x, a.y)}
+                          fill="none" stroke={ACCENT} strokeWidth="1.6"
+                          markerEnd="url(#reachArrow)" />
+                        <text className="fa-reach-label" x={a.lx} y={a.ly} textAnchor={a.anchor}>
+                          {a[lang]}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </g>
+
+                {/* Country label */}
+                <text className="fa-reach-country" x={proj(19.9, 44.5)[0]} y={proj(19.9, 44.5)[1]} textAnchor="middle">
+                  {isAr ? 'السعودية' : 'SAUDI ARABIA'}
+                </text>
+
+                {/* Three regional hubs — Jeddah · Riyadh · Dammam */}
+                {(Object.values(HUBS) as Hub[]).map((h, i) => (
+                  <g key={h.en}>
+                    <circle className="fa-reach-ping" cx={h.x} cy={h.y} r="6" fill="none"
+                      stroke={ACCENT} strokeWidth="1.5" style={{ animationDelay: `${i * 0.8}s` }} />
+                    <circle cx={h.x} cy={h.y} r="4.5" fill={ACCENT} stroke="#fff" strokeWidth="1.5" />
+                    <text className="fa-reach-hub" x={h.lx} y={h.ly} textAnchor={h.anchor}>
+                      {h[lang]}
+                    </text>
+                  </g>
+                ))}
+              </svg>
               <div className="fa-netmap-vignette" aria-hidden />
             </div>
           </div>

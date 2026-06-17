@@ -5,45 +5,78 @@ import BrandPattern from '../components/brand/BrandPattern';
 import BrandButton from '../components/brand/BrandButton';
 import { useT } from '../i18n/I18nContext';
 
-const sidebarOps = [
-  { label: 'Dashboard', active: true, badge: null },
-  { label: 'Shipments', active: false, badge: 128 },
-  { label: 'Inventory', active: false, badge: null },
-  { label: 'Analytics', active: false, badge: null },
-];
-const sidebarSettings = [
-  { label: 'Integrations', active: false, badge: null },
-  { label: 'Team', active: false, badge: null },
-];
-
-const kpis = [
-  { label: 'Orders today', value: '2,841', delta: '12.4%', positive: true },
-  { label: 'Shipped', value: '2,604', delta: '8.1%', positive: true },
-  { label: 'On-time SLA', value: '99.8%', delta: '0.4 pts', positive: true },
-  { label: 'Avg. label cost', value: 'SAR 18.40', delta: 'SAR 0.70', positive: false },
-];
-
 const chartPoints = [30, 45, 35, 55, 48, 62, 58, 75, 68, 82, 78, 90];
-
-const shipments = [
-  { id: 'FA-30482', name: 'Riyadh Beauty Co.', status: 'In transit', color: '#F15B41', time: '12m ago' },
-  { id: 'FA-30481', name: 'Jeddah Home Goods', status: 'Delivered', color: '#22c55e', time: '1h ago' },
-  { id: 'FA-30480', name: 'Dammam Activewear', status: 'In transit', color: '#F15B41', time: '2h ago' },
-  { id: 'FA-30479', name: 'Medina Gifts', status: 'Picking', color: '#8a8a9a', time: '2h ago' },
-  { id: 'FA-30478', name: 'Khobar Supply', status: 'Delivered', color: '#22c55e', time: '3h ago' },
-];
 
 export default function DashboardPreview() {
   const { ref, isInView } = useInView(0.15);
   const { locale } = useT();
   const isAr = locale === 'ar';
+
+  const sidebarOps = isAr
+    ? [
+        { label: 'لوحة التحكم', active: true, badge: null },
+        { label: 'الشحنات', active: false, badge: 128 },
+        { label: 'المخزون', active: false, badge: null },
+        { label: 'التحليلات', active: false, badge: null },
+      ]
+    : [
+        { label: 'Dashboard', active: true, badge: null },
+        { label: 'Shipments', active: false, badge: 128 },
+        { label: 'Inventory', active: false, badge: null },
+        { label: 'Analytics', active: false, badge: null },
+      ];
+
+  const sidebarSettings = isAr
+    ? [
+        { label: 'التكاملات', active: false, badge: null },
+        { label: 'الفريق', active: false, badge: null },
+      ]
+    : [
+        { label: 'Integrations', active: false, badge: null },
+        { label: 'Team', active: false, badge: null },
+      ];
+
+  const kpis = isAr
+    ? [
+        { label: 'طلبات اليوم', value: '2,841', delta: '12.4%', positive: true },
+        { label: 'تم الشحن', value: '2,604', delta: '8.1%', positive: true },
+        { label: 'الالتزام بالمواعيد', value: '99.8%', delta: '0.4 pts', positive: true },
+        { label: 'متوسط تكلفة الملصق', value: '18.40 ر.س', delta: '0.70 ر.س', positive: false },
+      ]
+    : [
+        { label: 'Orders today', value: '2,841', delta: '12.4%', positive: true },
+        { label: 'Shipped', value: '2,604', delta: '8.1%', positive: true },
+        { label: 'On-time SLA', value: '99.8%', delta: '0.4 pts', positive: true },
+        { label: 'Avg. label cost', value: 'SAR 18.40', delta: 'SAR 0.70', positive: false },
+      ];
+
+  const shipments = isAr
+    ? [
+        { id: 'FA-30482', name: 'ريادة بيوتي', status: 'في الطريق', color: '#F15B41', time: 'منذ 12د' },
+        { id: 'FA-30481', name: 'جدة هوم جودز', status: 'تم التسليم', color: '#22c55e', time: 'منذ ساعة' },
+        { id: 'FA-30480', name: 'دمام أكتيفوير', status: 'في الطريق', color: '#F15B41', time: 'منذ ساعتين' },
+        { id: 'FA-30479', name: 'هدايا المدينة', status: 'جاري الانتقاء', color: '#8a8a9a', time: 'منذ ساعتين' },
+        { id: 'FA-30478', name: 'الخبر سبلاي', status: 'تم التسليم', color: '#22c55e', time: 'منذ 3 ساعات' },
+      ]
+    : [
+        { id: 'FA-30482', name: 'Riyadh Beauty Co.', status: 'In transit', color: '#F15B41', time: '12m ago' },
+        { id: 'FA-30481', name: 'Jeddah Home Goods', status: 'Delivered', color: '#22c55e', time: '1h ago' },
+        { id: 'FA-30480', name: 'Dammam Activewear', status: 'In transit', color: '#F15B41', time: '2h ago' },
+        { id: 'FA-30479', name: 'Medina Gifts', status: 'Picking', color: '#8a8a9a', time: '2h ago' },
+        { id: 'FA-30478', name: 'Khobar Supply', status: 'Delivered', color: '#22c55e', time: '3h ago' },
+      ];
+
   const bullets = isAr
     ? ['مخزون مباشر عبر كل المواقع', 'تنبيهات إعادة الطلب قبل نفاد المخزون', 'تتبع الشحنة من المستودع إلى الباب']
     : ['Live inventory counts across all locations', 'Automated reorder alerts before stock runs low', 'Shipment tracking from dock to doorstep'];
 
+  const opsLabel = isAr ? 'العمليات' : 'Operations';
+  const settingsLabel = isAr ? 'الإعدادات' : 'Settings';
+  const shipmentsVolumeLabel = isAr ? 'حجم الشحنات' : 'Shipments volume';
+  const recentShipmentsLabel = isAr ? 'آخر الشحنات' : 'Recent shipments';
+
   return (
     <section ref={ref} className="relative bg-fa-cream section-padding border-t border-fa-hairline overflow-hidden">
-      {/* Pattern 3 (lozenge stripe) — soft texture in the upper-right corner */}
       <BrandPattern
         pattern="lozenge"
         tint="navy"
@@ -60,18 +93,18 @@ export default function DashboardPreview() {
             <h2 className="font-display font-bold text-[32px] sm:text-[40px] lg:text-[56px] text-fa-liberty-blue leading-[1.05] tracking-[-0.02em]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
               {isAr ? (
                 <>
-                  لوحة واحدة.<br /><span className="text-fa-orange-soda">كل طلب</span> واضح دائماً.
+                  لوحة واحدة<br /><span className="text-fa-orange-soda">كل طلب</span> واضح دائماً
                 </>
               ) : (
                 <>
-                  One dashboard.<br /><span className="text-fa-orange-soda">Every package</span>, always.
+                  One dashboard<br /><span className="text-fa-orange-soda">Every package</span>, always
                 </>
               )}
             </h2>
             <p className="font-body mt-5 text-base text-fa-ink-muted leading-[1.6]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
               {isAr
-                ? 'رؤية لحظية لفريق العمليات، صفحات تتبع واضحة للعملاء، وربط تقني للمنصات التي تعتمد عليها.'
-                : 'Real-time visibility for your operations team. Clear tracking pages for your customers. APIs for the platforms you rely on.'}
+                ? 'رؤية لحظية لفريق العمليات، صفحات تتبع واضحة للعملاء، وربط تقني للمنصات التي تعتمد عليها'
+                : 'Real-time visibility for your operations team. Clear tracking pages for your customers. APIs for the platforms you rely on'}
             </p>
             <ul className="mt-6 space-y-2.5">
               {bullets.map((item, i) => (
@@ -109,14 +142,14 @@ export default function DashboardPreview() {
               <div className="flex" style={{ minHeight: 380 }}>
                 {/* Sidebar */}
                 <div className="w-44 bg-white border-r border-[#f0f0f0] p-3 hidden sm:block">
-                  <div className="text-[9px] font-semibold text-[#8a8a9a] uppercase tracking-[0.1em] mb-2 px-2">Operations</div>
+                  <div className="text-[9px] font-semibold text-[#8a8a9a] uppercase tracking-[0.1em] mb-2 px-2">{opsLabel}</div>
                   {sidebarOps.map((item) => (
                     <div key={item.label} className={`flex items-center justify-between px-2 py-1.5 text-[12px] rounded-md cursor-default ${item.active ? 'bg-[#0D1232] text-[#F4F4F1] font-medium' : 'text-[#6b6b7b] hover:bg-[#F4F4F1]'}`}>
                       {item.label}
                       {item.badge && <span className="text-[9px] bg-[#F15B41] text-white px-1.5 py-0.5 rounded-full font-medium">{item.badge}</span>}
                     </div>
                   ))}
-                  <div className="text-[9px] font-semibold text-[#8a8a9a] uppercase tracking-[0.1em] mb-2 mt-4 px-2">Settings</div>
+                  <div className="text-[9px] font-semibold text-[#8a8a9a] uppercase tracking-[0.1em] mb-2 mt-4 px-2">{settingsLabel}</div>
                   {sidebarSettings.map((item) => (
                     <div key={item.label} className="flex items-center justify-between px-2 py-1.5 text-[12px] text-[#6b6b7b] rounded-md hover:bg-[#F4F4F1] cursor-default">
                       {item.label}
@@ -144,7 +177,7 @@ export default function DashboardPreview() {
                   {/* Chart */}
                   <div className="bg-white border border-[#f0f0f0] rounded-lg p-3 mb-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-semibold text-[#0D1232]">Shipments volume</span>
+                      <span className="text-xs font-semibold text-[#0D1232]">{shipmentsVolumeLabel}</span>
                       <div className="flex gap-0.5">
                         {['1D', '7D', '30D', '1Y'].map((period) => (
                           <span key={period} className={`text-[9px] px-2 py-0.5 rounded cursor-default ${period === '1Y' ? 'bg-[#0D1232] text-[#F4F4F1]' : 'text-[#8a8a9a] hover:bg-[#F4F4F1]'}`}>{period}</span>
@@ -165,7 +198,7 @@ export default function DashboardPreview() {
 
                   {/* Recent shipments */}
                   <div>
-                    <div className="text-[10px] font-semibold text-[#8a8a9a] uppercase tracking-wide mb-2">Recent shipments</div>
+                    <div className="text-[10px] font-semibold text-[#8a8a9a] uppercase tracking-wide mb-2">{recentShipmentsLabel}</div>
                     <div className="space-y-1.5">
                       {shipments.map((s) => (
                         <div key={s.id} className="flex items-center justify-between text-[11px]">

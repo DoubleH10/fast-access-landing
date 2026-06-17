@@ -14,7 +14,7 @@ const en = {
   whatis: {
     chip: 'What is Fast Access',
     headlineA: 'We store, pack, and ship your orders —',
-    headlineHighlight: 'you just sell.',
+    headlineHighlight: 'you just sell',
     body: 'Fast Access is an end-to-end fulfillment partner for online brands in Saudi Arabia. Send us your inventory and we warehouse it, pack every order with your branding, and deliver across the Kingdom and the Gulf — with same-day delivery from cloud stores inside major cities. One partner, one dashboard, every order tracked from receipt to doorstep.',
     point1: 'Storage, packing & shipping in one place',
     point2: 'Same-day delivery in 2–4 hours',
@@ -45,8 +45,8 @@ const en = {
   },
   cloud: {
     chip: 'Cloud Stores · Same-Day Delivery',
-    headlineA: '~⅓ of Saudi consumers want it next day.',
-    headlineB: 'We deliver in 2–4 hours.',
+    headlineA: '~⅓ of Saudi consumers want it next day',
+    headlineB: 'We deliver in 2–4 hours',
     body: 'Cloud warehouses inside Saudi cities — purpose-built for urgent daily orders, peak hours, and holidays. The fastest way to win a new customer’s loyalty on their very first order.',
     bullet1: 'Best option for urgent daily orders',
     bullet2: 'Wins customer loyalty from the first order',
@@ -61,7 +61,7 @@ const en = {
     chip: 'What we do',
     headlineA: 'Everything your business needs to',
     headlineHighlight: 'grow',
-    headlineB: ', in one place.',
+    headlineB: ', in one place',
     body: 'Stop juggling vendors. Fast Access runs storage, packing, shipping, tracking, and customer support as one tightly-coordinated operation — so every order arrives the way you sold it.',
     learnMore: 'Learn more',
     items: [
@@ -77,7 +77,7 @@ const en = {
     chip: 'The Package Journey',
     headlineA: 'Every order,',
     headlineHighlight: 'tracked',
-    headlineB: 'across five steps.',
+    headlineB: 'across five steps',
     body: 'From receiving to delivery, your inventory moves through our intelligent network with real-time visibility at every stage.',
   },
   numbers: {
@@ -90,7 +90,7 @@ const en = {
     chip: 'The Network',
     headlineA: 'A wide logistics network across',
     headlineHighlight: 'Saudi Arabia',
-    headlineB: 'and beyond.',
+    headlineB: 'and beyond',
     body: 'Nationwide fulfilment and delivery coverage — from Riyadh to every major city in Saudi Arabia, with same-day hubs and carrier lanes across the Kingdom, fast shipping to all GCC countries, and international shipments through the strongest carrier partners.',
   },
   pricing: {
@@ -117,7 +117,7 @@ const en = {
     chip: 'Ready when you are',
     headlineA: 'Built for',
     headlineHighlight: 'Speed',
-    headlineB: ', Designed for Clarity.',
+    headlineB: ', Designed for Clarity',
     body: 'Tell us about your business. We’ll come back with a tailored plan within one business day.',
     primary: 'Inquire Now',
     secondary: 'Book a tour',
@@ -143,7 +143,7 @@ const en = {
   },
   partner: {
     chip: 'More than a vendor',
-    headlineA: 'Fast Access isn’t just a service.',
+    headlineA: 'Fast Access isn’t just a service',
     headlineHighlight: 'We’re a partner you can trust',
     headlineB: '',
     items: [
@@ -155,7 +155,7 @@ const en = {
   },
   expand: {
     chip: 'Scale with confidence',
-    headlineA: 'Scale without second-guessing.',
+    headlineA: 'Scale without second-guessing',
     headlineHighlight: 'You lead, we’ve got the rest',
     headlineB: '',
     items: [
@@ -185,7 +185,7 @@ const en = {
     chip: 'By the numbers',
     headlineA: 'Stop worrying about',
     headlineHighlight: 'how to ship',
-    headlineB: ' your store’s orders.',
+        headlineB: ' your store’s orders',
     body: 'Because every order our team receives reaches the customer — safely.',
     items: [
       { value: 500, suffix: '+', label: 'Merchants we’ve helped grow' },
@@ -235,7 +235,7 @@ const ar = {
   whatis: {
     chip: 'ما هي Fast Access',
     headlineA: 'نخزّن ونغلّف ونشحن طلباتك —',
-    headlineHighlight: 'وأنت تبيع فقط.',
+    headlineHighlight: 'وأنت تبيع فقط',
     body: 'Fast Access شريك لوجستي متكامل للعلامات التجارية الإلكترونية في السعودية. أرسل لنا مخزونك ونتولى تخزينه، وتغليف كل طلب بهوية علامتك، وتوصيله لكل مناطق المملكة والخليج — مع توصيل في نفس اليوم من متاجر سحابية داخل المدن الكبرى. شريك واحد، لوحة تحكم واحدة، وكل طلب متتبع من الاستلام حتى باب العميل.',
     point1: 'تخزين وتغليف وشحن في مكان واحد',
     point2: 'توصيل في نفس اليوم خلال 2 إلى 4 ساعات',
@@ -266,8 +266,8 @@ const ar = {
   },
   cloud: {
     chip: 'المتاجر السحابية · توصيل في نفس اليوم',
-    headlineA: 'حوالي ثلث المستهلكين في السعودية يفضلون التوصيل في اليوم التالي.',
-    headlineB: 'نحن نوصل في 2 إلى 4 ساعات.',
+    headlineA: 'حوالي ثلث المستهلكين في السعودية يفضلون التوصيل في اليوم التالي',
+    headlineB: 'نحن نوصل في 2 إلى 4 ساعات',
     body: 'مخازن سحابية داخل المدن السعودية — مصممة للطلبات اليومية العاجلة، ساعات الذروة، والإجازات. أسرع طريقة لكسب ولاء العميل من أول طلب.',
     bullet1: 'الخيار الأمثل للطلبات اليومية العاجلة',
     bullet2: 'تكسب ولاء العميل من أول طلب',
@@ -282,7 +282,7 @@ const ar = {
     chip: 'ماذا نقدّم',
     headlineA: 'كل ما تحتاجه تجارتك',
     headlineHighlight: 'لتنمو',
-    headlineB: '، في مكان واحد.',
+    headlineB: '، في مكان واحد',
     body: 'لا تضيع نفسك مع أكثر من شركة. عندنا كل اللي تحتاجه من تخزين وتجهيز وشحن ومتابعة ودعم العملاء — منظومة واحدة متكاملة، حتى يصل كل طلب كما بعته.',
     learnMore: 'اعرف المزيد',
     items: [
@@ -298,7 +298,7 @@ const ar = {
     chip: 'رحلة الطلب',
     headlineA: 'كل طلب،',
     headlineHighlight: 'متتبع',
-    headlineB: 'عبر خمس خطوات.',
+    headlineB: 'عبر خمس خطوات',
     body: 'من الاستلام إلى التسليم، يتنقل مخزونك عبر شبكتنا الذكية مع رؤية لحظية في كل مرحلة.',
   },
   numbers: {
@@ -311,7 +311,7 @@ const ar = {
     chip: 'الشبكة',
     headlineA: 'شبكة لوجستية واسعة في',
     headlineHighlight: 'السعودية',
-    headlineB: 'وخارجها.',
+    headlineB: 'وخارجها',
     body: 'تغطية شاملة للتخزين والتوصيل — من الرياض إلى كل مدينة رئيسية في المملكة، مع مراكز توصيل في نفس اليوم وخطوط شحن عبر المملكة، وشحن سريع لجميع دول الخليج، وشحنات دولية بالتعاون مع أقوى شركاء الشحن.',
   },
   pricing: {
@@ -338,7 +338,7 @@ const ar = {
     chip: 'جاهزون متى ما كنت جاهزاً',
     headlineA: 'مصممون',
     headlineHighlight: 'للسرعة',
-    headlineB: '، مهندسون للوضوح.',
+    headlineB: '، مهندسون للوضوح',
     body: 'حدّثنا عن تجارتك. سنرد عليك بخطة مخصصة خلال يوم عمل واحد.',
     primary: 'تواصل معنا',
     secondary: 'احجز جولة',

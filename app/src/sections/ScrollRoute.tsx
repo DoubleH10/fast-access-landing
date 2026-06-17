@@ -54,6 +54,7 @@ const SCENES = [
 ] as const;
 
 const VIDEO_DURATION = 12.041667;
+const ROUTE_VIDEO_SRC = '/assets/scroll-route-truck.mp4';
 
 export default function ScrollRoute() {
   const { locale } = useT();
@@ -63,8 +64,35 @@ export default function ScrollRoute() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const [activeScene, setActiveScene] = useState(0);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
 
   useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    if (!('IntersectionObserver' in window)) {
+      setShouldLoadVideo(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setShouldLoadVideo(true);
+        observer.disconnect();
+      },
+      // Start fetching before the sticky section reaches the viewport so the
+      // scroll-scrub still feels ready without loading the MP4 at first paint.
+      { rootMargin: '1800px 0px' },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!shouldLoadVideo) return;
+
     const section = sectionRef.current;
     const video = videoRef.current;
     const progress = progressRef.current;
@@ -182,9 +210,9 @@ export default function ScrollRoute() {
           <video
             ref={videoRef}
             className="h-full w-full object-cover object-[38%_46%] will-change-transform lg:object-[center_60%]"
-            src="/assets/scroll-route-truck.mp4"
+            src={shouldLoadVideo ? ROUTE_VIDEO_SRC : undefined}
             poster="/assets/scroll-route-truck-poster.jpg"
-            preload="auto"
+            preload={shouldLoadVideo ? 'auto' : 'none'}
             muted
             playsInline
             aria-hidden
