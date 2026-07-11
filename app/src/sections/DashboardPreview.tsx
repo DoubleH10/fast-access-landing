@@ -19,7 +19,7 @@ const sidebarSettings = [
 const kpis = [
   { label: 'Orders today', value: '2,841', delta: '12.4%', positive: true },
   { label: 'Shipped', value: '2,604', delta: '8.1%', positive: true },
-  { label: 'On-time SLA', value: '99.8%', delta: '0.4 pts', positive: true },
+  { label: 'On-time SLA', value: '97%', delta: '0.4 pts', positive: true },
   { label: 'Avg. label cost', value: 'SAR 18.40', delta: 'SAR 0.70', positive: false },
 ];
 
@@ -38,7 +38,7 @@ export default function DashboardPreview() {
   const { locale } = useT();
   const isAr = locale === 'ar';
   const bullets = isAr
-    ? ['مخزون مباشر عبر كل المواقع', 'تنبيهات إعادة الطلب قبل نفاد المخزون', 'تتبع الشحنة من المستودع إلى الباب']
+    ? ['مخزونك مباشر وواضح عبر كل المواقع', 'تنبيهات إعادة الطلب قبل لا ينفد المخزون', 'تتبع كامل للشحنة... من المستودع إلى الباب']
     : ['Live inventory counts across all locations', 'Automated reorder alerts before stock runs low', 'Shipment tracking from dock to doorstep'];
 
   return (
@@ -60,7 +60,7 @@ export default function DashboardPreview() {
             <h2 className="font-display font-bold text-[32px] sm:text-[40px] lg:text-[56px] text-fa-liberty-blue leading-[1.05] tracking-[-0.02em]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 600ms ease-out 100ms' }}>
               {isAr ? (
                 <>
-                  لوحة واحدة.<br /><span className="text-fa-orange-soda">كل طلب</span> واضح دائماً.
+                  لوحة واحدة...<br /><span className="text-fa-orange-soda">وكل طلب</span> قدام عينك.
                 </>
               ) : (
                 <>
@@ -70,7 +70,7 @@ export default function DashboardPreview() {
             </h2>
             <p className="font-body mt-5 text-base text-fa-ink-muted leading-[1.6]" style={{ opacity: isInView ? 1 : 0, transform: isInView ? 'translateY(0)' : 'translateY(20px)', transition: 'all 500ms ease-out 200ms' }}>
               {isAr
-                ? 'رؤية لحظية لفريق العمليات، صفحات تتبع واضحة للعملاء، وربط تقني للمنصات التي تعتمد عليها.'
+                ? 'رؤية لحظية لفريق عملياتك، صفحات تتبع واضحة لعملائك، وربط مباشر مع المنصات اللي تعتمد عليها — مافي شي يمشي بدون ما تدري عنه.'
                 : 'Real-time visibility for your operations team. Clear tracking pages for your customers. APIs for the platforms you rely on.'}
             </p>
             <ul className="mt-6 space-y-2.5">

@@ -39,9 +39,9 @@ export default function Solutions() {
   ];
 
   const capabilities = [
-    { icon: Boxes, title: isAr ? 'تخزين مرن' : 'Flexible warehousing', body: isAr ? 'مساحات تتمدد مع موسمك، مع تخزين مبرّد عند الحاجة.' : 'Space that expands with your season, with cold storage on demand.', metric: isAr ? '42+ مركز' : '42+ centres' },
+    { icon: Boxes, title: isAr ? 'تخزين مرن' : 'Flexible warehousing', body: isAr ? 'مساحات تتمدد مع موسمك، مع تخزين مبرّد عند الحاجة.' : 'Space that expands with your season, with cold storage on demand.', metric: isAr ? '10+ مراكز' : '10+ centres' },
     { icon: PackageCheck, title: isAr ? 'تجهيز وتغليف' : 'Pick & pack', body: isAr ? 'تغليف بهوية علامتك، جاهز لمواسم الذروة.' : 'Branded packing built for your identity, ready for peak.', metric: isAr ? '2 ساعة تجهيز' : '2-hr pick-pack' },
-    { icon: Truck, title: isAr ? 'شحن وتوصيل' : 'Shipping & delivery', body: isAr ? 'شبكة نقل واسعة وتوصيل بنفس اليوم في المدن الكبرى.' : 'Wide carrier network with same-day in major cities.', metric: isAr ? '99.8% بالوقت' : '99.8% on-time' },
+    { icon: Truck, title: isAr ? 'شحن وتوصيل' : 'Shipping & delivery', body: isAr ? 'شبكة نقل واسعة وتوصيل بنفس اليوم في المدن الكبرى.' : 'Wide carrier network with same-day in major cities.', metric: isAr ? '97% بالوقت' : '97% on-time' },
     { icon: Radar, title: isAr ? 'متابعة لحظية' : 'Live tracking', body: isAr ? 'كل حدث على الطلب يظهر مباشرة لك ولعميلك.' : 'Every order event surfaces live, for you and your buyer.', metric: isAr ? '5 مراحل' : '5 stages' },
     { icon: Store, title: isAr ? 'المتاجر السحابية' : 'Cloud stores', body: isAr ? 'مخزونك موزّع حيث يطلب عملاؤك فعلاً.' : 'Inventory pre-positioned where your customers actually order.', metric: isAr ? '6 مدن' : '6 cities' },
     { icon: Headset, title: isAr ? 'خدمة العملاء' : 'Customer care', body: isAr ? 'فريق دعم يتابع الاستثناءات قبل أن تتحول لشكاوى.' : 'A team that catches exceptions before they become complaints.', metric: isAr ? 'دعم 24/7' : '24/7 support' },

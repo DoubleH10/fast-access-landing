@@ -87,7 +87,7 @@ export default function Contact() {
                   </div>
                   <textarea rows={4} className={field} placeholder={isAr ? 'ماذا تشحن؟ أخبرنا بالتفاصيل.' : 'What do you ship? Tell us a bit.'} aria-label={isAr ? 'رسالتك' : 'Message'} />
                   <button type="submit" className="btn-brand btn-brand--filled w-full justify-center">
-                    <span className="btn-brand__label">{isAr ? 'إرسال الطلب' : 'Send request'}</span>
+                    <span className="btn-brand__label">{isAr ? 'أرسل الطلب — وخلّها علينا' : 'Send request'}</span>
                   </button>
                   <p className="font-body text-[12px] text-fa-ink-muted/80 text-center">
                     {isAr ? 'نرد خلال يوم عمل واحد. لا رسائل مزعجة.' : 'We reply within one business day. No spam.'}

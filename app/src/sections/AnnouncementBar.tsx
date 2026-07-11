@@ -38,14 +38,14 @@ export default function AnnouncementBar() {
           <TrendingUp size={12} className="text-[#F15B41] flex-shrink-0" />
           <p className="text-[11px] sm:text-xs text-white/65 leading-snug">
             {isAr
-              ? 'توصيل في نفس اليوم من المتاجر السحابية داخل المدن الرئيسية'
+              ? 'توصيل بنفس اليوم داخل المدن الرئيسية — خلّها علينا،'
               : 'Same-day cloud-store delivery is available in major Saudi cities'}
           </p>
           <Link
             to="/contact"
             className="text-xs font-semibold text-[#F15B41] hover:text-[#FB7C65] hover:underline underline-offset-2 transition-all duration-150"
           >
-            {isAr ? 'اطلب عرضاً' : 'Request quote'}
+            {isAr ? 'واطلب عرضك' : 'Request quote'}
           </Link>
         </div>
         <button

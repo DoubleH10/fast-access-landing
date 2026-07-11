@@ -39,7 +39,7 @@ export default function Pricing() {
       ];
 
   const inclusions = isAr
-    ? ['بدون عقود طويلة', 'بدون رسوم انتقاء خفية', 'بدون رسوم إعداد', 'خصومات حسب الحجم', 'ادفع على ما تشحنه فقط', 'وضوح في التسعير عبر المناطق']
+    ? ['بدون عقود طويلة تقيّدك', 'بدون رسوم انتقاء خفية... وبدون رسوم إعداد', 'خصومات تكبر مع حجمك', 'تدفع على اللي تشحنه فقط', 'تسعير واضح عبر كل المناطق']
     : ['No long-term contracts', 'No per-pick hidden fees', 'No setup charge', 'Volume-based discounts', 'Pay only for what you ship', 'Clear regional pricing'];
 
   return (

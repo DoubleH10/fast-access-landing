@@ -11,7 +11,7 @@ import { useT } from '../i18n/I18nContext';
 
 const verbsByLocale: Record<'en' | 'ar', string[]> = {
   en: ['Store', 'Pack', 'Ship', 'Track', 'Deliver'],
-  ar: ['تخزين', 'تجهيز', 'شحن', 'تتبع', 'توصيل'],
+  ar: ['نخزّن', 'نجهّز', 'نشحن', 'نتتبع', 'نوصّل', 'خلّها علينا'],
 };
 
 function Star() {

@@ -91,9 +91,9 @@ export default function Hero() {
             {/* Hero Stats */}
             <div className="hero-fade grid grid-cols-3 gap-0 mt-10 border-t border-fa-classic-chalk/15 pt-7 max-w-[560px]">
               {[
-                { value: '99.8', unit: '%', label: t('hero.statOnTime') },
+                { value: '97', unit: '%', label: t('hero.statOnTime') },
                 { value: '2', unit: isAr ? 'ساعة' : 'hr', label: t('hero.statPickPack') },
-                { value: '42', unit: '+', label: t('hero.statCenters') },
+                { value: '10', unit: '+', label: t('hero.statCenters') },
               ].map((stat, i) => (
                 <div key={stat.label} className="flex items-stretch">
                   <div className="pe-3 sm:pe-8">

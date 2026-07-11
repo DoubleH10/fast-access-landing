@@ -20,9 +20,9 @@ export default function About() {
   ];
 
   const numbers = [
-    { v: '42+', l: isAr ? 'مركز توزيع' : 'Fulfilment centres' },
+    { v: '10+', l: isAr ? 'مركز توزيع' : 'Fulfilment centres' },
     { v: '13', l: isAr ? 'منطقة في المملكة' : 'Regions in the Kingdom' },
-    { v: '99.8%', l: isAr ? 'التزام بالوقت' : 'On-time rate' },
+    { v: '97%', l: isAr ? 'التزام بالوقت' : 'On-time rate' },
     { v: '24/7', l: isAr ? 'دعم تشغيلي' : 'Operations support' },
   ];
 

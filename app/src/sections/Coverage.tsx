@@ -118,7 +118,7 @@ export default function Coverage() {
   const activeHub = byId[active];
 
   const stats = [
-    { value: '42', unit: '+', label: isAr ? 'مركز توزيع' : 'Fulfilment centres' },
+    { value: '10', unit: '+', label: isAr ? 'مركز توزيع' : 'Fulfilment centres' },
     { value: '13', unit: '', label: isAr ? 'منطقة مغطّاة' : 'Regions covered' },
     { value: '6', unit: '', label: isAr ? 'مدن توصيل بنفس اليوم' : 'Same-day cities' },
   ];

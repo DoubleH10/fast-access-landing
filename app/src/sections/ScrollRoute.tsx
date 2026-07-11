@@ -15,7 +15,7 @@ const SCENES = [
     metric: { en: 'Origin signal', ar: 'إشارة البداية' },
     detail: {
       en: 'When the terrain is cold or visibility drops, the order still starts with a clear pickup record.',
-      ar: 'حتى مع الطريق البارد أو انخفاض الرؤية، يبدأ الطلب بسجل استلام واضح.',
+      ar: 'من أول مسح ضوئي يبدأ الطلب بسجل استلام واضح — حتى لو كان الطريق باردًا أو الرؤية منخفضة، المعلومة عندك قبل السؤال.',
     },
   },
   {
@@ -165,8 +165,8 @@ export default function ScrollRoute() {
               <h2 className="mt-5 font-display text-[34px] font-semibold leading-[0.98] tracking-[-0.025em] text-fa-classic-chalk sm:text-[50px] lg:text-[68px]">
                 {isAr ? (
                   <>
-                    عندما يتغير الطريق،{' '}
-                    <span className="text-fa-orange-soda">تتغير المعلومة</span>.
+                    الطريق يتغيّر...{' '}
+                    <span className="text-fa-orange-soda">ومعلومتك ما تنقطع</span>.
                   </>
                 ) : (
                   <>
@@ -177,7 +177,7 @@ export default function ScrollRoute() {
               </h2>
               <p className="mt-5 max-w-[34rem] font-body text-[14px] leading-[1.75] text-fa-classic-chalk/68 sm:text-base">
                 {isAr
-                  ? 'المشهد هنا ليس شرحاً جديداً للخطوات، بل قراءة تشغيلية لما يحدث حول الشاحنة أثناء انتقالها بين البيئات.'
+                  ? 'بين المستودع وباب العميل، تمر شحنتك ببيئات وظروف مختلفة — وكل تغيّر يصير حولها يتحوّل عندنا إلى معلومة واضحة توصلك لحظيًا.'
                   : 'This is not another steps list. It is a live readout of what changes around the truck as it crosses each environment.'}
               </p>
             </div>
